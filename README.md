@@ -1,39 +1,39 @@
-[![MIT License](https://img.shields.io/github/license/bcgov/quickstart-openshift.svg)](/LICENSE.md)
+[![MIT License](https://img.shields.io/github/license/bcgov/nr-gwells.svg)](/LICENSE.md)
 [![Lifecycle](https://img.shields.io/badge/Lifecycle-Experimental-339999)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
 
-[![Merge](https://github.com/bcgov/quickstart-openshift/actions/workflows/merge.yml/badge.svg)](https://github.com/bcgov/quickstart-openshift/actions/workflows/merge.yml)
-[![Analysis](https://github.com/bcgov/quickstart-openshift/actions/workflows/analysis.yml/badge.svg)](https://github.com/bcgov/quickstart-openshift/actions/workflows/analysis.yml)
-[![Scheduled](https://github.com/bcgov/quickstart-openshift/actions/workflows/scheduled.yml/badge.svg)](https://github.com/bcgov/quickstart-openshift/actions/workflows/scheduled.yml)
+[![Merge](https://github.com/bcgov/nr-gwells/actions/workflows/merge.yml/badge.svg)](https://github.com/bcgov/nr-gwells/actions/workflows/merge.yml)
+[![Analysis](https://github.com/bcgov/nr-gwells/actions/workflows/analysis.yml/badge.svg)](https://github.com/bcgov/nr-gwells/actions/workflows/analysis.yml)
+[![Scheduled](https://github.com/bcgov/nr-gwells/actions/workflows/scheduled.yml/badge.svg)](https://github.com/bcgov/nr-gwells/actions/workflows/scheduled.yml)
 
 Frontend (JavaScript/TypeScript)
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_frontend&metric=bugs)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_frontend)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_frontend&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_frontend)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_frontend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_frontend)
-[![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_frontend&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_frontend)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_frontend&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_frontend)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_frontend&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_frontend)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_frontend&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_frontend)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_frontend&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_frontend)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_frontend&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_frontend)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_frontend&metric=bugs)](https://sonarcloud.io/summary/new_code?id=nr-gwells_frontend)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_frontend&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=nr-gwells_frontend)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_frontend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=nr-gwells_frontend)
+[![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_frontend&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=nr-gwells_frontend)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_frontend&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=nr-gwells_frontend)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_frontend&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=nr-gwells_frontend)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_frontend&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=nr-gwells_frontend)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_frontend&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=nr-gwells_frontend)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_frontend&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=nr-gwells_frontend)
 
 Backend (JavaScript/TypeScript)
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_backend&metric=bugs)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_backend)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_backend&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_backend)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_backend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_backend)
-[![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_backend&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_backend)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_backend&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_backend)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_backend&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_backend)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_backend&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_backend)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_backend&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_backend)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_backend&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_backend)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_backend&metric=bugs)](https://sonarcloud.io/summary/new_code?id=nr-gwells_backend)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_backend&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=nr-gwells_backend)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_backend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=nr-gwells_backend)
+[![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_backend&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=nr-gwells_backend)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_backend&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=nr-gwells_backend)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_backend&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=nr-gwells_backend)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_backend&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=nr-gwells_backend)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_backend&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=nr-gwells_backend)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=nr-gwells_backend&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=nr-gwells_backend)
 
 # QuickStart for OpenShift
 
 ## Pull Request-Based Workflows with Sample Stack
 
-The is a fully functional set of [GitHub Actions](https://github.com/bcgov/quickstart-openshift/actions) workflows and a starter application stack intended to help Agile teams hit the ground running.
+The is a fully functional set of [GitHub Actions](https://github.com/bcgov/nr-gwells/actions) workflows and a starter application stack intended to help Agile teams hit the ground running.
 
 Features:
 * Pull Request-based pipeline
@@ -77,7 +77,7 @@ The following are required:
 
 Create a new repository using this repository as a template.
 
-* Verify bcgov/quickstart-openshift is selected under Repository template
+* Verify bcgov/nr-gwells is selected under Repository template
 
 ![](./.github/graphics/template.png)
 
@@ -195,7 +195,7 @@ Pull Requests:
 
 Packages are available from your repository (link on right).  All should have visibility set to public for the workflows to run successfully.
 
-E.g. https://github.com/bcgov/quickstart-openshift/packages
+E.g. https://github.com/bcgov/nr-gwells/packages
 
 ### Branch Protection Rules
 
@@ -366,7 +366,7 @@ Supported languages:
 
 ## SchemaSpy
 
-The database documentation is created and deployed to GitHub pages.  See [here](https://bcgov.github.io/quickstart-openshift/schemaspy/index.html).
+The database documentation is created and deployed to GitHub pages.  See [here](https://bcgov.github.io/nr-gwells/schemaspy/index.html).
 
 After a full workflow run and merge can been run, please do the following:
 
