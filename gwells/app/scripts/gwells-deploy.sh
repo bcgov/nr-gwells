@@ -1,0 +1,68 @@
+#!/bin/sh
+#
+# Mon Nov  6 15:03:49 2017 GW Shell script run by 'oc exec' on OpenShift
+#   initiated by Jenkins job, which connects to the application server
+#   pod (gwells-nn-xxxxx which is STATUS = 'Running'):
+#      oc exec gwells-nnn-xxxx $VIRTUAL_ENV/src/openshift/scripts/gwells-deploy.sh
+#
+#   This deploy is triggered on all three envionments (moe-gwells-dev,
+#   moe-gwells-test, moe-gwells-prod)
+#
+#   Example: oc exec gwells-97-69b7z /opt/app-root/src/openshift/scripts/gwells-deploy.sh
+#
+#   If run on local Developer workstation, ensure that you have Environment variables set
+#   for $DATABASE_SERVICE_NAME, $DATABASE_PASSWORD, $DATABASE_NAME, $DATABASE_USER
+#
+#   Optionally, set $DB_REPLICATE (None|Subset|Full).
+#
+#   Example: ./gwells-deploy.sh
+
+
+# Sensitive, keep before 'set -x'
+#
+export PGPASSWORD=$DATABASE_PASSWORD
+APP_SOURCE_DIR=${APP_SOURCE_DIR:-"${APP_ROOT}/src"}
+
+# Halt conditions, verbosity and field separator
+#
+set -xeuo pipefail
+IFS=$'\n\t'
+
+ls $APP_SOURCE_DIR
+ls /app
+
+# Python migrate table changes
+#
+echo "Post-Deploy: Python migration"
+cd $APP_SOURCE_DIR/backend/
+python manage.py migrate
+
+
+# Create additional DB objects (e.g. spatial indices, stored procedures)
+#
+echo "Post-Deploy: SQL imports"
+# 2018-SEP-25 GW Aquifers CodeWithUs	
+cd $APP_SOURCE_DIR/database/scripts/aquifers/
+
+psql -X --set ON_ERROR_STOP=on -h $DATABASE_SERVICE_NAME -d $DATABASE_NAME -U $DATABASE_USER << EOF
+DROP TABLE IF EXISTS xform_aquifers;
+CREATE unlogged TABLE IF NOT EXISTS xform_aquifers (
+aquifer_id integer,mapping_year integer);
+\copy xform_aquifers FROM 'xforms-aquifers.csv' HEADER DELIMITER ',' CSV
+EOF
+
+cd $APP_SOURCE_DIR/database/scripts/wellsearch/
+psql -X --set ON_ERROR_STOP=on -h $DATABASE_SERVICE_NAME -d $DATABASE_NAME -U $DATABASE_USER -f \
+	post-deploy.sql
+
+
+# Python related portion of post-deploy
+#
+echo "Post-Deploy: Python tasks"
+cd $APP_SOURCE_DIR/backend/
+python manage.py post-deploy
+
+
+# Success!
+#
+echo "Post-Deploy: completed successfully"
