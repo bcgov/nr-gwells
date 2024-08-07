@@ -1,23 +1,21 @@
-# Build
-FROM node:22-slim AS build
+FROM node:18.12.0-slim
 
-# Copy, build static files; see .dockerignore for exclusions
+# RUN apt-get -y update
+
+# RUN apt-get -y install git build-essential
+
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    make \
+    g++
+
 WORKDIR /app
-COPY . ./
-RUN npm run deploy
 
-# Deploy using Caddy to host static files
-FROM caddy:2.8.4-alpine
-RUN apk add --no-cache ca-certificates
+COPY package*.json ./
 
-# Copy static files, verify Caddyfile formatting
-COPY --from=build /app/dist /srv
-COPY Caddyfile /etc/caddy/Caddyfile
-RUN caddy fmt /etc/caddy/Caddyfile
+RUN npm install
 
-# Boilerplate, not used in OpenShift/Kubernetes
-EXPOSE 3000 3001
-HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost:3001/health
+COPY . /app
 
-# Nonroot user
-USER 1001
+RUN npm i && npm run build
