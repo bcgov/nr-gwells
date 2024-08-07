@@ -1,14 +1,17 @@
 ---
 name: Task
-about: Work for the team that cannot be written as a user story
+about: Any work that does not directly impact the user
 title: ''
-labels: task
+labels: Task
 assignees: ''
 
 ---
 
 **Describe the task**
 A clear and concise description of what the task is.
+
+**Purpose**
+The reason why this task is needed and/or what value it adds.
 
 **Acceptance Criteria**
 - [ ] first
