@@ -167,14 +167,14 @@ const RESULT_COLUMNS = [
   'internalComments',
   'aquiferLithology',
   'aquiferVulnerabilityIndex',
+  'startDatePumpingTest',
   'storativity',
   'transmissivity',
   'hydraulicConductivity',
   'specificStorage',
   'specificYield',
-  'testingMethod',
-  'testingDuration',
-  'analyticSolutionType',
+  'specificCapacity',
+  'pumpingTestDescription',
   'boundaryEffect',
   'createUser',
   'createDate',
@@ -185,7 +185,8 @@ const RESULT_COLUMNS = [
   'alterationStartDate',
   'alterationEndDate',
   'decomissionStartDate',
-  'decomissionEndDate'
+  'decomissionEndDate',
+  'licenceNumber',
 ]
 
 export default {
@@ -228,7 +229,6 @@ export default {
   methods: {
     handleReset () {
       this.$emit('reset')
-      this.localSelectedColumnIds = [...DEFAULT_COLUMNS]
     },
     showModal () {
       this.$refs['column-select-modal'].show()
@@ -271,9 +271,10 @@ export default {
       const columnIds = [...this.localSelectedColumnIds]
       columnIds.sort((columnA, columnB) => {
         return this.columnOrders[columnA] - this.columnOrders[columnB]
-      })
-      this.$store.commit(SET_SEARCH_RESULT_COLUMNS, columnIds)
-      this.hideModal()
+      });
+      localStorage.setItem('userColumnPreferences', JSON.stringify(columnIds));
+      this.$store.commit(SET_SEARCH_RESULT_COLUMNS, columnIds);
+      this.hideModal();
     },
     cancelChanges () {
       this.localSelectedColumnIds = [...this.selectedColumnIds]
@@ -282,9 +283,12 @@ export default {
     }
   },
   created () {
-    this.localSelectedColumnIds = [...this.selectedColumnIds]
-    this.initColumnOrders()
-
+    if (localStorage && localStorage.getItem('userColumnPreferences')) {
+      this.localSelectedColumnIds = JSON.parse(localStorage.getItem('userColumnPreferences'));
+    } else {
+      this.localSelectedColumnIds = [...this.selectedColumnIds];
+    }
+    this.initColumnOrders();
     // listen for reset wells search so we can adjust our selected search columns
     this.$store.subscribeAction((action, state) => {
       if (action.type === RESET_WELLS_SEARCH) {
