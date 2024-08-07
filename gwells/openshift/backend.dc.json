@@ -140,7 +140,6 @@
                 "DB_REPLICATE": null,
                 "DJANGO_DEBUG":  null,
                 "ENABLE_ADDITIONAL_DOCUMENTS":  null,
-                "ENABLE_GOOGLE_ANALYTICS": null,
                 "E_LICENSING_URL": null,
                 "S3_PRIVATE_BUCKET": null,
                 "S3_PRIVATE_HOST": null,
@@ -477,15 +476,6 @@
                                         }
                                     },
                                     {
-                                        "name": "ENABLE_GOOGLE_ANALYTICS",
-                                        "valueFrom": {
-                                            "configMapKeyRef": {
-                                                "key": "ENABLE_GOOGLE_ANALYTICS",
-                                                "name": "gwells-global-config${NAME_SUFFIX}"
-                                            }
-                                        }
-                                    },
-                                    {
                                         "name": "S3_AQUIFER_BUCKET",
                                         "valueFrom": {
                                             "configMapKeyRef": {
@@ -733,6 +723,15 @@
                                     {
                                         "name": "ENFORCE_ENV_VARIABLES",
                                         "value": "False"
+                                    },
+                                    {
+                                        "name": "GEOCODER_ADDRESS_API_BASE",
+                                        "valueFrom": {
+                                            "configMapKeyRef": {
+                                                "key": "GEOCODER_ADDRESS_API_BASE",
+                                                "name": "gwells-global-config${NAME_SUFFIX}"
+                                            }
+                                        }
                                     }
                                 ],
                                 "resources": {

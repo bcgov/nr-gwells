@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
 import datetime
 import logging.config
 from pathlib import Path
@@ -23,6 +24,7 @@ from gwells.settings.base import get_env_variable
 
 BASE_DIR = str(Path(__file__).parents[2])
 
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -46,10 +48,6 @@ SESSION_COOKIE_HTTPONLY = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_env_variable('DJANGO_DEBUG', 'False') == 'True'
-
-# Controls availability of Google Analytics
-ENABLE_GOOGLE_ANALYTICS = get_env_variable(
-    'ENABLE_GOOGLE_ANALYTICS', 'False', strict=True) == 'True'
 
 # Additional Documents Feature Flag
 ENABLE_ADDITIONAL_DOCUMENTS = get_env_variable(
@@ -75,7 +73,6 @@ if get_env_variable('CUSTOM_GDAL_GEOS', 'True', strict=False, warn=False) == 'Tr
 # django-settings-export lets us make these variables available in the templates.
 # This eleminate the need for setting the context for each and every view.
 SETTINGS_EXPORT = [
-    'ENABLE_GOOGLE_ANALYTICS',      # This is only enabled for production
     # To temporarily disable additional documents feature
     'ENABLE_ADDITIONAL_DOCUMENTS',
     # This allows for moving the app around without code changes
@@ -265,12 +262,15 @@ except:
     public_key = get_env_variable('SSO_PUBKEY', "")
 
 
-JWT_AUTH = {
-    'JWT_PUBLIC_KEY': ("-----BEGIN PUBLIC KEY-----\n" +
-                       public_key +
-                       "\n-----END PUBLIC KEY-----"),
-    'JWT_ALGORITHM': 'RS256',
-    'JWT_AUDIENCE': get_env_variable('SSO_AUDIENCE')
+SIMPLE_JWT = {
+    'ALGORITHM': 'RS256',
+    'VERIFYING_KEY': ("-----BEGIN PUBLIC KEY-----\n" +
+                      public_key +
+                      "\n-----END PUBLIC KEY-----"),
+    'AUDIENCE': None,
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'USER_ID_FIELD': 'username',
+    'USER_ID_CLAIM': 'preferred_username',
 }
 
 
@@ -316,6 +316,15 @@ SWAGGER_SETTINGS = {
 }
 
 ADD_REVERSION_ADMIN = True
+
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'apps.smtp.gov.bc.ca'
+EMAIL_PORT = 25
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'no-reply@gov.bc.ca'
+EMAIL_HOST_PASSWORD = ''
 
 
 # It can be very useful to disable migrations when testing. This piece of code allows one to disable

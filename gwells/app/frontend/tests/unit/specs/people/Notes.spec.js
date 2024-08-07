@@ -21,7 +21,8 @@ describe('Notes.vue', () => {
       user: () => null,
       currentDriller: jest.fn().mockReturnValue(fakePerson),
       drillers: () => [],
-      userRoles: () => ({ registry: { edit: true, view: true, approve: true } })
+      userRoles: () => ({ registry: { edit: true, view: true, approve: true } }),
+      keycloak: () => ({idTokenParsed: { displayName: fakePerson.first_name}})
     }
     store = new Vuex.Store({ getters, actions, mutations })
   })
@@ -32,7 +33,7 @@ describe('Notes.vue', () => {
       localVue,
       stubs: ['router-link', 'router-view'],
       mocks: {
-        $route: {params: {person_guid: 'aaaa-4444-bbbb-1111'}}
+        $route: { params: { person_guid: 'aaaa-4444-bbbb-1111' } }
       }
     })
     expect(wrapper.find('#notesSectionTitle').text()).toEqual('Notes')
@@ -44,7 +45,7 @@ describe('Notes.vue', () => {
       localVue,
       stubs: ['router-link', 'router-view'],
       mocks: {
-        $route: {params: {person_guid: 'aaaa-4444-bbbb-1111'}}
+        $route: { params: { person_guid: 'aaaa-4444-bbbb-1111' } }
       },
       propsData: { type: 'person', guid: fakePerson.person_guid, record: fakePerson }
     })
