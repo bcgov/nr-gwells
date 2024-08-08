@@ -1,14 +1,15 @@
 #!/bin/bash
 if [ "$ENVIRONMENT" = "local" ]; then
   echo "Running in local environment" &&
+  echo "Current working directory: $(pwd)" &&
+  echo "files:" &&
+  ls -l &&
   sleep 3 &&
   set -x &&
-  cd /app/backend &&
-  mkdir -p .pip &&
-  curl -s -o get-pip.py https://bootstrap.pypa.io/pip/3.5/get-pip.py && python3 get-pip.py && 
-  python3 -m pip install --upgrade pip &&
-  python3 -m pip install ptvsd &&
-  python3 -m pip install --cache-dir=.pip -r requirements.txt &&
+  # mkdir -p .pip &&
+  # python3 -m pip install --upgrade pip &&
+  # python3 -m pip install ptvsd &&
+  # python3 -m pip install --cache-dir=.pip -r requirements.txt &&
   python3 manage.py migrate --noinput &&
   ./load_fixtures.sh all &&
   python3 manage.py createinitialrevisions &&
@@ -19,7 +20,6 @@ elif [ "$ENVIRONMENT" = "test" ]; then
   echo "Running in test environment" &&
   sleep 3 &&
   set -x &&
-  cd /app/backend &&
   mkdir -p .pip &&
   python3 -m pip install --upgrade pip &&
   python3 -m pip install ptvsd &&

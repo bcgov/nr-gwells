@@ -140,13 +140,14 @@ services:
 #############################################################################################
   backend:
     platform: linux/x86_64
+    working_dir: /app/backend
     build:
       context: ./backend
       dockerfile: Dockerfile
     hostname: backend
-    env_file:
-    - path: ./.env.test
-      required: false
+    # env_file:
+    # - path: ./.env.test
+    #   required: false
     environment:
       ENVIRONMENT: "${ENVIRONMENT:-local}"
       APP_CONTEXT_ROOT: gwells
@@ -201,8 +202,8 @@ services:
     #     target: /backend
     #     consistency: cached
     #   - type: bind
-    #     source: ./scripts/backend-command-script.sh
-    #     target: /scripts/backend-command-script.sh
+    #     source: ./backend-command-script.sh
+    #     target: /backend-command-script.sh
     #     consistency: cached
     ports:
       - "8000:8000"
