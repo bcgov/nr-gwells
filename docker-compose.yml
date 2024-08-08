@@ -194,16 +194,16 @@ services:
       EMAIL_NOTIFICATION_RECIPIENT: sustainment.team@gov.bc.ca
       GEOCODER_ADDRESS_API_BASE: https://geocoder.api.gov.bc.ca/addresses.json?
       LOCAL: True
-    command: ./scripts/backend-command-script.sh
-    volumes:
-      - type: bind
-        source: ./backend
-        target: /backend
-        consistency: cached
-      - type: bind
-        source: ./scripts/backend-command-script.sh
-        target: /scripts/backend-command-script.sh
-        consistency: cached
+      LOAD_FIXTURES: True
+    # volumes:
+    #   - type: bind
+    #     source: ./backend
+    #     target: /backend
+    #     consistency: cached
+    #   - type: bind
+    #     source: ./scripts/backend-command-script.sh
+    #     target: /scripts/backend-command-script.sh
+    #     consistency: cached
     ports:
       - "8000:8000"
       - "3000:3000"
