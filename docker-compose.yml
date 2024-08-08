@@ -140,13 +140,14 @@ services:
 #############################################################################################
   backend:
     platform: linux/x86_64
+    working_dir: /app/backend
     build:
       context: ./backend
       dockerfile: Dockerfile
     hostname: backend
-    env_file:
-    - path: ./.env.test
-      required: false
+    # env_file:
+    # - path: ./.env.test
+    #   required: false
     environment:
       ENVIRONMENT: "${ENVIRONMENT:-local}"
       APP_CONTEXT_ROOT: gwells
@@ -194,16 +195,16 @@ services:
       EMAIL_NOTIFICATION_RECIPIENT: sustainment.team@gov.bc.ca
       GEOCODER_ADDRESS_API_BASE: https://geocoder.api.gov.bc.ca/addresses.json?
       LOCAL: True
-    command: ./scripts/backend-command-script.sh
-    volumes:
-      - type: bind
-        source: ./backend
-        target: /backend
-        consistency: cached
-      - type: bind
-        source: ./scripts/backend-command-script.sh
-        target: /scripts/backend-command-script.sh
-        consistency: cached
+      LOAD_FIXTURES: True
+    # volumes:
+    #   - type: bind
+    #     source: ./backend
+    #     target: /backend
+    #     consistency: cached
+    #   - type: bind
+    #     source: ./backend-command-script.sh
+    #     target: /backend-command-script.sh
+    #     consistency: cached
     ports:
       - "8000:8000"
       - "3000:3000"
