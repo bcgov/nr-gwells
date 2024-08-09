@@ -13,7 +13,7 @@ services:
 #############################################################################################
   minio-public:
     build:
-      context: ./openshift/docker/minio/
+      context: ./gwells/openshift/docker/minio/
     hostname: minio
     ports:
     - "9000:9000"
@@ -140,7 +140,7 @@ services:
 #############################################################################################
   backend:
     platform: linux/x86_64
-    working_dir: /app/backend
+    working_dir: /app
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -196,6 +196,16 @@ services:
       GEOCODER_ADDRESS_API_BASE: https://geocoder.api.gov.bc.ca/addresses.json?
       LOCAL: True
       LOAD_FIXTURES: True
+    command: /bin/bash -c "
+      python3 -m pip install --upgrade pip &&
+      python3 -m pip install ptvsd &&
+      python3 -m pip install -r requirements.txt &&
+      python3 manage.py migrate --noinput &&
+      ./load_fixtures.sh all &&
+      python3 manage.py createinitialrevisions &&
+      python3 manage.py collectstatic --noinput &&
+      python3 manage.py export --cleanup=1 --upload=1 &&
+      python3 manage.py runserver 0.0.0.0:8000"
     # volumes:
     #   - type: bind
     #     source: ./backend
