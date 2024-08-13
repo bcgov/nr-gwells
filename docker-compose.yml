@@ -116,7 +116,7 @@ services:
       dockerfile: Dockerfile
     hostname: frontend
     environment:
-      DEBUG: "True"
+      DEBUG: "true"
       VUE_APP_AXIOS_BASE_URL: /api/
       VUE_APP_VECTOR_TILE_BASE_URL: "/tiles/"
       VECTOR_TILE_SERVER: "http://tileserv:7800/"
@@ -157,10 +157,10 @@ services:
       DATABASE_PASSWORD: "${DATABASE_PASSWORD:-test1}"
       DATABASE_SERVICE_NAME: gwells
       DJANGO_ADMIN_URL: admin
-      DJANGO_DEBUG: "True"
+      DJANGO_DEBUG: "true"
       DJANGO_SECRET_KEY: secret
-      ENABLE_ADDITIONAL_DOCUMENTS: "True"
-      ENABLE_AQUIFERS_SEARCH: "True"
+      ENABLE_ADDITIONAL_DOCUMENTS: "true"
+      ENABLE_AQUIFERS_SEARCH: "true"
       GWELLS_SERVICE_HOST: "${GWELLS_SERVICE_HOST:-db}"
       GWELLS_SERVICE_PORT: "${GWELLS_SERVICE_PORT:-5432}"
       MINIO_ACCESS_KEY: minio
@@ -193,8 +193,8 @@ services:
       S3_USE_SECURE: 0
       EMAIL_NOTIFICATION_RECIPIENT: sustainment.team@gov.bc.ca
       GEOCODER_ADDRESS_API_BASE: https://geocoder.api.gov.bc.ca/addresses.json?
-      LOCAL: True
-      LOAD_FIXTURES: True
+      LOCAL: "true"
+      LOAD_FIXTURES: "true"
     command: /bin/bash -c "
       python3 -m pip install --upgrade pip &&
       python3 -m pip install ptvsd &&
