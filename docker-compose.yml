@@ -73,7 +73,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata-volume:/pgdata:z
+      - /pgdata:z
       - ./database/scripts/local_dev/setup.sql:/pgconf/setup.sql
     healthcheck:
       test: ["CMD-SHELL", "/usr/pgsql-12/bin/pg_isready", "-d", "gwells"]
@@ -217,9 +217,3 @@ services:
     environment:
       PGADMIN_DEFAULT_PASSWORD: admin
       PGADMIN_DEFAULT_EMAIL: admin@gwells.com
-
-#############################################################################################
-###                                       Volumes                                         ###
-#############################################################################################
-volumes:
-  pgdata-volume:
