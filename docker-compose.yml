@@ -32,7 +32,7 @@ services:
 #############################################################################################
   minio-private:
     build:
-      context: ./openshift/docker/minio/
+      context: ./gwells/openshift/docker/minio/
     hostname: minio
     ports:
     - "9001:9001"
@@ -110,9 +110,11 @@ services:
 ###                                       Frontend                                        ###
 #############################################################################################
   frontend:
-    image: node:14.21.3
+    working_dir: /app
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     hostname: frontend
-    working_dir: /app/frontend
     environment:
       DEBUG: "True"
       VUE_APP_AXIOS_BASE_URL: /api/
@@ -120,17 +122,14 @@ services:
       VECTOR_TILE_SERVER: "http://tileserv:7800/"
       API_TARGET: "${API_TARGET:-http://backend:8000/}"
     command: /bin/bash -c "
-        set -x &&
-        cd /app/frontend &&
-        npm install &&
         npm run serve"
     ports:
       - "8080:8080"
-    volumes:
-      - type: bind
-        source: ./app/frontend
-        target: /app/frontend
-      - /app/frontend/node_modules/
+    # volumes:
+    #   - type: bind
+    #     source: ./app/frontend
+    #     target: /app/frontend
+    #   - /app/frontend/node_modules/
     depends_on:
       - backend
     networks:
