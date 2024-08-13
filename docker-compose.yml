@@ -96,9 +96,9 @@ services:
       - db
     platform: linux/x86_64
     image: pramsey/pg_tileserv:20231005
-    env_file:
-    - path: ./.env.test
-      required: false
+    # env_file:
+    # - path: ./.env.test
+    #   required: false
     environment:
       DATABASE_URL: "postgres://ftw_reader:${DATABASE_PASSWORD:-test1}@${GWELLS_SERVICE_HOST:-db}:${GWELLS_SERVICE_PORT:-5432}/gwells"
     ports:
