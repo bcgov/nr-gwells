@@ -80,10 +80,10 @@
   #       with:
   #         sarif_file: "trivy-results.sarif"
 
-  # results:
-  #   name: Analysis Results
-  #   needs: [tests, trivy]
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - run: echo "Success!"
+  results:
+    name: Analysis Results
+    # needs: [tests, trivy]
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo "Success!"
 
