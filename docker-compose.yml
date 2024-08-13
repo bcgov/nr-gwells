@@ -17,9 +17,9 @@ services:
       context: ./gwells/openshift/docker/minio/
     hostname: minio
     ports:
-    - "9000:9000"
+      - "9000:9000"
     volumes:
-    - /data
+      - /data
     environment:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio1234
@@ -35,9 +35,9 @@ services:
       context: ./gwells/openshift/docker/minio/
     hostname: minio
     ports:
-    - "9001:9001"
+      - "9001:9001"
     volumes:
-    - /data
+      - /data
     environment:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio1234
@@ -73,7 +73,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - /pgdata:z
+      - /pgdata
       - ./database/scripts/local_dev/setup.sql:/pgconf/setup.sql
     healthcheck:
       test: ["CMD-SHELL", "/usr/pgsql-12/bin/pg_isready", "-d", "gwells"]
@@ -207,13 +207,16 @@ services:
         condition: service_healthy
 
 #############################################################################################
-###                                       Volumes                                         ###
+###                                       PGAdmin                                         ###
 #############################################################################################
   pgadmin:
     container_name: gwells-pgadmin
+    profiles: ["pgadmin"]
     image: dpage/pgadmin4
     ports:
       - 5050:80
     environment:
       PGADMIN_DEFAULT_PASSWORD: admin
       PGADMIN_DEFAULT_EMAIL: admin@gwells.com
+    depends_on:
+      - db
