@@ -26,8 +26,6 @@ services:
       MINIO_DATA_DIR: /data
     entrypoint: /minio-entrypoint.sh
     command: server /data
-    networks:
-      - gwells-network
 
 #############################################################################################
 ###                                       Minio-Priv                                      ###
@@ -46,8 +44,6 @@ services:
       MINIO_DATA_DIR: /data
     entrypoint: /minio-entrypoint.sh
     command: server --address :9001 /data
-    networks:
-      - gwells-network
 
 #############################################################################################
 ###                                       CrunchyDB                                       ###
@@ -85,8 +81,6 @@ services:
       timeout: 30s
       retries: 5
       start_period: 120s
-    networks:
-      - gwells-network
 
 #############################################################################################
 ###                                       Tileserv                                        ###
@@ -105,8 +99,6 @@ services:
     ports:
       - "7800:7800"
     entrypoint: sh -c "sleep 10; /app/pg_tileserv"
-    networks:
-      - gwells-network
 
 #############################################################################################
 ###                                       Frontend                                        ###
@@ -132,8 +124,6 @@ services:
       - /frontend/node_modules/
     depends_on:
       - backend
-    networks:
-      - gwells-network
 
 #############################################################################################
 ###                                       Backend                                         ###
@@ -215,8 +205,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - gwells-network
 
 #############################################################################################
 ###                                       Volumes                                         ###
@@ -229,19 +217,9 @@ services:
     environment:
       PGADMIN_DEFAULT_PASSWORD: admin
       PGADMIN_DEFAULT_EMAIL: admin@gwells.com
-    networks:
-      - gwells-network
-
 
 #############################################################################################
 ###                                       Volumes                                         ###
 #############################################################################################
 volumes:
   pgdata-volume:
-
-#############################################################################################
-###                                       Network                                         ###
-#############################################################################################
-networks:
-  gwells-network:
-    driver: "bridge"
