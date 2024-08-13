@@ -8,6 +8,7 @@
 #        For example:
 #          docker login -u garywong-bc -p `oc whoami -t` docker-registry.pathfinder.gov.bc.ca
 services:
+
 #############################################################################################
 ###                                       Minio-Pub                                       ###
 #############################################################################################
@@ -16,17 +17,16 @@ services:
       context: ./gwells/openshift/docker/minio/
     hostname: minio
     ports:
-    - "9000:9000"
+      - "9000:9000"
     volumes:
-    - /data
+      - /data
     environment:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio1234
       MINIO_DATA_DIR: /data
     entrypoint: /minio-entrypoint.sh
     command: server /data
-    networks:
-      - gwells-network
+
 #############################################################################################
 ###                                       Minio-Priv                                      ###
 #############################################################################################
@@ -35,17 +35,16 @@ services:
       context: ./gwells/openshift/docker/minio/
     hostname: minio
     ports:
-    - "9001:9001"
+      - "9001:9001"
     volumes:
-    - /data
+      - /data
     environment:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio1234
       MINIO_DATA_DIR: /data
     entrypoint: /minio-entrypoint.sh
     command: server --address :9001 /data
-    networks:
-      - gwells-network
+
 #############################################################################################
 ###                                       CrunchyDB                                       ###
 #############################################################################################
@@ -72,21 +71,17 @@ services:
       TILESERVER_USER: ftw_reader
       TILESERVER_PASSWORD: test1
     ports:
-    - "5432:5432"
+      - "5432:5432"
     volumes:
-      - pgdata-volume:/pgdata:z
-      - type: bind
-        source: ./database/scripts/local_dev/setup.sql
-        target: /pgconf/setup.sql
-        consistency: cached
+      - /pgdata
+      - ./database/scripts/local_dev/setup.sql:/pgconf/setup.sql
     healthcheck:
       test: ["CMD-SHELL", "/usr/pgsql-12/bin/pg_isready", "-d", "gwells"]
       interval: 20s
       timeout: 30s
       retries: 5
       start_period: 120s
-    networks:
-      - gwells-network
+
 #############################################################################################
 ###                                       Tileserv                                        ###
 #############################################################################################
@@ -96,16 +91,15 @@ services:
       - db
     platform: linux/x86_64
     image: pramsey/pg_tileserv:20231005
-    env_file:
-    - path: ./.env.test
-      required: false
+    # env_file:
+    # - path: ./.env.test
+    #   required: false
     environment:
       DATABASE_URL: "postgres://ftw_reader:${DATABASE_PASSWORD:-test1}@${GWELLS_SERVICE_HOST:-db}:${GWELLS_SERVICE_PORT:-5432}/gwells"
     ports:
       - "7800:7800"
     entrypoint: sh -c "sleep 10; /app/pg_tileserv"
-    networks:
-      - gwells-network
+
 #############################################################################################
 ###                                       Frontend                                        ###
 #############################################################################################
@@ -116,7 +110,7 @@ services:
       dockerfile: Dockerfile
     hostname: frontend
     environment:
-      DEBUG: "True"
+      DEBUG: "true"
       VUE_APP_AXIOS_BASE_URL: /api/
       VUE_APP_VECTOR_TILE_BASE_URL: "/tiles/"
       VECTOR_TILE_SERVER: "http://tileserv:7800/"
@@ -126,14 +120,11 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - type: bind
-        source: ./frontend
-        target: /frontend
+      - ./frontend:/frontend
       - /frontend/node_modules/
     depends_on:
       - backend
-    networks:
-      - gwells-network
+
 #############################################################################################
 ###                                       Backend                                         ###
 #############################################################################################
@@ -157,10 +148,10 @@ services:
       DATABASE_PASSWORD: "${DATABASE_PASSWORD:-test1}"
       DATABASE_SERVICE_NAME: gwells
       DJANGO_ADMIN_URL: admin
-      DJANGO_DEBUG: "True"
+      DJANGO_DEBUG: "true"
       DJANGO_SECRET_KEY: secret
-      ENABLE_ADDITIONAL_DOCUMENTS: "True"
-      ENABLE_AQUIFERS_SEARCH: "True"
+      ENABLE_ADDITIONAL_DOCUMENTS: "true"
+      ENABLE_AQUIFERS_SEARCH: "true"
       GWELLS_SERVICE_HOST: "${GWELLS_SERVICE_HOST:-db}"
       GWELLS_SERVICE_PORT: "${GWELLS_SERVICE_PORT:-5432}"
       MINIO_ACCESS_KEY: minio
@@ -193,8 +184,8 @@ services:
       S3_USE_SECURE: 0
       EMAIL_NOTIFICATION_RECIPIENT: sustainment.team@gov.bc.ca
       GEOCODER_ADDRESS_API_BASE: https://geocoder.api.gov.bc.ca/addresses.json?
-      LOCAL: True
-      LOAD_FIXTURES: True
+      LOCAL: "true"
+      LOAD_FIXTURES: "true"
     command: /bin/bash -c "
       python3 -m pip install --upgrade pip &&
       python3 -m pip install ptvsd &&
@@ -205,48 +196,27 @@ services:
       python3 manage.py collectstatic --noinput &&
       python3 manage.py export --cleanup=1 --upload=1 &&
       python3 manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - type: bind
-        source: ./backend
-        target: /backend
-        consistency: cached
-      # - type: bind
-      #   source: ./backend-command-script.sh
-      #   target: /backend-command-script.sh
-      #   consistency: cached
+    volumes: 
+      - ./backend:/backend
+      # - ./backend-command-script.sh:/backend-command-script.sh
     ports:
       - "8000:8000"
       - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - gwells-network
 
 #############################################################################################
-###                                       Volumes                                         ###
+###                                       PGAdmin                                         ###
 #############################################################################################
   pgadmin:
     container_name: gwells-pgadmin
+    profiles: ["pgadmin"]
     image: dpage/pgadmin4
     ports:
       - 5050:80
     environment:
       PGADMIN_DEFAULT_PASSWORD: admin
       PGADMIN_DEFAULT_EMAIL: admin@gwells.com
-    networks:
-      - gwells-network
-
-
-#############################################################################################
-###                                       Volumes                                         ###
-#############################################################################################
-volumes:
-  pgdata-volume:
-
-#############################################################################################
-###                                       Network                                         ###
-#############################################################################################
-networks:
-  gwells-network:
-    driver: "bridge"
+    depends_on:
+      - db
