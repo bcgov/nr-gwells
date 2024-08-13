@@ -8,6 +8,7 @@
 #        For example:
 #          docker login -u garywong-bc -p `oc whoami -t` docker-registry.pathfinder.gov.bc.ca
 services:
+
 #############################################################################################
 ###                                       Minio-Pub                                       ###
 #############################################################################################
@@ -27,6 +28,7 @@ services:
     command: server /data
     networks:
       - gwells-network
+
 #############################################################################################
 ###                                       Minio-Priv                                      ###
 #############################################################################################
@@ -46,6 +48,7 @@ services:
     command: server --address :9001 /data
     networks:
       - gwells-network
+
 #############################################################################################
 ###                                       CrunchyDB                                       ###
 #############################################################################################
@@ -72,13 +75,10 @@ services:
       TILESERVER_USER: ftw_reader
       TILESERVER_PASSWORD: test1
     ports:
-    - "5432:5432"
+      - "5432:5432"
     volumes:
       - pgdata-volume:/pgdata:z
-      - type: bind
-        source: ./database/scripts/local_dev/setup.sql
-        target: /pgconf/setup.sql
-        consistency: cached
+      - ./database/scripts/local_dev/setup.sql:/pgconf/setup.sql
     healthcheck:
       test: ["CMD-SHELL", "/usr/pgsql-12/bin/pg_isready", "-d", "gwells"]
       interval: 20s
@@ -87,6 +87,7 @@ services:
       start_period: 120s
     networks:
       - gwells-network
+
 #############################################################################################
 ###                                       Tileserv                                        ###
 #############################################################################################
@@ -106,6 +107,7 @@ services:
     entrypoint: sh -c "sleep 10; /app/pg_tileserv"
     networks:
       - gwells-network
+
 #############################################################################################
 ###                                       Frontend                                        ###
 #############################################################################################
@@ -126,14 +128,13 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - type: bind
-        source: ./frontend
-        target: /frontend
+      - ./frontend:/frontend
       - /frontend/node_modules/
     depends_on:
       - backend
     networks:
       - gwells-network
+
 #############################################################################################
 ###                                       Backend                                         ###
 #############################################################################################
@@ -205,15 +206,9 @@ services:
       python3 manage.py collectstatic --noinput &&
       python3 manage.py export --cleanup=1 --upload=1 &&
       python3 manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - type: bind
-        source: ./backend
-        target: /backend
-        consistency: cached
-      # - type: bind
-      #   source: ./backend-command-script.sh
-      #   target: /backend-command-script.sh
-      #   consistency: cached
+    volumes: 
+      - ./backend:/backend
+      # - ./backend-command-script.sh:/backend-command-script.sh
     ports:
       - "8000:8000"
       - "3000:3000"
