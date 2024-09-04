@@ -35,9 +35,15 @@ jobs:
   #     oc_namespace: ${{ secrets.OC_NAMESPACE }}
   #     oc_token: ${{ secrets.OC_TOKEN }}
   #   with:
-  #     triggers: ('backend/' 'frontend/' 'migrations/')
+  #     triggers: ('frontend/')
   #     params:
   #       --set global.secrets.persist=false
+
+  deploy:
+    name: Deploy
+    needs: [builds]
+    secrets: inherit
+    uses: ./.github/workflows/.deploy.yml
 
   # tests:
   #   name: Tests
