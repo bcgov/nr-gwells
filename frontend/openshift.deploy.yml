@@ -110,4 +110,4 @@ objects:
         weight: 100
       tls:
         termination: edge
-        insecureEdgeTerminationPolicy: Redirects
+        insecureEdgeTerminationPolicy: Redirect
