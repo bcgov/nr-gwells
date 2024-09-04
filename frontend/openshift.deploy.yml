@@ -61,8 +61,8 @@ objects:
               env:
                 - name: LOG_LEVEL
                   value: info
-                - name: VUE_APP_AXIOS_BASE_URL
-                  value: http://${APP}-${TARGET}/gwells/api/v2/
+                # - name: VUE_APP_AXIOS_BASE_URL
+                #   value: http://${APP}-${TARGET}/gwells/api/v2/
               ports:
                 - name: http
                   containerPort: 5173
