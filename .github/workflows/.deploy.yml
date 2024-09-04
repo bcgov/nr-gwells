@@ -1,0 +1,37 @@
+name: .Deploys
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: GitHub environment; e.g. PR number (omit), TEST or PROD
+        required: false
+        type: string
+      tag: 
+        description: Image tag; e.g. PR number or latest
+        default: ${{ github.event.number }}
+        required: false
+        type: string
+      target:
+        description: Deployment target; e.g. PR number (omit), test or prod
+        default: ${{ github.event.number }}
+        required: false
+        type: string
+
+jobs:
+  frontend:
+    name: Frontend
+    # needs: [backend]
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Deploy Frontend
+        uses: bcgov-nr/action-deployer-openshift@v3.0.0
+        with:
+          oc_namespace: ${{ vars.OC_NAMESPACE }}
+          oc_server: ${{ vars.OC_SERVER }}
+          oc_token: ${{ secrets.OC_TOKEN }}
+          file: frontend/openshift.deploy.yml
+          overwrite: true
+          parameters:
+            -p TAG=${{ inputs.tag }} -p TARGET=${{ inputs.target }}
