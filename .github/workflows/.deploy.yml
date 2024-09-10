@@ -56,3 +56,18 @@ jobs:
             -p LIMIT_CPU=500m
             -p LIMIT_MEMORY=1Gi
             -p POSTGRESQL_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+
+  backend:
+    name: Backend
+    # environment: ${{ inputs.environment }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Deplaoy Backend
+        uses: bcgov-nr/action-deployer-openshift@v3.0.0
+        with:
+            oc_namespace: ${{ vars.OC_NAMESPACE }}
+            oc_server: ${{ vars.OC_SERVER }}
+            oc_token: ${{ secrets.OC_TOKEN }}
+            file: backend/backend.dc.json
+            parameters:
+                
