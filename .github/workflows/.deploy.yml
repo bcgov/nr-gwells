@@ -70,4 +70,5 @@ jobs:
             oc_token: ${{ secrets.OC_TOKEN }}
             file: backend/backend.dc.json
             parameters:
-                
+                -p NAME_SUFFIX=-dev-${{ github.event.number }}
+                -p ENV_NAME=dev
