@@ -26,19 +26,6 @@ jobs:
           tag_fallback: latest
           triggers: ('${{ matrix.package }}/')
 
-  # # https://github.com/bcgov/quickstart-openshift-helpers
-  # deploys:
-  #   name: Deploys
-  #   needs: [builds]
-  #   uses: bcgov/quickstart-openshift-helpers/.github/workflows/.deployer.yml@v0.6.1
-  #   secrets:
-  #     oc_namespace: ${{ secrets.OC_NAMESPACE }}
-  #     oc_token: ${{ secrets.OC_TOKEN }}
-  #   with:
-  #     triggers: ('frontend/')
-  #     params:
-  #       --set global.secrets.persist=false
-
   deploy:
     name: Deploy
     needs: [builds]
@@ -60,3 +47,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - run: echo "Success!"
+
+  # dump:
+  #   name: Dump Context
+  #   runs-on: ubuntu-22.04
+  #   env:
+  #     CONTEXT: ${{ toJson(github) }}
+  #   steps:
+  #     - run: echo "${{ env.CONTEXT }}"

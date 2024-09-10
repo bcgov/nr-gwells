@@ -34,14 +34,14 @@ jobs:
         uses: bcgov-nr/action-get-pr@v0.0.1
 
   # https://github.com/bcgov/quickstart-openshift-helpers
-  deploy-test:
-    name: Deploy (test)
-    uses: bcgov/quickstart-openshift-helpers/.github/workflows/.deployer.yml@v0.6.1
-    secrets:
-      oc_namespace: ${{ secrets.OC_NAMESPACE }}
-      oc_token: ${{ secrets.OC_TOKEN }}
-    with:
-      environment: test
+  # deploy-test:
+  #   name: Deploy (test)
+  #   uses: bcgov/quickstart-openshift-helpers/.github/workflows/.deployer.yml@v0.6.1
+  #   secrets:
+  #     oc_namespace: ${{ secrets.OC_NAMESPACE }}
+  #     oc_token: ${{ secrets.OC_TOKEN }}
+  #   with:
+  #     environment: test
 
   # deploy-prod:
   #   name: Deploy (prod)
