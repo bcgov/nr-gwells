@@ -29,10 +29,7 @@ parameters:
     generate: expression
     name: POSTGRESQL_USER
     required: true
-  - description: Password for the PostgreSQL connection user.
-    displayName: PostgreSQL Connection Password
-    from: "[a-zA-Z0-9]{16}"
-    generate: expression
+  - description: Password for the PostgreSQL connection user
     name: POSTGRESQL_PASSWORD
     required: true
   - description: Name of the PostgreSQL database accessed.
