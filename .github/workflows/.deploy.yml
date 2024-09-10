@@ -44,7 +44,7 @@ jobs:
           file: database/postgresql.dc.yml
           overwrite: true
           parameters:
-            -p DATABASE_SERVICE_NAME=gwells-pg12-dev-${{ github.event.number }}
+            -p DATABASE_SERVICE_NAME=nr-gwells-pg12-dev-${{ github.event.number }}
             -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
             -p IMAGE_STREAM_NAME=crunchy-postgres-gis
             -p NAME_SUFFIX=-dev-${{ github.event.number }}

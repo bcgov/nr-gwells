@@ -48,10 +48,10 @@ jobs:
     steps:
       - run: echo "Success!"
 
-  dump:
-    name: Dump Context
-    runs-on: ubuntu-22.04
-    env:
-      CONTEXT: ${{ toJson(github) }}
-    steps:
-      - run: echo "${{ env.CONTEXT }}"
+  # dump:
+  #   name: Dump Context
+  #   runs-on: ubuntu-22.04
+  #   env:
+  #     CONTEXT: ${{ toJson(github) }}
+  #   steps:
+  #     - run: echo "${{ env.CONTEXT }}"
