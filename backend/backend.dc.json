@@ -198,7 +198,7 @@
                                         "name": "PGDATABASE",
                                         "valueFrom": {
                                             "secretKeyRef": {
-                                                "name": "gwells-pg12${NAME_SUFFIX}",
+                                                "name": "nr-gwells-pg12${NAME_SUFFIX}",
                                                 "key": "database-name"
                                             }
                                         }
@@ -207,7 +207,7 @@
                                         "name": "PGUSER",
                                         "valueFrom": {
                                             "secretKeyRef": {
-                                                "name": "gwells-pg12${NAME_SUFFIX}",
+                                                "name": "nr-gwells-pg12${NAME_SUFFIX}",
                                                 "key": "database-user"
                                             }
                                         }
@@ -216,14 +216,14 @@
                                         "name": "PGPASSWORD",
                                         "valueFrom": {
                                             "secretKeyRef": {
-                                                "name": "gwells-pg12${NAME_SUFFIX}",
+                                                "name": "nr-gwells-pg12${NAME_SUFFIX}",
                                                 "key": "database-password"
                                             }
                                         }
                                     },
                                     {
                                         "name": "PGHOST",
-                                        "value": "gwells-pg12${NAME_SUFFIX}"
+                                        "value": "nr-gwells-pg12${NAME_SUFFIX}"
                                     }
                                 ]
                             }
