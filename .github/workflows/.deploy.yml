@@ -19,19 +19,39 @@ on:
         type: string
 
 jobs:
-  frontend:
-    name: Frontend
-    # needs: [backend]
-    environment: ${{ inputs.environment }}
+  database:
+    name: Database
+    # environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
     steps:
-      - name: Deploy Frontend
+      # - name: Deploy Frontend
+      #   uses: bcgov-nr/action-deployer-openshift@v3.0.0
+      #   with:
+      #     oc_namespace: ${{ vars.OC_NAMESPACE }}
+      #     oc_server: ${{ vars.OC_SERVER }}
+      #     oc_token: ${{ secrets.OC_TOKEN }}
+      #     file: frontend/openshift.deploy.yml
+      #     overwrite: true
+      #     parameters:
+      #       -p TAG=${{ inputs.tag }} -p TARGET=${{ inputs.target }}
+
+      - name: Database
         uses: bcgov-nr/action-deployer-openshift@v3.0.0
         with:
           oc_namespace: ${{ vars.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
           oc_token: ${{ secrets.OC_TOKEN }}
-          file: frontend/openshift.deploy.yml
+          file: database/postgresql.dc.yml
           overwrite: true
           parameters:
-            -p TAG=${{ inputs.tag }} -p TARGET=${{ inputs.target }}
+            -p DATABASE_SERVICE_NAME=gwells-pg12-dev-${{ github.event.number }}
+            -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
+            -p IMAGE_STREAM_NAME=crunchy-postgres-gis
+            -p NAME_SUFFIX=-dev-${{ github.event.number }}
+            -p POSTGRESQL_DATABASE=gwells
+            -p VOLUME_CAPACITY=1Gi
+            -p STORAGE_CLASS=netapp-file-standard
+            -p REQUEST_CPU=200m
+            -p REQUEST_MEMORY=512Mi
+            -p LIMIT_CPU=500m
+            -p LIMIT_MEMORY=1Gi
