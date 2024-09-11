@@ -1,6 +1,5 @@
----
 kind: Template
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 parameters:
 - name: NAME_SUFFIX
   displayName: Name Suffix
@@ -109,8 +108,8 @@ objects:
     labels:
       appver: nr-gwells${NAME_SUFFIX}
       app: nr-gwells${NAME_SUFFIX}
-- kind: DeploymentConfig
-  apiVersion: v1
+- kind: Deployment
+  apiVersion: apps/v1
   metadata:
     name: nr-gwells${NAME_SUFFIX}
     creationTimestamp: 
@@ -120,7 +119,7 @@ objects:
       description: Defines how to deploy the application server
   spec:
     strategy:
-      type: Rolling
+      type: RollingUpdate
       rollingParams:
         timeoutSeconds: 900
         # pre:
@@ -154,6 +153,7 @@ objects:
     test: false
     selector:
       name: nr-gwells${NAME_SUFFIX}
+      deployment: nr-gwells${NAME_SUFFIX}
     template:
       metadata:
         name: nr-gwells${NAME_SUFFIX}
@@ -161,6 +161,7 @@ objects:
         labels:
           name: nr-gwells${NAME_SUFFIX}
           appver: nr-gwells${NAME_SUFFIX}
+          deployment: nr-gwells${NAME_SUFFIX}
       spec:
         # initContainers:
         # - name: check-db
@@ -480,7 +481,7 @@ objects:
     minReplicas: 2
     scaleTargetRef:
       apiVersion: v1
-      kind: DeploymentConfig
+      kind: Deployment
       name: nr-gwells${NAME_SUFFIX}
     targetCPUUtilizationPercentage: 90
 - kind: Service
