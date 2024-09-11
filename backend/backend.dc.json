@@ -40,6 +40,12 @@
             "name": "MEMORY_LIMIT",
             "required": false,
             "value": "1Gi"
+        },
+        {
+            "name": "PSQL_IMAGE",
+            "description": "A psql client image (a PostgreSQL image will suffice)",
+            "required": true,
+            "value": "image-registry.openshift-image-registry.svc:5000/26e83e-tools/crunchy-postgres-gis:centos7-12.4-3.0-4.5.0"
         }
     ],
     "objects": [
@@ -118,23 +124,6 @@
             }
         },
         {
-            "kind": "Secret",
-            "apiVersion": "v1",
-            "type": "kubernetes.io/basic-auth",
-            "metadata": {
-                "creationTimestamp": null,
-                "name": "gwells-database-credentials${NAME_SUFFIX}",
-                "annotations": {
-                    "template.openshift.io.bcgov/create": "true"
-                }
-            },
-            "data": {
-                "password": null,
-                "postgres_admin_password": null,
-                "username": null
-            }
-        },
-        {
             "apiVersion": "v1",
             "data": {
                 "DB_REPLICATE": null,
@@ -151,6 +140,8 @@
                 "SSO_PORT": null,
                 "SSO_PUBKEY": null,
                 "SSO_REALM": null,
+                "SSO_TEST_AUDIENCE": null,
+                "SSO_TEST_CLIENT": null,
                 "GDAL_LIBRARY_PATH": null,
                 "GEOS_LIBRARY_PATH": null
             },
@@ -198,7 +189,7 @@
                                         "name": "PGDATABASE",
                                         "valueFrom": {
                                             "secretKeyRef": {
-                                                "name": "nr-gwells-pg12${NAME_SUFFIX}",
+                                                "name": "gwells-pg12${NAME_SUFFIX}",
                                                 "key": "database-name"
                                             }
                                         }
@@ -207,7 +198,7 @@
                                         "name": "PGUSER",
                                         "valueFrom": {
                                             "secretKeyRef": {
-                                                "name": "nr-gwells-pg12${NAME_SUFFIX}",
+                                                "name": "gwells-pg12${NAME_SUFFIX}",
                                                 "key": "database-user"
                                             }
                                         }
@@ -216,14 +207,14 @@
                                         "name": "PGPASSWORD",
                                         "valueFrom": {
                                             "secretKeyRef": {
-                                                "name": "nr-gwells-pg12${NAME_SUFFIX}",
+                                                "name": "gwells-pg12${NAME_SUFFIX}",
                                                 "key": "database-password"
                                             }
                                         }
                                     },
                                     {
                                         "name": "PGHOST",
-                                        "value": "nr-gwells-pg12${NAME_SUFFIX}"
+                                        "value": "gwells-pg12${NAME_SUFFIX}"
                                     }
                                 ]
                             }
@@ -250,7 +241,7 @@
                         "type": "ConfigChange"
                     }
                 ],
-                "replicas": 1,
+                "replicas": 2,
                 "test": false,
                 "selector": {
                     "name": "gwells${NAME_SUFFIX}"
@@ -268,7 +259,7 @@
                         "initContainers": [
                             {
                                 "name": "check-db",
-                                "image": "registry.access.redhat.com/rhscl/postgresql-95-rhel7@sha256:31d46b178b84cd92e1be5348f02a75f6a39867d5a57eb099b7c864deaaf02a49",
+                                "image": "${PSQL_IMAGE}",
                                 "command": [
                                     "/bin/bash",
                                     "-c",
@@ -366,15 +357,6 @@
                                         "value": "public"
                                     },
                                     {
-                                        "name": "POSTGRESQL_ADMIN_PASSWORD",
-                                        "valueFrom": {
-                                            "secretKeyRef": {
-                                                "name": "gwells-database-credentials${NAME_SUFFIX}",
-                                                "key": "postgres_admin_password"
-                                            }
-                                        }
-                                    },
-                                    {
                                         "name": "APP_MODULE",
                                         "value": "wsgi:application"
                                     },
@@ -384,7 +366,7 @@
                                     },
                                     {
                                         "name": "APP_CONFIG",
-                                        "value": "/opt/app-root/src/backend/gunicorn.cfg"
+                                        "value": "/opt/app-root/src/backend/gunicorn.ocp4.cfg"
                                     },
                                     {
                                         "name": "DJANGO_SECRET_KEY",
@@ -584,6 +566,24 @@
                                         }
                                     },
                                     {
+                                        "name": "SSO_TEST_CLIENT",
+                                        "valueFrom": {
+                                            "configMapKeyRef": {
+                                                "key": "SSO_TEST_CLIENT",
+                                                "name": "gwells-global-config${NAME_SUFFIX}"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "SSO_TEST_AUDIENCE",
+                                        "valueFrom": {
+                                            "configMapKeyRef": {
+                                                "key": "SSO_TEST_AUDIENCE",
+                                                "name": "gwells-global-config${NAME_SUFFIX}"
+                                            }
+                                        }
+                                    },
+                                    {
                                         "name": "ENABLE_ADDITIONAL_DOCUMENTS",
                                         "valueFrom": {
                                             "configMapKeyRef": {
@@ -723,6 +723,15 @@
                                     {
                                         "name": "ENFORCE_ENV_VARIABLES",
                                         "value": "False"
+                                    },
+                                    {
+                                        "name": "EMAIL_NOTIFICATION_RECIPIENT",
+                                        "valueFrom": {
+                                            "configMapKeyRef": {
+                                                "key": "EMAIL_NOTIFICATION_RECIPIENT",
+                                                "name": "gwells-global-config${NAME_SUFFIX}"
+                                            }
+                                        }
                                     },
                                     {
                                         "name": "GEOCODER_ADDRESS_API_BASE",
