@@ -237,13 +237,13 @@ objects:
           - name: APP_CONFIG
             value: "/opt/app-root/src/backend/gunicorn.ocp4.cfg"
           - name: DJANGO_SECRET_KEY
-            value: DJANGO_SECRET_KEY
+            value: ${DJANGO_SECRET_KEY}
           - name: DJANGO_ADMIN_URL
-            value: DJANGO_ADMIN_URL
+            value: ${DJANGO_ADMIN_URL}
           - name: DJANGO_ADMIN_USER
-            value: DJANGO_ADMIN_USER
+            value: ${DJANGO_ADMIN_USER}
           - name: DJANGO_ADMIN_PASSWORD
-            value: DJANGO_ADMIN_PASSWORD
+            value: ${DJANGO_ADMIN_PASSWORD}
           - name: E_LICENSING_AUTH_PASSWORD
             valueFrom:
               secretKeyRef:
