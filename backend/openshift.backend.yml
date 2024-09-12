@@ -38,6 +38,8 @@ parameters:
   required: true
 - name: E_LICENSING_AUTH_PASSWORD
   required: true
+- name: E_LICENSING_URL
+  required: true
 objects:
 - kind: ImageStream
   apiVersion: v1
@@ -85,12 +87,13 @@ objects:
   stringData:
     E_LICENSING_AUTH_PASSWORD: ${E_LICENSING_AUTH_PASSWORD}
     E_LICENSING_AUTH_USERNAME: ${E_LICENSING_AUTH_USERNAME}
-- apiVersion: v1
+- kind: ConfigMap
+  apiVersion: v1
   data:
     DB_REPLICATE: 
     DJANGO_DEBUG: 
     ENABLE_ADDITIONAL_DOCUMENTS: 
-    E_LICENSING_URL: 
+    E_LICENSING_URL: ${E_LICENSING_URL}
     S3_PRIVATE_BUCKET: 
     S3_PRIVATE_HOST: 
     S3_WELL_EXPORT_BUCKET: 
@@ -105,7 +108,7 @@ objects:
     SSO_TEST_CLIENT: 
     GDAL_LIBRARY_PATH: 
     GEOS_LIBRARY_PATH: 
-  kind: ConfigMap
+
   metadata:
     creationTimestamp: 
     name: nr-gwells-global-config${NAME_SUFFIX}
@@ -267,8 +270,8 @@ objects:
           - name: E_LICENSING_URL
             valueFrom:
               configMapKeyRef:
-                key: E_LICENSING_URL
                 name: nr-gwells-global-config${NAME_SUFFIX}
+                key: E_LICENSING_URL
           - name: DJANGO_DEBUG
             valueFrom:
               configMapKeyRef:
