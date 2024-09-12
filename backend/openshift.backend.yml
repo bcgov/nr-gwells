@@ -26,6 +26,14 @@ parameters:
   description: A psql client image (a PostgreSQL image will suffice)
   required: true
   value: image-registry.openshift-image-registry.svc:5000/26e83e-tools/crunchy-postgres-gis:centos7-12.4-3.0-4.5.0
+- name: DJANGO_ADMIN_PASSWORD
+  required: true
+- name: DJANGO_ADMIN_URL
+  required: true
+- name: DJANGO_ADMIN_USER
+  required: true
+- name: DJANGO_SECRET_KEY
+  required: true
 objects:
 - kind: ImageStream
   apiVersion: v1
@@ -64,10 +72,10 @@ objects:
     annotations:
       as-copy-of: nr-gwells-django-secrets
   data:
-    admin_password: 
-    admin_url: 
-    admin_user: 
-    secret_key: 
+    admin_password: DJANGO_ADMIN_PASSWORD
+    admin_url: DJANGO_ADMIN_URL
+    admin_user: DJANGO_ADMIN_USER
+    secret_key: DJANGO_SECRET_KEY
 - kind: Secret
   apiVersion: v1
   type: Opaque
@@ -153,7 +161,8 @@ objects:
     test: false
     selector:
       name: nr-gwells${NAME_SUFFIX}
-      deployment: nr-gwells${NAME_SUFFIX}
+      matchLabels:
+        deployment: nr-gwells${NAME_SUFFIX}
     template:
       metadata:
         name: nr-gwells${NAME_SUFFIX}
