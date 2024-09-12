@@ -62,7 +62,7 @@ jobs:
     # environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
     steps:
-      - name: Deplaoy Backend
+      - name: Deploy Backend
         uses: bcgov-nr/action-deployer-openshift@v3.0.0
         with:
             oc_namespace: ${{ vars.OC_NAMESPACE }}
@@ -72,3 +72,7 @@ jobs:
             parameters:
                 -p NAME_SUFFIX=-dev-${{ github.event.number }}
                 -p ENV_NAME=dev
+                -P DJANGO_ADMIN_PASSWORD=${{ secrets.DJANGO_ADMIN_PASSWORD }}
+                -p DJANGO_ADMIN_URL=${{ secrets.DJANGO_ADMIN_URL }}
+                -p DJANGO_ADMIN_USER=${{ secrets.DJANGO_ADMIN_USER }}
+                -p DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
