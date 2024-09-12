@@ -68,7 +68,7 @@ objects:
   metadata:
     creationTimestamp: 
     name: nr-gwells-django${NAME_SUFFIX}
-  strinData:
+  stringData:
     admin_password: ${DJANGO_ADMIN_PASSWORD}
     admin_url: ${DJANGO_ADMIN_URL}
     admin_user: ${DJANGO_ADMIN_USER}
