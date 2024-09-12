@@ -63,19 +63,19 @@ objects:
     S3_ROOT_BUCKET: 
     S3_PUBLIC_ACCESS_KEY: 
     S3_PUBLIC_SECRET_KEY: 
-- kind: Secret
-  apiVersion: v1
-  type: Opaque
-  metadata:
-    creationTimestamp: 
-    name: nr-gwells-django${NAME_SUFFIX}
-    annotations:
-      as-copy-of: nr-gwells-django-secrets
-  data:
-    admin_password: DJANGO_ADMIN_PASSWORD
-    admin_url: DJANGO_ADMIN_URL
-    admin_user: DJANGO_ADMIN_USER
-    secret_key: DJANGO_SECRET_KEY
+# - kind: Secret
+#   apiVersion: v1
+#   type: Opaque
+#   metadata:
+#     creationTimestamp: 
+#     name: nr-gwells-django${NAME_SUFFIX}
+#     annotations:
+#       as-copy-of: nr-gwells-django-secrets
+#   data:
+#     admin_password: DJANGO_ADMIN_PASSWORD
+#     admin_url: DJANGO_ADMIN_URL
+#     admin_user: DJANGO_ADMIN_USER
+#     secret_key: DJANGO_SECRET_KEY
 - kind: Secret
   apiVersion: v1
   type: Opaque
@@ -237,25 +237,13 @@ objects:
           - name: APP_CONFIG
             value: "/opt/app-root/src/backend/gunicorn.ocp4.cfg"
           - name: DJANGO_SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: nr-gwells-django${NAME_SUFFIX}
-                key: secret_key
+            value: DJANGO_SECRET_KEY
           - name: DJANGO_ADMIN_URL
-            valueFrom:
-              secretKeyRef:
-                name: nr-gwells-django${NAME_SUFFIX}
-                key: admin_url
+            value: DJANGO_ADMIN_URL
           - name: DJANGO_ADMIN_USER
-            valueFrom:
-              secretKeyRef:
-                name: nr-gwells-django${NAME_SUFFIX}
-                key: admin_user
+            value: DJANGO_ADMIN_USER
           - name: DJANGO_ADMIN_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: nr-gwells-django${NAME_SUFFIX}
-                key: admin_password
+            value: DJANGO_ADMIN_PASSWORD
           - name: E_LICENSING_AUTH_PASSWORD
             valueFrom:
               secretKeyRef:
