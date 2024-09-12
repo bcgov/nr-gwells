@@ -34,6 +34,10 @@ parameters:
   required: true
 - name: DJANGO_SECRET_KEY
   required: true
+- name: E_LICENSING_AUTH_USERNAME
+  required: true
+- name: E_LICENSING_AUTH_PASSWORD
+  required: true
 objects:
 - kind: ImageStream
   apiVersion: v1
@@ -75,15 +79,12 @@ objects:
     secret_key: ${DJANGO_SECRET_KEY}
 - kind: Secret
   apiVersion: v1
-  type: Opaque
   metadata:
     creationTimestamp: 
     name: nr-gwells-e-licensing${NAME_SUFFIX}
-    annotations:
-      as-copy-of: nr-gwells-e-licensing-secrets
-  data:
-    E_LICENSING_AUTH_PASSWORD: 
-    E_LICENSING_AUTH_USERNAME: 
+  stringData:
+    E_LICENSING_AUTH_PASSWORD: ${E_LICENSING_AUTH_USERNAME}
+    E_LICENSING_AUTH_USERNAME: ${E_LICENSING_AUTH_PASSWORD}
 - apiVersion: v1
   data:
     DB_REPLICATE: 

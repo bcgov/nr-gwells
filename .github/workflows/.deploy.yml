@@ -76,3 +76,5 @@ jobs:
                 -p DJANGO_ADMIN_URL=${{ secrets.DJANGO_ADMIN_URL }}
                 -p DJANGO_ADMIN_USER=${{ secrets.DJANGO_ADMIN_USER }}
                 -p DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
+                -p E_LICENSING_AUTH_USERNAME=${{ secrets.E_LICENSING_AUTH_USERNAME }}
+                -p E_LICENSING_AUTH_PASSWORD=${{ secrets.E_LICENSING_AUTH_PASSWORD }}
