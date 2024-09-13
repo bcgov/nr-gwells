@@ -52,8 +52,6 @@ parameters:
   required: true
 - name: S3_WELL_EXPORT_BUCKET
   required: true
-- name: S3_AQUIFER_BUCKET
-  required: true
 - name: SSO_AUDIENCE
   required: true
 - name: SSO_AUTH_HOST
@@ -75,6 +73,8 @@ parameters:
 - name: GDAL_LIBRARY_PATH
   required: true
 - name: GEOS_LIBRARY_PATH
+  required: true
+- name: S3_AQUIFER_BUCKET
   required: true
 - name: S3_AQUIFER_BUCKET
   required: true
