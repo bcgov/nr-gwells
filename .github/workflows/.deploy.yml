@@ -103,3 +103,15 @@ jobs:
                 -p S3_PRIVATE_REGISTRANT_BUCKET=${{ vars.S3_PRIVATE_REGISTRANT_BUCKET }}
                 -p S3_PRIVATE_WELL_BUCKET=${{ vars.S3_PRIVATE_WELL_BUCKET }}
                 -p ENABLE_AQUIFERS_SEARCH=${{ vars.ENABLE_AQUIFERS_SEARCH }}
+                -p MINIO_ACCESS_KEY=${{ vars.MINIO_ACCESS_KEY }}
+                -p MINIO_SECRET_KEY=${{ vars.MINIO_SECRET_KEY }}
+                -p S3_PUBLIC_ACCESS_KEY=${{ vars.S3_PUBLIC_ACCESS_KEY }}
+                -p S3_PUBLIC_SECRET_KEY=${{ vars.S3_PUBLIC_SECRET_KEY }}
+                -p S3_HOST=${{ vars.S3_HOST }}
+                -p S3_ROOT_BUCKET=${{ vars.S3_ROOT_BUCKET }}
+                -p S3_PRIVATE_HOST=${{ vars.S3_PRIVATE_HOST }}
+                -p S3_WELL_EXPORT_BUCKET=${{ vars.S3_WELL_EXPORT_BUCKET }}
+                -p S3_PRIVATE_BUCKET=${{ vars.S3_PRIVATE_BUCKET }}
+                -p SSO_IDP_HINT=${{ vars.SSO_IDP_HINT }}
+                -p EMAIL_NOTIFICATION_RECIPIENT=${{ vars.EMAIL_NOTIFICATION_RECIPIENT }}
+                -p GEOCODER_ADDRESS_API_BASE=${{ vars.GEOCODER_ADDRESS_API_BASE }}
