@@ -120,19 +120,16 @@ objects:
       local: false
 - kind: Secret
   apiVersion: v1
-  type: Opaque
   metadata:
     name: minio-access-parameters${NAME_SUFFIX}
     creationTimestamp: 
-    annotations:
-      as-copy-of: nr-gwells-minio-secrets
-  data:
-    MINIO_ACCESS_KEY: 
-    MINIO_SECRET_KEY: 
-    S3_HOST: 
-    S3_ROOT_BUCKET: 
-    S3_PUBLIC_ACCESS_KEY: 
-    S3_PUBLIC_SECRET_KEY: 
+  stringData:
+    MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+    MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+    S3_HOST: ${S3_HOST}
+    S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
+    S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
+    S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
 - kind: Secret
   apiVersion: v1
   metadata:
@@ -185,15 +182,8 @@ objects:
     S3_PRIVATE_REGISTRANT_BUCKET: ${S3_PRIVATE_REGISTRANT_BUCKET}
     S3_PRIVATE_WELL_BUCKET: ${S3_PRIVATE_WELL_BUCKET}
     ENABLE_AQUIFERS_SEARCH: ${ENABLE_AQUIFERS_SEARCH}
-    MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-    MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-    S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
-    S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
-    S3_HOST: ${S3_HOST}
-    S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
     EMAIL_NOTIFICATION_RECIPIENT: ${EMAIL_NOTIFICATION_RECIPIENT}
     GEOCODER_ADDRESS_API_BASE: ${GEOCODER_ADDRESS_API_BASE}
-
 - kind: Deployment
   apiVersion: apps/v1
   metadata:
