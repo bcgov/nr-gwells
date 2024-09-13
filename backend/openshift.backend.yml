@@ -52,6 +52,8 @@ parameters:
   required: true
 - name: S3_WELL_EXPORT_BUCKET
   required: true
+- name: S3_AQUIFER_BUCKET
+  required: true
 - name: SSO_AUDIENCE
   required: true
 - name: SSO_AUTH_HOST
@@ -73,6 +75,20 @@ parameters:
 - name: GDAL_LIBRARY_PATH
   required: true
 - name: GEOS_LIBRARY_PATH
+  required: true
+- name: S3_AQUIFER_BUCKET
+  required: true
+- name: S3_REGISTRANT_BUCKET
+  required: true
+- name: S3_PRIVATE_ROOT_BUCKET
+  required: true
+- name: S3_PRIVATE_AQUIFER_BUCKET
+  required: true
+- name: S3_PRIVATE_REGISTRANT_BUCKET
+  required: true
+- name: S3_PRIVATE_WELL_BUCKET
+  required: true
+- name: ENABLE_AQUIFERS_SEARCH
   required: true
 objects:
 - kind: ImageStream
@@ -136,7 +152,8 @@ objects:
     E_LICENSING_URL: ${E_LICENSING_URL}
     S3_PRIVATE_BUCKET: ${S3_PRIVATE_BUCKET}
     S3_PRIVATE_HOST: ${S3_PRIVATE_HOST}
-    S3_WELL_EXPORT_BUCKET: ${S3_WELL_EXPORT_BUCKET} 
+    S3_WELL_EXPORT_BUCKET: ${S3_WELL_EXPORT_BUCKET}
+    S3_AQUIFER_BUCKET: ${S3_AQUIFER_BUCKET}
     SSO_AUDIENCE: ${SSO_AUDIENCE}
     SSO_AUTH_HOST: ${SSO_AUTH_HOST}
     SSO_CLIENT: ${SSO_CLIENT}

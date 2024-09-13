@@ -96,3 +96,10 @@ jobs:
                 -p SSO_TEST_CLIENT=${{ vars.SSO_TEST_CLIENT }}
                 -p GDAL_LIBRARY_PATH=${{ vars.GDAL_LIBRARY_PATH }}
                 -p GEOS_LIBRARY_PATH=${{ vars.GEOS_LIBRARY_PATH }}
+                -p S3_AQUIFER_BUCKET=${{ vars.S3_AQUIFER_BUCKET }}
+                -p S3_REGISTRANT_BUCKET=${{ vars.S3_REGISTRANT_BUCKET }}
+                -p S3_PRIVATE_ROOT_BUCKET=${{ vars.S3_PRIVATE_ROOT_BUCKET }}
+                -p S3_PRIVATE_AQUIFER_BUCKET=${{ vars.S3_PRIVATE_AQUIFER_BUCKET }}
+                -p S3_PRIVATE_REGISTRANT_BUCKET=${{ vars.S3_PRIVATE_REGISTRANT_BUCKET }}
+                -p S3_PRIVATE_WELL_BUCKET=${{ vars.S3_PRIVATE_WELL_BUCKET }}
+                -p ENABLE_AQUIFERS_SEARCH=${{ vars.ENABLE_AQUIFERS_SEARCH }}
