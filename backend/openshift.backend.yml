@@ -126,12 +126,10 @@ objects:
   metadata:
     creationTimestamp: 
     name: nr-gwells-global-config${NAME_SUFFIX}
-    annotations:
-      as-copy-of: nr-gwells-global-config
     labels:
       appver: nr-gwells${NAME_SUFFIX}
       app: nr-gwells${NAME_SUFFIX}
-  data:
+  stringData:
     DB_REPLICATE: ${DB_REPLICATE}
     DJANGO_DEBUG: ${DJANGO_DEBUG}
     ENABLE_ADDITIONAL_DOCUMENTS: ${ENABLE_ADDITIONAL_DOCUMENTS}
