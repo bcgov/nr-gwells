@@ -88,18 +88,18 @@ parameters:
   required: true
 - name: ENABLE_AQUIFERS_SEARCH
   required: true
-- name: MINIO_ACCESS_KEY
-  required: true
-- name: MINIO_SECRET_KEY
-  required: true
-- name: S3_PUBLIC_ACCESS_KEY
-  required: true
-- name: S3_PUBLIC_SECRET_KEY
-  required: true
-- name: S3_HOST
-  required: true
-- name: S3_ROOT_BUCKET
-  required: true
+# - name: MINIO_ACCESS_KEY
+#   required: true
+# - name: MINIO_SECRET_KEY
+#   required: true
+# - name: S3_PUBLIC_ACCESS_KEY
+#   required: true
+# - name: S3_PUBLIC_SECRET_KEY
+#   required: true
+# - name: S3_HOST
+#   required: true
+# - name: S3_ROOT_BUCKET
+#   required: true
 - name: EMAIL_NOTIFICATION_RECIPIENT
   required: true
 - name: GEOCODER_ADDRESS_API_BASE
@@ -118,18 +118,18 @@ objects:
   spec:
     lookupPolicy:
       local: false
-- kind: Secret
-  apiVersion: v1
-  metadata:
-    name: minio-access-parameters${NAME_SUFFIX}
-    creationTimestamp: 
-  stringData:
-    MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-    MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-    S3_HOST: ${S3_HOST}
-    S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
-    S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
-    S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
+# - kind: Secret
+#   apiVersion: v1
+#   metadata:
+#     name: minio-access-parameters${NAME_SUFFIX}
+#     creationTimestamp: 
+#   stringData:
+#     MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+#     MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+#     S3_HOST: ${S3_HOST}
+#     S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
+#     S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
+#     S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
 - kind: Secret
   apiVersion: v1
   metadata:
@@ -445,36 +445,36 @@ objects:
               configMapKeyRef:
                 key: DB_REPLICATE
                 name: nr-gwells-global-config${NAME_SUFFIX}
-          - name: MINIO_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: minio-access-parameters${NAME_SUFFIX}
-                key: MINIO_ACCESS_KEY
-          - name: MINIO_SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: minio-access-parameters${NAME_SUFFIX}
-                key: MINIO_SECRET_KEY
-          - name: S3_PUBLIC_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: minio-access-parameters${NAME_SUFFIX}
-                key: S3_PUBLIC_ACCESS_KEY
-          - name: S3_PUBLIC_SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: minio-access-parameters${NAME_SUFFIX}
-                key: S3_PUBLIC_SECRET_KEY
-          - name: S3_HOST
-            valueFrom:
-              secretKeyRef:
-                name: minio-access-parameters${NAME_SUFFIX}
-                key: S3_HOST
-          - name: S3_ROOT_BUCKET
-            valueFrom:
-              secretKeyRef:
-                name: minio-access-parameters${NAME_SUFFIX}
-                key: S3_ROOT_BUCKET
+          # - name: MINIO_ACCESS_KEY
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       key: MINIO_ACCESS_KEY
+          # - name: MINIO_SECRET_KEY
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       key: MINIO_SECRET_KEY
+          # - name: S3_PUBLIC_ACCESS_KEY
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       key: S3_PUBLIC_ACCESS_KEY
+          # - name: S3_PUBLIC_SECRET_KEY
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       key: S3_PUBLIC_SECRET_KEY
+          # - name: S3_HOST
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       key: S3_HOST
+          # - name: S3_ROOT_BUCKET
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       key: S3_ROOT_BUCKET
           - name: S3_PRIVATE_HOST
             valueFrom:
               configMapKeyRef:
