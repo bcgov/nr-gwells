@@ -36,6 +36,7 @@ jobs:
 
   database:
     name: Database
+    needs: init
     # environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
