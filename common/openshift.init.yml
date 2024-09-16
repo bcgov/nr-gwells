@@ -22,7 +22,7 @@ parameters:
     displayName: PostgreSQL Database Name
     name: POSTGRESQL_DATABASE
     required: true
-    value: sampledb
+    value: gwells
 objects:
   - apiVersion: v1
     kind: Secret

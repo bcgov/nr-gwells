@@ -32,7 +32,7 @@ jobs:
           file: frontend/openshift.deploy.yml
           overwrite: true
           parameters:
-            -p TAG=${{ inputs.tag }} -p TARGET=${{ inputs.target }}
+            -p POSTGRESQL_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
 
   database:
     name: Database
@@ -63,14 +63,12 @@ jobs:
             -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
             -p IMAGE_STREAM_NAME=crunchy-postgres-gis
             -p NAME_SUFFIX=-dev-${{ github.event.number }}
-            -p POSTGRESQL_DATABASE=gwells
             -p VOLUME_CAPACITY=1Gi
             -p STORAGE_CLASS=netapp-file-standard
             -p REQUEST_CPU=200m
             -p REQUEST_MEMORY=512Mi
             -p LIMIT_CPU=500m
             -p LIMIT_MEMORY=1Gi
-            -p POSTGRESQL_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
 
   backend:
     name: Backend
