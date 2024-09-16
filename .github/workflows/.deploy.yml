@@ -22,6 +22,18 @@ jobs:
   init:
     name: Initialize
     runs-on: ubuntu-latest
+    steps:
+      - name: Initialize
+        uses: bcgov-nr/action-deployer-openshift@v3.0.0
+        with:
+          oc_namespace: ${{ vars.OC_NAMESPACE }}
+          oc_server: ${{ vars.OC_SERVER }}
+          oc_token: ${{ secrets.OC_TOKEN }}
+          file: frontend/openshift.deploy.yml
+          overwrite: true
+          parameters:
+            -p TAG=${{ inputs.tag }} -p TARGET=${{ inputs.target }}
+
   database:
     name: Database
     # environment: ${{ inputs.environment }}

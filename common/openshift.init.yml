@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: postgresql-persistent-template
+metadata:
+  creationTimestamp: null
+  name: gwells-postgresql-dc
+parameters:
+  - description: The name of the OpenShift Service exposed for the database.
+    displayName: Database Service Name
+    name: DATABASE_SERVICE_NAME
+    required: true
+    value: postgresql
+  - description: Username for PostgreSQL user that will be used for accessing the database.
+    name: POSTGRESQL_USER
+    required: true
+    value: gwells
+  - description: Password for the PostgreSQL connection user
+    name: POSTGRESQL_PASSWORD
+    required: true
+  - description: Name of the PostgreSQL database accessed.
+    displayName: PostgreSQL Database Name
+    name: POSTGRESQL_DATABASE
+    required: true
+    value: sampledb
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: ${DATABASE_SERVICE_NAME}
+    stringData:
+      database-name: ${POSTGRESQL_DATABASE}
+      database-password: ${POSTGRESQL_PASSWORD}
+      database-user: ${POSTGRESQL_USER}
+      fdw-database-user: null
+      fdw-database-password: null
+      fdw-database-server: null
+      fdw-database-schema: null
