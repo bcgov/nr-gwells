@@ -39,8 +39,8 @@ jobs:
             -p DJANGO_ADMIN_URL=${{ secrets.DJANGO_ADMIN_URL }}
             -p DJANGO_ADMIN_USER=${{ secrets.DJANGO_ADMIN_USER }}
             -p DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
-            -p MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
-            -p MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
+            # -p MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
+            # -p MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
             # -p S3_PUBLIC_ACCESS_KEY=${{ secrets.S3_PUBLIC_ACCESS_KEY }}
             # -p S3_PUBLIC_SECRET_KEY=${{ secrets.S3_PUBLIC_SECRET_KEY }}
             # -p S3_HOST=${{ secrets.S3_HOST }}
