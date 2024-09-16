@@ -24,7 +24,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: ${DATABASE_SERVICE_NAME}
+      name: gwells-pg12${NAME_SUFFIX}
     stringData:
       database-name: ${POSTGRESQL_DATABASE}
       database-password: ${POSTGRESQL_PASSWORD}

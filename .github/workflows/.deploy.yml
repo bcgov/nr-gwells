@@ -32,6 +32,7 @@ jobs:
           file: common/openshift.init.yml
           overwrite: true
           parameters:
+            -p NAME_SUFFIX=-dev-${{ github.event.number }}
             -p POSTGRESQL_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             -p FDW_DATABASE_PASSWORD=${{ secrets.FDW_DATABASE_PASSWORD }}
 
