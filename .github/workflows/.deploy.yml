@@ -33,6 +33,7 @@ jobs:
           overwrite: true
           parameters:
             -p POSTGRESQL_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            -p FDW_DATABASE_PASSWORD=${{ secrets.FDW_DATABASE_PASSWORD }}
 
   database:
     name: Database

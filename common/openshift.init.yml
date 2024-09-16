@@ -1,10 +1,5 @@
 apiVersion: v1
 kind: Template
-labels:
-  template: postgresql-persistent-template
-metadata:
-  creationTimestamp: null
-  name: gwells-postgresql-dc
 parameters:
   - description: The name of the OpenShift Service exposed for the database.
     displayName: Database Service Name
@@ -23,6 +18,8 @@ parameters:
     name: POSTGRESQL_DATABASE
     required: true
     value: gwells
+  - name: FDW_DATABASE_PASSWORD
+    required: true
 objects:
   - apiVersion: v1
     kind: Secret
@@ -32,7 +29,7 @@ objects:
       database-name: ${POSTGRESQL_DATABASE}
       database-password: ${POSTGRESQL_PASSWORD}
       database-user: ${POSTGRESQL_USER}
-      fdw-database-user: null
-      fdw-database-password: null
-      fdw-database-server: null
-      fdw-database-schema: null
+      fdw-database-user: proxy_wells_gwells
+      fdw-database-password: ${FDW_DATABASE_PASSWORD}
+      fdw-database-server: "//nrk1-scan.bcgov/envprod1.nrs.bcgov"
+      fdw-database-schema: WELLS

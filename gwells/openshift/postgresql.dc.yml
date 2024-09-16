@@ -142,10 +142,10 @@ objects:
       database-name: ${POSTGRESQL_DATABASE}
       database-password: ${POSTGRESQL_PASSWORD}
       database-user: ${POSTGRESQL_USER}
-      fdw-database-user: null
+      fdw-database-user: proxy_wells_gwells
       fdw-database-password: null
-      fdw-database-server: null
-      fdw-database-schema: null
+      fdw-database-server: "//nrk1-scan.bcgov/envprod1.nrs.bcgov"
+      fdw-database-schema: WELLS
   - apiVersion: v1
     kind: Service
     metadata:
