@@ -24,6 +24,30 @@ parameters:
     value: gwells
   - name: FDW_DATABASE_PASSWORD
     required: true
+  - name: DJANGO_ADMIN_PASSWORD
+    required: true
+  - name: DJANGO_ADMIN_URL
+    required: true
+  - name: DJANGO_ADMIN_USER
+    required: true
+  - name: DJANGO_SECRET_KEY
+    required: true
+  - name: E_LICENSING_AUTH_USERNAME
+    required: true
+  - name: E_LICENSING_AUTH_PASSWORD
+    required: true
+  - name: MINIO_ACCESS_KEY
+    required: true
+  - name: MINIO_SECRET_KEY
+    required: true
+  - name: S3_PUBLIC_ACCESS_KEY
+    required: true
+  - name: S3_PUBLIC_SECRET_KEY
+    required: true
+  - name: S3_HOST
+    required: true
+  - name: S3_ROOT_BUCKET
+    required: true
 objects:
   - apiVersion: v1
     kind: Secret
@@ -37,3 +61,33 @@ objects:
       fdw-database-password: ${FDW_DATABASE_PASSWORD}
       fdw-database-server: "//nrk1-scan.bcgov/envprod1.nrs.bcgov"
       fdw-database-schema: WELLS
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: minio-access-parameters${NAME_SUFFIX}
+      creationTimestamp: 
+    stringData:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      S3_HOST: ${S3_HOST}
+      S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
+      S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
+      S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      creationTimestamp: 
+      name: gwells-django${NAME_SUFFIX}
+    stringData:
+      admin_password: ${DJANGO_ADMIN_PASSWORD}
+      admin_url: ${DJANGO_ADMIN_URL}
+      admin_user: ${DJANGO_ADMIN_USER}
+      secret_key: ${DJANGO_SECRET_KEY}
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      creationTimestamp: 
+      name: gwells-e-licensing${NAME_SUFFIX}
+    stringData:
+      E_LICENSING_AUTH_PASSWORD: ${E_LICENSING_AUTH_PASSWORD}
+      E_LICENSING_AUTH_USERNAME: ${E_LICENSING_AUTH_USERNAME}
