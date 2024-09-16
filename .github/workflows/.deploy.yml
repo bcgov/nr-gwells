@@ -73,6 +73,7 @@ jobs:
 
   backend:
     name: Backend
+    needs: init
     # environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
