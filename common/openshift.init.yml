@@ -1,6 +1,10 @@
 apiVersion: v1
 kind: Template
 parameters:
+  - description: A suffix appended to all objects
+    displayName: Name Suffix
+    name: NAME_SUFFIX
+    required: true
   - description: The name of the OpenShift Service exposed for the database.
     displayName: Database Service Name
     name: DATABASE_SERVICE_NAME
