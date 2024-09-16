@@ -35,6 +35,16 @@ jobs:
             -p NAME_SUFFIX=-dev-${{ github.event.number }}
             -p POSTGRESQL_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             -p FDW_DATABASE_PASSWORD=${{ secrets.FDW_DATABASE_PASSWORD }}
+            -p DJANGO_ADMIN_PASSWORD=${{ secrets.DJANGO_ADMIN_PASSWORD }}
+            -p DJANGO_ADMIN_URL=${{ secrets.DJANGO_ADMIN_URL }}
+            -p DJANGO_ADMIN_USER=${{ secrets.DJANGO_ADMIN_USER }}
+            -p DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
+            -p MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
+            -p MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
+            -p S3_PUBLIC_ACCESS_KEY=${{ secrets.S3_PUBLIC_ACCESS_KEY }}
+            -p S3_PUBLIC_SECRET_KEY=${{ secrets.S3_PUBLIC_SECRET_KEY }}
+            -p S3_HOST=${{ secrets.S3_HOST }}
+            -p S3_ROOT_BUCKET=${{ secrets.S3_ROOT_BUCKET }}
 
   database:
     name: Database
@@ -89,10 +99,6 @@ jobs:
             parameters:
                 -p NAME_SUFFIX=-dev-${{ github.event.number }}
                 -p ENV_NAME=dev
-                -p DJANGO_ADMIN_PASSWORD=${{ secrets.DJANGO_ADMIN_PASSWORD }}
-                -p DJANGO_ADMIN_URL=${{ secrets.DJANGO_ADMIN_URL }}
-                -p DJANGO_ADMIN_USER=${{ secrets.DJANGO_ADMIN_USER }}
-                -p DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
                 -p E_LICENSING_AUTH_USERNAME=${{ secrets.E_LICENSING_AUTH_USERNAME }}
                 -p E_LICENSING_AUTH_PASSWORD=${{ secrets.E_LICENSING_AUTH_PASSWORD }}
                 -p E_LICENSING_URL=${{ vars.E_LICENSING_URL }}
@@ -120,11 +126,5 @@ jobs:
                 -p S3_PRIVATE_REGISTRANT_BUCKET=${{ vars.S3_PRIVATE_REGISTRANT_BUCKET }}
                 -p S3_PRIVATE_WELL_BUCKET=${{ vars.S3_PRIVATE_WELL_BUCKET }}
                 -p ENABLE_AQUIFERS_SEARCH=${{ vars.ENABLE_AQUIFERS_SEARCH }}
-                -p MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
-                -p MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
-                -p S3_PUBLIC_ACCESS_KEY=${{ secrets.S3_PUBLIC_ACCESS_KEY }}
-                -p S3_PUBLIC_SECRET_KEY=${{ secrets.S3_PUBLIC_SECRET_KEY }}
-                -p S3_HOST=${{ secrets.S3_HOST }}
-                -p S3_ROOT_BUCKET=${{ secrets.S3_ROOT_BUCKET }}
                 -p EMAIL_NOTIFICATION_RECIPIENT=${{ vars.EMAIL_NOTIFICATION_RECIPIENT }}
                 -p GEOCODER_ADDRESS_API_BASE=${{ vars.GEOCODER_ADDRESS_API_BASE }}
