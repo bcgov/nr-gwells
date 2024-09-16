@@ -29,7 +29,7 @@ jobs:
           oc_namespace: ${{ vars.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
           oc_token: ${{ secrets.OC_TOKEN }}
-          file: frontend/openshift.deploy.yml
+          file: common/openshift.init.yml
           overwrite: true
           parameters:
             -p POSTGRESQL_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
