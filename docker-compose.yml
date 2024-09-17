@@ -50,9 +50,7 @@ services:
 #############################################################################################
   db:
     platform: linux/x86_64
-    build:
-      context: ./database
-      dockerfile: Dockerfile
+    image: crunchydata/crunchy-postgres-gis:centos7-12.2-4.2.2
     hostname: db
     environment:
       PG_USER: gwells
@@ -76,7 +74,7 @@ services:
       - "5432:5432"
     volumes:
       - /pgdata
-      # - ./database/scripts/local_dev/setup.sql:/pgconf/setup.sql
+      - ./database/scripts/local_dev/setup.sql:/pgconf/setup.sql
     healthcheck:
       test: ["CMD-SHELL", "/usr/pgsql-12/bin/pg_isready", "-d", "gwells"]
       interval: 20s
