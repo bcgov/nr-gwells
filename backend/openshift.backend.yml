@@ -220,7 +220,7 @@ objects:
         #       memory: 128Mi
         containers:
         - name: gwells-app${NAME_SUFFIX}
-          image: 'ghcr.io/bcgov/gwells/backend:54'
+          image: 'ghcr.io/bcgov/nr-gwells/backend:54'
           ports:
           - containerPort: 8080
             protocol: TCP
