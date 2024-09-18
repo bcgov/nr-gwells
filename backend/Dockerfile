@@ -1,15 +1,105 @@
-# FROM python:3.6.15-slim-buster AS build
+FROM python:3.6.15-buster AS build
 
-# RUN apt-get -y update && apt-get -y install \
-#     git \
-#     build-essential \
-#     gdal-bin \
-#     libgdal-dev
+# Envars
+ENV ENVIRONMENT="local"
+ENV APP_CONTEXT_ROOT=gwells
+ENV CSRF_COOKIE_SECURE="False"
+ENV CUSTOM_GDAL_GEOS="False"
+ENV DATABASE_NAME=gwells
+ENV DATABASE_USER="gwells"
+ENV DATABASE_PASSWORD="test1"
+ENV DATABASE_SERVICE_NAME=gwells
+ENV DJANGO_ADMIN_URL=admin
+ENV DJANGO_DEBUG="true"
+ENV DJANGO_SECRET_KEY=secret
+ENV ENABLE_ADDITIONAL_DOCUMENTS="true"
+ENV ENABLE_AQUIFERS_SEARCH="true"
+ENV GWELLS_SERVICE_HOST="db"
+ENV GWELLS_SERVICE_PORT="5432"
+ENV MINIO_ACCESS_KEY=minio
+ENV MINIO_SECRET_KEY=minio1234
+ENV PYTHONUNBUFFERED="1"
+ENV SESSION_COOKIE_SECURE="False"
+ENV SSO_AUDIENCE=gwells-4121
+ENV SSO_CLIENT=gwells-4121
+ENV SSO_TEST_AUDIENCE=gwells-api-tests-4820
+ENV SSO_TEST_CLIENT=gwells-api-tests-4820
+ENV SSO_AUTH_HOST=https://test.loginproxy.gov.bc.ca/auth
+ENV SSO_IDP_HINT="undefined"
+ENV SSO_PORT=0
+ENV SSO_REALM=standard
+ENV SSO_PUBKEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiFdv9GA83uHuy8Eu9yiZHGGF9j6J8t7FkbcpaN81GDjwbjsIJ0OJO9dKRAx6BAtTC4ubJTBJMPvQER5ikOhIeBi4o25fg61jpgsU6oRZHkCXc9gX6mrjMjbsPaf3/bjjYxP5jicBDJQeD1oRa24+tiGggoQ7k6gDEN+cRYqqNpzC/GQbkUPk8YsgroncEgu8ChMh/3ERsLV2zorchMANUq76max16mHrhtWIQxrb/STpSt4JuSlUzzBV/dcXjJe5gywZHe0jAutFhNqjHzHdgyaC4RAd3eYQo+Kl/JOgy2AZrnx+CiPmvOJKe9tAW4k4H087ng8aVE40v4HW/FEbnwIDAQAB
+ENV S3_HOST=minio-public:9000
+ENV S3_PRIVATE_HOST=minio-private:9001
+ENV S3_PRIVATE_BUCKET=gwells
+ENV S3_PRIVATE_ROOT_BUCKET=gwells
+ENV S3_PRIVATE_WELL_BUCKET=well-docs
+ENV S3_PRIVATE_AQUIFER_BUCKET=aquifer-docs
+ENV S3_PRIVATE_REGISTRANT_BUCKET=driller-docs
+ENV S3_PUBLIC_ACCESS_KEY=minio
+ENV S3_PUBLIC_SECRET_KEY=minio1234
+ENV S3_AQUIFER_BUCKET=aquifer-docs
+ENV S3_REGISTRANT_BUCKET=driller-docs
+ENV S3_ROOT_BUCKET=gwells
+ENV S3_WELL_BUCKET=well-docs
+ENV S3_WELL_EXPORT_BUCKET=gwells
+ENV S3_USE_SECURE=0
+ENV EMAIL_NOTIFICATION_RECIPIENT=sustainment.team@gov.bc.ca
+ENV GEOCODER_ADDRESS_API_BASE=https://geocoder.api.gov.bc.ca/addresses.json?
+ENV LOCAL="true"
+ENV LOAD_FIXTURES="true"
 
-# RUN echo "Checking gdal-config installation"
-# RUN find / -name gdal-config
+# Install dependencies
+RUN apt-get -y update && apt-get -y install \
+    git \
+    build-essential \
+    gdal-bin \
+    libgdal-dev
 
-# ENV PATH="/usr/bin:${PATH}"
+RUN echo "Checking gdal-config installation"
+RUN find / -name gdal-config
+
+ENV PATH="/usr/bin:${PATH}"
+
+WORKDIR /app
+
+RUN python3 -m pip install 'setuptools<58.0'
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install ptvsd
+
+COPY . /app
+# COPY ./backend-command-script.sh /backend-command-script.sh
+COPY ./requirements.txt /requirements.txt
+
+# RUN chmod +x load_fixtures.sh works when i pull the dockerfile into backend but not when dockerfile is with other docker files
+RUN chmod +x /app
+
+# RUN python3 -m pip install -r requirements.txt
+
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install ptvsd
+RUN python3 -m pip install -r requirements.txt
+# RUN python3 manage.py migrate --noinput
+# RUN ./load_fixtures.sh all
+# RUN python3 manage.py createinitialrevisions
+# RUN python3 manage.py collectstatic --noinput
+# RUN python3 manage.py export --cleanup=1 --upload=1
+
+# CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+
+
+# make script executable
+# RUN chmod +x /backend/backend-command-script.sh
+
+# production image step
+# FROM python:3.7-slim
+
+# # TODO: need to confirm version of libgdal-dev used with FROM python version
+# RUN apt-get -y update && \
+#     apt-get -y install libgdal32 \
+#     gdal-bin
+
+# ENV PATH="/usr/bin/python3:${PATH}"
 
 # WORKDIR /app
 
@@ -17,108 +107,15 @@
 # RUN python3 -m pip install --upgrade pip
 # RUN python3 -m pip install ptvsd
 
-# COPY . /app
-# COPY ./backend-command-script.sh /backend-command-script.sh
-# COPY ./requirements.txt /requirements.txt
+# COPY --from=build /app /app
+# COPY --from=build /backend-command-script.sh /backend-command-script.sh
+# COPY --from=build /requirements.txt /requirements.txt
 
-# # RUN chmod +x load_fixtures.sh works when i pull the dockerfile into backend but not when dockerfile is with other docker files
 # RUN chmod +x /app
 
 # RUN python3 -m pip install -r requirements.txt
 
-# # make script executable
-# # RUN chmod +x /backend/backend-command-script.sh
+# make script executable
+# RUN chmod +x /backend/backend-command-script.sh
 
-# # production image step
-# # FROM python:3.7-slim
-
-# # # TODO: need to confirm version of libgdal-dev used with FROM python version
-# # RUN apt-get -y update && \
-# #     apt-get -y install libgdal32 \
-# #     gdal-bin
-
-# # ENV PATH="/usr/bin/python3:${PATH}"
-
-# # WORKDIR /app
-
-# # RUN python3 -m pip install 'setuptools<58.0'
-# # RUN python3 -m pip install --upgrade pip
-# # RUN python3 -m pip install ptvsd
-
-# # COPY --from=build /app /app
-# # COPY --from=build /backend-command-script.sh /backend-command-script.sh
-# # COPY --from=build /requirements.txt /requirements.txt
-
-# # RUN chmod +x /app
-
-# # RUN python3 -m pip install -r requirements.txt
-
-# # make script executable
-# # RUN chmod +x /backend/backend-command-script.sh
-
-# # CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
-
-
-FROM registry.access.redhat.com/rhscl/python-36-rhel7:1
-
-
-# Switch to root user
-#
-USER root
-
-
-# External libraries required by Python GIS extensions (e.g. GeoDjango, GeoAlchemy)
-# Install and configure GEOS
-#
-# Note: HTTPS will result in certificate errors, hence the downgrade to HTTP here
-#
-
-RUN cd /tmp && wget http://download.osgeo.org/geos/geos-3.7.1.tar.bz2 && \
-    tar xjf geos-3.7.1.tar.bz2 && \
-    cd geos-3.7.1/ && \
-    ./configure --prefix=/usr/local && \
-    make && \
-    make install && \
-    ldconfig && \
-    cd /tmp && \
-    rm -rf /tmp/geos-3.7.1 /tmp/geos-3.7.1.tar.bz2
-
-
-# Install and configure PROJ.4
-#
-# Note: HTTPS will result in certificate errors, hence the downgrade to HTTP here
-#
-
-RUN cd /tmp && wget http://download.osgeo.org/proj/proj-5.2.0.tar.gz && \
-    wget http://download.osgeo.org/proj/proj-datumgrid-north-america-1.1.tar.gz && \
-    tar xzf proj-5.2.0.tar.gz && \
-    cd proj-5.2.0/nad && \
-    tar xzf ../../proj-datumgrid-north-america-1.1.tar.gz && \
-    cd .. && \
-    ./configure --prefix=/usr/local && \
-    make \
-    && make install && \
-    ldconfig && \
-    rm -rf /tmp/proj-5.2.0 /tmp/proj-5.2.0.tar.gz /tmp/proj-datumgrid-north-america-1.1.tar.gz
-
-
-# Install and configure GDAL
-# (without SFCGAL as we aren't using "CREATE EXTENSION postgis_sfcgal;")
-#
-
-RUN cd /tmp && wget http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz && \
-    tar zxvf gdal-2.4.0.tar.gz && cd gdal-2.4.0/ && \
-    ./configure --prefix=/usr/local --with-python --with-sfcgal=no && \
-    make -j4 && \
-    make install && \
-    ldconfig && \
-    rm -rf /tmp/gdal-2.4.0 /tmp/gdal-2.4.0.tar.gz
-
-
-# Configure GDAL file locations
-#
-RUN echo "/usr/local/lib/" >> /etc/ld.so.conf && \
-    ldconfig
-
-
-USER 1001
+# CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
