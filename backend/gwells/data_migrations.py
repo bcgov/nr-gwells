@@ -37,7 +37,6 @@ def border_data(apps, schema_editor):
     zip_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'migrations/BCGW_ABMS_PROV.zip')
     print(f"ZipPATH: {zip_path}")
 
-    import os
     print(f"<<<<------>>>>>>>>current working directory: {os.getcwd()}")
 
     with ZipFile(zip_path, 'r') as zipObj:
