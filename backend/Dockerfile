@@ -1,4 +1,4 @@
-FROM python:3.6.15-buster AS build
+FROM python:3.7-slim
 
 # Envars
 ENV ENVIRONMENT="local"
@@ -50,22 +50,17 @@ ENV LOCAL="true"
 ENV LOAD_FIXTURES="true"
 
 # Install dependencies
-RUN apt-get -y update && apt-get -y install \
-    git \
-    build-essential \
-    gdal-bin \
-    libgdal-dev
+RUN apt-get -y update
 
-RUN echo "Checking gdal-config installation"
-RUN find / -name gdal-config
+RUN apt-get -y install git build-essential gdal-bin libgdal-dev
 
-ENV PATH="/usr/bin:${PATH}"
+ENV PATH="/usr/bin/python3:${PATH}"
 
 WORKDIR /app
 
-RUN python3 -m pip install 'setuptools<58.0'
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install ptvsd
+RUN python3 -m pip install 'setuptools<58.0'
 
 COPY . /app
 # COPY ./backend-command-script.sh /backend-command-script.sh
@@ -76,17 +71,16 @@ RUN chmod +x /app
 
 # RUN python3 -m pip install -r requirements.txt
 
-RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install ptvsd
+
 RUN python3 -m pip install -r requirements.txt
-# RUN python3 manage.py migrate --noinput
-# RUN ./load_fixtures.sh all
-# RUN python3 manage.py createinitialrevisions
-# RUN python3 manage.py collectstatic --noinput
-# RUN python3 manage.py export --cleanup=1 --upload=1
 
-# CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
-
+# TODO: move to entrypoint in deployment template?
+CMD sh -c "python3 manage.py migrate --noinput && \
+    ./load_fixtures.sh all && \
+    python3 manage.py createinitialrevisions && \
+    python3 manage.py collectstatic --noinput && \
+    python3 manage.py export --cleanup=1 --upload=1 && \
+    python3 manage.py runserver 0.0.0.0:8000"
 
 # make script executable
 # RUN chmod +x /backend/backend-command-script.sh
