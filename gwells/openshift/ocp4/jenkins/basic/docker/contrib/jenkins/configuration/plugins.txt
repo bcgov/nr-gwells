@@ -91,7 +91,7 @@ pipeline-model-extensions:2.2125.vddb_a_44a_d605e
 pipeline-rest-api:2.32
 pipeline-stage-view:2.32
 blueocean-autofavorite:1.2.5
-cloudbees-bitbucket-branch-source:800.va_b_b_9a_a_5035c1
+cloudbees-bitbucket-branch-source:888.v8e6d479a_1730
 disable-github-multibranch-status:1.2
 docker-commons:419.v8e3cd84ef49c
 docker-workflow:1.24
