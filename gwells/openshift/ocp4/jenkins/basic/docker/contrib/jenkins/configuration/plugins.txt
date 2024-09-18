@@ -77,7 +77,7 @@ startup-trigger-plugin:2.9.3
 workflow-basic-steps:2.20
 workflow-cps:3653.v07ea_433c90b_4
 workflow-multibranch:733.v109046189126
-basic-branch-build-strategies:71.vc1421f89888e
+basic-branch-build-strategies:81.v05e333931c7d
 blueocean-display-url:2.4.1
 blueocean-jira:1.23.2
 blueocean-pipeline-scm-api:1.27.3
