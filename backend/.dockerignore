@@ -4,7 +4,7 @@
 .github
 .idea
 .vscode
-Dockerfile
+Dockerfile*
 CODE_OF_CONDUCT*
 CONTRIBUTING*
 LICENSE*
@@ -16,9 +16,10 @@ node_modules
 npm-debug.log
 
 # App-specific exclusions
-# coverage
-# e2e
-# migrations
-# output
-# test
-# tests
+coverage
+cypress
+e2e
+migrations
+output
+test
+tests
