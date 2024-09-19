@@ -186,11 +186,11 @@ objects:
           appver: gwells${NAME_SUFFIX}
           deployment: gwells${NAME_SUFFIX}
       spec:
-        containers:
         volumes:
           - name: migrations
             emptyDir:
               sizeLimit: 250Mi
+        containers:
         - name: gwells-app${NAME_SUFFIX}
           image: 'ghcr.io/bcgov/nr-gwells/backend:54'
           volumeMounts:
