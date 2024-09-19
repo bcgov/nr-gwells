@@ -82,7 +82,7 @@ CMD sh -c "python3 manage.py migrate --noinput && \
     python3 manage.py export --cleanup=1 --upload=1 && \
     python3 manage.py runserver 0.0.0.0:8000"
 
-RUN mkdir staticfiles && \
+RUN mkdir /app/staticfiles/admin && \
     ln -s /app/staticfiles /tmp/staticfiles
 
 # make script executable
