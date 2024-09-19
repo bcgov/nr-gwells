@@ -186,41 +186,16 @@ objects:
           appver: gwells${NAME_SUFFIX}
           deployment: gwells${NAME_SUFFIX}
       spec:
-        # initContainers:
-        # - name: check-db
-        #   image: "${PSQL_IMAGE}"
-        #   command:
-        #   - "/bin/bash"
-        #   - "-c"
-        #   - psql -qtAX -c 'select 1'
-        #   env:
-        #   - name: PGDATABASE
-        #     valueFrom:
-        #       secretKeyRef:
-        #         name: gwells-pg12${NAME_SUFFIX}
-        #         key: database-name
-        #   - name: PGUSER
-        #     valueFrom:
-        #       secretKeyRef:
-        #         name: gwells-pg12${NAME_SUFFIX}
-        #         key: database-user
-        #   - name: PGPASSWORD
-        #     valueFrom:
-        #       secretKeyRef:
-        #         name: gwells-pg12${NAME_SUFFIX}
-        #         key: database-password
-        #   - name: PGHOST
-        #     value: gwells-pg12${NAME_SUFFIX}
-        #   resources:
-        #     limits:
-        #       cpu: 50m
-        #       memory: 256Mi
-        #     requests:
-        #       cpu: 10m
-        #       memory: 128Mi
         containers:
+        volumes:
+          - name: migrations
+            emptyDir:
+              sizeLimit: 250Mi
         - name: gwells-app${NAME_SUFFIX}
           image: 'ghcr.io/bcgov/nr-gwells/backend:54'
+          volumeMounts:
+            - name: migrations
+              mountPath: /app/staticfiles
           ports:
           - containerPort: 8080
             protocol: TCP

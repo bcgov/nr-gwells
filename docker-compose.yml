@@ -123,7 +123,8 @@ services:
       - ./frontend:/frontend
       - /frontend/node_modules/
     depends_on:
-      - backend
+      backend:
+        condition: service_started
 
 #############################################################################################
 ###                                       Backend                                         ###
@@ -194,6 +195,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      minio-public:
+        condition: service_started
 
 #############################################################################################
 ###                                       PGAdmin                                         ###
