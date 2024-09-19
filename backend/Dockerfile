@@ -83,7 +83,8 @@ CMD sh -c "python3 manage.py migrate --noinput && \
     python3 manage.py runserver 0.0.0.0:8000"
 
 RUN mkdir -p /app/staticfiles/admin/css && \
-    ln -s /app/staticfiles /tmp/staticfiles
+    ln -s /app/staticfiles /tmp/staticfiles && \
+    chmod 777 /app/staticfiles
 
 # make script executable
 # RUN chmod +x /backend/backend-command-script.sh
