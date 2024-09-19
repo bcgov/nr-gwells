@@ -187,14 +187,14 @@ objects:
           deployment: gwells${NAME_SUFFIX}
       spec:
         volumes:
-          - name: migrations
+          - name: staticfiles
             emptyDir:
               sizeLimit: 250Mi
         containers:
         - name: gwells-app${NAME_SUFFIX}
           image: 'ghcr.io/bcgov/nr-gwells/backend:54'
           volumeMounts:
-            - name: migrations
+            - name: staticfiles
               mountPath: /app/staticfiles
           ports:
           - containerPort: 8080
@@ -439,25 +439,25 @@ objects:
             requests:
               cpu: "${CPU_REQUEST}"
               memory: "${MEMORY_REQUEST}"
-          livenessProbe:
-            httpGet:
-              path: "/gwells/health"
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 60
-            timeoutSeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 6
-          readinessProbe:
-            httpGet:
-              path: "/gwells/health"
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 5
-            timeoutSeconds: 2
-            periodSeconds: 5
-            successThreshold: 1
+          # livenessProbe:
+          #   httpGet:
+          #     path: "/gwells/health"
+          #     port: 8080
+          #     scheme: HTTP
+          #   initialDelaySeconds: 60
+          #   timeoutSeconds: 5
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   failureThreshold: 6
+          # readinessProbe:
+          #   httpGet:
+          #     path: "/gwells/health"
+          #     port: 8080
+          #     scheme: HTTP
+          #   initialDelaySeconds: 5
+          #   timeoutSeconds: 2
+          #   periodSeconds: 5
+          #   successThreshold: 1
             failureThreshold: 10
           terminationMessagePath: "/dev/termination-log"
           terminationMessagePolicy: File
