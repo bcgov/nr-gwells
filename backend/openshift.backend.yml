@@ -366,16 +366,16 @@ objects:
               configMapKeyRef:
                 key: DB_REPLICATE
                 name: gwells-global-config${NAME_SUFFIX}
-          - name: MINIO_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: minio-access-parameters${NAME_SUFFIX}
-                key: MINIO_ACCESS_KEY
-          - name: MINIO_SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: minio-access-parameters${NAME_SUFFIX}
-                key: MINIO_SECRET_KEY
+          # - name: MINIO_ACCESS_KEY
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       key: MINIO_ACCESS_KEY
+          # - name: MINIO_SECRET_KEY
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       key: MINIO_SECRET_KEY
           - name: S3_PUBLIC_ACCESS_KEY
             valueFrom:
               secretKeyRef:
