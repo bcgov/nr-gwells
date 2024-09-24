@@ -40,14 +40,14 @@ parameters:
   #   required: true
   # - name: MINIO_SECRET_KEY
   #   required: true
-  # - name: S3_PUBLIC_ACCESS_KEY
-  #   required: true
-  # - name: S3_PUBLIC_SECRET_KEY
-  #   required: true
-  - name: S3_HOST
+  - name: S3_PUBLIC_ACCESS_KEY
     required: true
-  - name: S3_ROOT_BUCKET
+  - name: S3_PUBLIC_SECRET_KEY
     required: true
+  # - name: S3_HOST
+  #   required: true
+  # - name: S3_ROOT_BUCKET
+  #   required: true
 objects:
   - apiVersion: v1
     kind: Secret
@@ -69,10 +69,10 @@ objects:
     stringData:
       # MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
       # MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-      S3_HOST: ${S3_HOST}
-      S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
-      # S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
-      # S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
+      # S3_HOST: ${S3_HOST}
+      # S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
+      S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
+      S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
   - apiVersion: v1
     kind: Secret
     metadata:
