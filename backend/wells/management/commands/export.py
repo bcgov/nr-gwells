@@ -203,6 +203,7 @@ class Command(BaseCommand):
         for version_desc in self.versioning_descriptor:
             version = version_desc['version']
             sheets = version_desc['sheets_sql']
+            print("Current Working Directory - GWELLS.zip: ", os.getcwd())
             self.generate_files(zip_filename, spreadsheet_filename, sheets)
             if options['upload'] == 1:
                 self.upload_files(zip_filename, spreadsheet_filename, version)
@@ -332,6 +333,7 @@ class Command(BaseCommand):
         # If there is an existing zip file, remove it.
         if os.path.exists(zip_filename):
             os.remove(zip_filename)
+        print("Current Working Directory - generate_files: ", os.getcwd())
         with zipfile.ZipFile(zip_filename, 'w', compression=zipfile.ZIP_DEFLATED) as gwells_zip:
             if os.path.exists(spreadsheet_filename):
                 os.remove(spreadsheet_filename)
