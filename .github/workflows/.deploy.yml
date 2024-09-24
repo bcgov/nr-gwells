@@ -41,12 +41,12 @@ jobs:
             -p DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
             -p E_LICENSING_AUTH_USERNAME=${{ secrets.E_LICENSING_AUTH_USERNAME }}
             -p E_LICENSING_AUTH_PASSWORD=${{ secrets.E_LICENSING_AUTH_PASSWORD }}
-            -p S3_PUBLIC_ACCESS_KEY=${{ secrets.S3_PUBLIC_ACCESS_KEY }}
-            -p S3_PUBLIC_SECRET_KEY=${{ secrets.S3_PUBLIC_SECRET_KEY }}
             -p S3_HOST=${{ secrets.S3_HOST }}
             -p S3_ROOT_BUCKET=${{ secrets.S3_ROOT_BUCKET }}
             # -p MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
             # -p MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
+            # -p S3_PUBLIC_ACCESS_KEY=${{ secrets.S3_PUBLIC_ACCESS_KEY }}
+            # -p S3_PUBLIC_SECRET_KEY=${{ secrets.S3_PUBLIC_SECRET_KEY }}
 
   database:
     name: Database
