@@ -197,7 +197,7 @@ class Command(BaseCommand):
         :param args: django managed args
         :param options: django managed options
         """
-        print("Current Working Directory - GWELLS.zip: ", os.getcwd())
+        print("Current Working Directory - GWELLS.zip: ", os.getcwd(), flush=True)
         logger.info('starting export')
         zip_filename = 'gwells.zip'
         spreadsheet_filename = 'gwells.xlsx'
