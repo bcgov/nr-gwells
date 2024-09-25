@@ -67,8 +67,7 @@ COPY . /app
 COPY ./requirements.txt /requirements.txt
 
 # RUN chmod +x load_fixtures.sh works when i pull the dockerfile into backend but not when dockerfile is with other docker files
-# RUN chmod +x /app
-RUN chmod +wx /app
+RUN chmod +x /app
 
 # RUN python3 -m pip install -r requirements.txt
 
