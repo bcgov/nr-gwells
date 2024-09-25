@@ -74,7 +74,7 @@ RUN chmod +x /app
 RUN python3 -m pip install -r requirements.txt
 
 # TODO: move to entrypoint in deployment template?
-CMD sh -c "chmod -R 777 && \
+CMD sh -c "chmod -R 777 /app && \
     python3 manage.py migrate --noinput && \
     ./load_fixtures.sh all && \
     python3 manage.py createinitialrevisions && \
