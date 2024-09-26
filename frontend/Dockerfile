@@ -1,4 +1,5 @@
-FROM node:14.21.3 AS build
+# FROM node:14.21.3 AS build
+FROM node:14.21.3
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -18,8 +19,10 @@ COPY . /app
 
 RUN npm run build
 
-FROM node:14.21.3
+CMD run sh -c "npm run serve"
 
-COPY --from=build /app /app
+# FROM node:14.21.3
 
-CMD ["npm" "run" "serve"]
+# COPY --from=build /app /app
+
+# CMD ["npm" "run" "serve"]
