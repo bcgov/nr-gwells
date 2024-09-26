@@ -16,6 +16,8 @@ RUN npm run build
 
 FROM caddy:alpine
 
+RUN chmod +x /usr/bin/caddy
+
 COPY --from=build /app/dist /usr/share/caddy
 
 # CMD run sh -c "npm run serve"
