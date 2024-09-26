@@ -131,6 +131,6 @@ jobs:
             oc_server: ${{ vars.OC_SERVER }}
             oc_token: ${{ secrets.OC_TOKEN }}
             file: frontend/openshift.deploy.yml
-            with:
+            parameters:
                 -p TAG=-dev-${{ github.event.number }}
                 -p TARGET=dev
