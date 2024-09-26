@@ -86,7 +86,7 @@ jobs:
             oc_namespace: ${{ vars.OC_NAMESPACE }}
             oc_server: ${{ vars.OC_SERVER }}
             oc_token: ${{ secrets.OC_TOKEN }}
-            file: backend/openshift.backend.yml
+            file: backend/openshift.deploy.yml
             parameters:
                 -p NAME_SUFFIX=-dev-${{ github.event.number }}
                 -p ENV_NAME=dev
@@ -117,7 +117,6 @@ jobs:
                 -p ENABLE_AQUIFERS_SEARCH=${{ vars.ENABLE_AQUIFERS_SEARCH }}
                 -p EMAIL_NOTIFICATION_RECIPIENT=${{ vars.EMAIL_NOTIFICATION_RECIPIENT }}
                 -p GEOCODER_ADDRESS_API_BASE=${{ vars.GEOCODER_ADDRESS_API_BASE }}
-                
 
   frontend: 
     name: Frontend
@@ -133,4 +132,5 @@ jobs:
             oc_token: ${{ secrets.OC_TOKEN }}
             file: frontend/openshift.deploy.yml
             with:
-              -p TAG=${{ inputs.tag }} -p TARGET=${{ inputs.target }}
+                -p TAG=-dev-${{ github.event.number }}
+                -p TARGET=dev
