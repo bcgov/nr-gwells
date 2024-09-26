@@ -1,13 +1,13 @@
 # FROM node:14.21.3 AS build
 FROM node:14.21.3
 
-RUN apt-get update && apt-get install -y \
-    git \
-    build-essential \
-    python3 \
-    python3-pip \
-    make \
-    g++
+RUN echo "Start of Dockerfile"
+
+RUN apt-get update
+
+RUN echo "Post apt-get update, pre install"
+
+RUN apt-get install -y git build-essential python3 python3-pip make g++
 
 WORKDIR /app
 
