@@ -9,14 +9,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # https://github.com/bcgov-nr/action-builder-ghcr
+  # # https://github.com/bcgov-nr/action-builder-ghcr
   builds:
     name: Builds
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: [backend, frontend]
-    timeout-minutes: 10
+        package: [database, backend]
+    timeout-minutes: 20
     steps:
       - uses: bcgov-nr/action-builder-ghcr@v2.2.0
         with:
@@ -40,17 +40,17 @@ jobs:
   #   with:
   #     target: ${{ github.event.number }}
 
-  results:
-    name: PR Results
-    # needs: [builds, deploys, tests]
-    if: always() && (!failure()) && (!cancelled())
-    runs-on: ubuntu-22.04
-    steps:
-      - run: echo "Success!"
+  # results:
+  #   name: PR Results
+  #   # needs: [builds, deploys, tests]
+  #   if: always() && (!failure()) && (!cancelled())
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - run: echo "Success!"
 
   # dump:
   #   name: Dump Context
-  #   runs-on: ubuntu-22.04
+  #   runs-on: ubuntu-latest
   #   env:
   #     CONTEXT: ${{ toJson(github) }}
   #   steps:

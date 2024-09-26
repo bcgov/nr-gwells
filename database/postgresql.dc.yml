@@ -23,20 +23,6 @@ parameters:
     name: DATABASE_SERVICE_NAME
     required: true
     value: postgresql
-  - description: Username for PostgreSQL user that will be used for accessing the database.
-    displayName: PostgreSQL Connection Username
-    from: user[A-Z0-9]{3}
-    generate: expression
-    name: POSTGRESQL_USER
-    required: true
-  - description: Password for the PostgreSQL connection user
-    name: POSTGRESQL_PASSWORD
-    required: true
-  - description: Name of the PostgreSQL database accessed.
-    displayName: PostgreSQL Database Name
-    name: POSTGRESQL_DATABASE
-    required: true
-    value: sampledb
   - description: Volume space available for data, e.g. 512Mi, 2Gi.
     displayName: Volume Capacity
     name: VOLUME_CAPACITY
@@ -139,23 +125,6 @@ objects:
         name: ${DATABASE_SERVICE_NAME}-setupcfg
         appver: gwells${NAME_SUFFIX}
       name: ${DATABASE_SERVICE_NAME}-setupcfg
-  - apiVersion: v1
-    kind: Secret
-    metadata:
-      annotations:
-        template.openshift.io/expose-database_name: "{.data['database-name']}"
-        template.openshift.io/expose-password: "{.data['database-password']}"
-        template.openshift.io/expose-username: "{.data['database-user']}"
-        as-copy-of: gwells-database-secrets
-      name: ${DATABASE_SERVICE_NAME}
-    stringData:
-      database-name: ${POSTGRESQL_DATABASE}
-      database-password: ${POSTGRESQL_PASSWORD}
-      database-user: ${POSTGRESQL_USER}
-      fdw-database-user: null
-      fdw-database-password: null
-      fdw-database-server: null
-      fdw-database-schema: null
   - apiVersion: v1
     kind: Service
     metadata:
