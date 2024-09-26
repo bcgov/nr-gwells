@@ -54,7 +54,8 @@ objects:
         spec:
           containers:
             - name: ${APP}-${TARGET}-${COMPONENT}
-              image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${TAG}
+              # image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${TAG}
+              image: ghcr.io/bcgov/nr-gwells/frontend:69
               # securityContext:
               #   runAsUser: 1011540000
               imagePullPolicy: Always
