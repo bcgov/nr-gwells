@@ -117,6 +117,7 @@ jobs:
                 -p ENABLE_AQUIFERS_SEARCH=${{ vars.ENABLE_AQUIFERS_SEARCH }}
                 -p EMAIL_NOTIFICATION_RECIPIENT=${{ vars.EMAIL_NOTIFICATION_RECIPIENT }}
                 -p GEOCODER_ADDRESS_API_BASE=${{ vars.GEOCODER_ADDRESS_API_BASE }}
+                
 
   frontend: 
     name: Frontend

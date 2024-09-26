@@ -18,10 +18,10 @@ parameters:
   value: 500m
 - name: MEMORY_REQUEST
   required: false
-  value: 2Gi
+  value: 1Gi
 - name: MEMORY_LIMIT
   required: false
-  value: 4Gi
+  value: 2Gi
 - name: PSQL_IMAGE
   description: A psql client image (a PostgreSQL image will suffice)
   required: true
