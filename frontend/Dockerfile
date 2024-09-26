@@ -16,11 +16,10 @@ RUN npm run build
 
 FROM caddy:2
 
-# RUN chmod +x /usr/bin/caddy
-
-COPY --from=build /app/dist /usr/share/caddy
-
-# CMD run sh -c "npm run serve"
+# Copy static files, verify Caddyfile formatting
+COPY --from=build /app/dist /srv
+COPY Caddyfile /etc/caddy/Caddyfile
+RUN caddy fmt /etc/caddy/Caddyfile
 
 # FROM node:14.21.3
 
