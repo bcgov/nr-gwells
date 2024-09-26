@@ -21,7 +21,8 @@ COPY . /app
 RUN npm run build
 
 RUN echo "CMD to run"
-CMD run sh -c "npm run serve"
+CMD run sh -c "echo 'Dockerfile Command' && \
+    npm run serve"
 
 # FROM node:14.21.3
 
