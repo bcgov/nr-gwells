@@ -1,5 +1,4 @@
-# FROM node:14.21.3 AS build
-FROM node:14.21.3
+FROM node:14.21.3 AS build
 
 RUN apt-get update
 
@@ -14,6 +13,10 @@ RUN npm install
 COPY . /app
 
 RUN npm run build
+
+FROM caddy:alpine
+
+COPY --from=build /app/dist /usr/share/caddy
 
 # CMD run sh -c "npm run serve"
 
