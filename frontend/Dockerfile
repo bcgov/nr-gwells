@@ -13,12 +13,14 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm i
+RUN echo "npm install"
+RUN npm install
 
 COPY . /app
 
 RUN npm run build
 
+RUN echo "CMD to run"
 CMD run sh -c "npm run serve"
 
 # FROM node:14.21.3
