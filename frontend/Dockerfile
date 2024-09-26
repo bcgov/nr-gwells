@@ -22,4 +22,4 @@ FROM node:14.21.3
 
 COPY --from=build /app /app
 
-# CMD ["npm run serve"]
+CMD ["npm" "run" "serve"]
