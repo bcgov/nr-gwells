@@ -14,9 +14,9 @@ COPY . /app
 
 RUN npm run build
 
-FROM caddy:alpine
+FROM caddy:2
 
-RUN chmod +x /usr/bin/caddy
+# RUN chmod +x /usr/bin/caddy
 
 COPY --from=build /app/dist /usr/share/caddy
 
