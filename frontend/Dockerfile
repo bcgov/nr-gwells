@@ -1,5 +1,7 @@
 FROM node:14.21.3 AS build
 
+ENV LOG_LEVEL="info"
+
 RUN apt-get update
 
 RUN apt-get install -y git build-essential python3 python3-pip make g++
@@ -15,6 +17,8 @@ COPY . /app
 RUN npm run build
 
 FROM caddy:2
+
+RUN env | sort
 
 # Copy static files, verify Caddyfile formatting
 COPY --from=build /app/dist /srv
