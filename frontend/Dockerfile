@@ -18,8 +18,6 @@ RUN npm run build
 
 FROM caddy:2
 
-RUN env | sort
-
 # Copy static files, verify Caddyfile formatting
 COPY --from=build /app/dist /srv
 COPY Caddyfile /etc/caddy/Caddyfile
