@@ -21,6 +21,8 @@ COPY --from=build /app/dist /srv
 COPY Caddyfile /etc/caddy/Caddyfile
 RUN caddy fmt /etc/caddy/Caddyfile
 
+CMD ["caddy", "--conf", "/etc/Caddyfile"]
+
 # FROM node:14.21.3
 
 # COPY --from=build /app /app
