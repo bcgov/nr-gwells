@@ -24,9 +24,9 @@ COPY Caddyfile /etc/caddy/Caddyfile
 RUN caddy fmt /etc/caddy/Caddyfile
 
 # Nonroot user
-USER 1001
+# USER 1001
 
-CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
+# CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
 
 # FROM node:14.21.3
 
