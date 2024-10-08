@@ -22,9 +22,9 @@ from django.views.generic import TemplateView
 from django.urls import path, re_path
 
 from django.shortcuts import redirect
-from django.views.decorators.cache import never_cache
+from django.views.decorators.cache import never_cache 
 
-from gwells.views import SurveyListCreateView, SurveyUpdateDeleteView, HealthView, index, api
+from gwells.views import SurveyListCreateView, SurveyUpdateDeleteView, HealthView, api
 from gwells.views.bulk import BulkWellAquiferCorrelation, BulkVerticalAquiferExtents
 from gwells.views.admin import *
 from gwells.settings.base import get_env_variable
@@ -101,6 +101,6 @@ urlpatterns = [
     # Catch all other cases to api/ and 404 them
     re_path(r'' + app_root_slash + api_path_prefix() + '/*', api.api_404, name='api-404'),
 
-    # Catch all other cases and push it to the SPA
-    re_path(r'' + app_root_slash + '*', index, name='spa'),
+    # # Catch all other cases and push it to the SPA
+    # re_path(r'' + app_root_slash + '*', index, name='spa'),
 ]

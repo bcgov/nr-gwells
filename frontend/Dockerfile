@@ -16,10 +16,10 @@ COPY . /app
 
 RUN npm run build
 
-FROM caddy:2
+FROM caddy:2.8.1
 
 # Copy static files, verify Caddyfile formatting
-COPY --from=build /app/dist /srv
+COPY --from=build /app/dist /srv/gwells
 COPY Caddyfile /etc/caddy/Caddyfile
 RUN caddy fmt /etc/caddy/Caddyfile
 
