@@ -23,6 +23,11 @@ jobs:
     name: Initialize
     runs-on: ubuntu-latest
     steps:
+      # Override OpenShift version, if specified
+      - name: Install CLI tools from OpenShift Mirror
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: ${{ inputs.oc_version || '4' }}
       - name: Initialize
         uses: bcgov-nr/action-deployer-openshift@v3.0.0
         with:
