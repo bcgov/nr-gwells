@@ -130,11 +130,11 @@ jobs:
       - name: Deploy Frontend
         uses: bcgov-nr/action-deployer-openshift@v3.0.1
         with:
-        oc_namespace: ${{ vars.OC_NAMESPACE }}
-        oc_server: ${{ vars.OC_SERVER }}
-        oc_token: ${{ secrets.OC_TOKEN }}
-        oc_version: "4.14.37"
-        file: frontend/openshift.deploy.yml
-        parameters:
+          oc_namespace: ${{ vars.OC_NAMESPACE }}
+          oc_server: ${{ vars.OC_SERVER }}
+          oc_token: ${{ secrets.OC_TOKEN }}
+          oc_version: "4.14.37"
+          file: frontend/openshift.deploy.yml
+          parameters:
             -p TAG=-dev-${{ github.event.number }}
             -p TARGET=dev
