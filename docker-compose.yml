@@ -105,9 +105,9 @@ services:
 #############################################################################################
   frontend:
     working_dir: /app
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    # build:
+    #   context: ./frontend
+    #   dockerfile: Dockerfile
     hostname: frontend
     environment:
       DEBUG: "true"
@@ -117,7 +117,8 @@ services:
       API_TARGET: "http://localhost:8000/"
       BACKEND_URL: "http://localhost:8000"
       LOG_LEVEL: "info"
-    command: caddy run --config /etc/caddy/Caddyfile
+    command: npm i && npm run server
+    image: node:14.21.3
     ports:
       - "3000:3000"
     volumes:
@@ -126,6 +127,23 @@ services:
     depends_on:
       backend:
         condition: service_started
+
+  caddy:
+    container_name: caddy
+    profiles: ["caddy"]
+    build: ./frontend
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      BACKEND_URL: http://backend:3000
+      LOG_LEVEL: info
+    ports: ["3005:3000"]
+    volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+    depends_on:
+      backend:
+        condition: service_healthy
 
 #############################################################################################
 ###                                       Backend                                         ###
