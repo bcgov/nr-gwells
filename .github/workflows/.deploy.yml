@@ -29,6 +29,7 @@ jobs:
           oc_namespace: ${{ vars.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
           oc_token: ${{ secrets.OC_TOKEN }}
+          oc_version: "4.14"
           file: common/openshift.init.yml
           overwrite: true
           parameters:
