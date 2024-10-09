@@ -133,8 +133,8 @@ jobs:
         oc_namespace: ${{ vars.OC_NAMESPACE }}
         oc_server: ${{ vars.OC_SERVER }}
         oc_token: ${{ secrets.OC_TOKEN }}
-          oc_version: "4.14.37"
-          file: frontend/openshift.deploy.yml
-          parameters:
-              -p TAG=-dev-${{ github.event.number }}
-              -p TARGET=dev
+        oc_version: "4.14.37"
+        file: frontend/openshift.deploy.yml
+        parameters:
+            -p TAG=-dev-${{ github.event.number }}
+            -p TARGET=dev
