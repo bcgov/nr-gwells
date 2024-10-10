@@ -5,28 +5,15 @@ parameters:
     displayName: Name Suffix
     description: A suffix appended to all objects
     required: true
-  - name: APP
-    description: Application name
-    value: gwells
-  - name: COMPONENT
-    description: Component name
-    value: frontend
-  - name: ORG
-    description: Organization name; e.g. bcgov or bcdevops
-    value: bcgov
-  - name: TAG
-    description: Image tag; e.g. PR number or latest
-    required: true
-  - name: TARGET
-    description: Deployment target; e.g. PR number, test or prod
+  - name: ENV_NAME
     required: true
 objects:
   - kind: Service
     apiVersion: v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: gwells}-${ENV_NAME}
+      name: gwells-${ENV_NAME}-frontend
     spec:
       type: ClusterIP
       ports:
@@ -35,30 +22,30 @@ objects:
           protocol: TCP
           name: 3005-tcp
       selector:
-        service: ${APP}-${TARGET}-${COMPONENT}
+        service: gwells-${ENV_NAME}-frontend
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-        deployment: ${APP}-${TARGET}-${COMPONENT}-${NAME_SUFFIX}
-      name: ${APP}-${TARGET}-${COMPONENT}-${NAME_SUFFIX}
+        app: gwells-${ENV_NAME}
+        deployment: gwells-${TENV_NAMEARGET}-frontend-${NAME_SUFFIX}
+      name: gwells-${ENV_NAME}-frontend-${NAME_SUFFIX}
     spec:
       strategy:
         type: Recreate
       selector:
         matchLabels:
-          deployment: ${APP}-${TARGET}-${COMPONENT}-${NAME_SUFFIX}
+          deployment: gwells-${ENV_NAME}-frontend-${NAME_SUFFIX}
       template:
         metadata:
           labels:
-            app: ${APP}-${TARGET}
-            deployment: ${APP}-${TARGET}-${COMPONENT}-${NAME_SUFFIX}
-            service: ${APP}-${TARGET}-${COMPONENT}
+            app: gwells-${ENV_NAME}
+            deployment: gwells-${ENV_NAME}-frontend-${NAME_SUFFIX}
+            service: gwells-${ENV_NAME}-frontend
         spec:
           containers:
-            - name: ${APP}-${TARGET}-${COMPONENT}
-              # image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${TAG}
+            - name: gwells-${ENV_NAME}-frontend
+              # image: ghcr.io/bcgov/gwells/frontend:${TAG}
               image: ghcr.io/bcgov/nr-gwells/frontend:69
               securityContext:
                 capabilities:
@@ -68,9 +55,9 @@ objects:
                 - name: LOG_LEVEL
                   value: info
                 - name: VUE_APP_AXIOS_BASE_URL
-                  value: http://${APP}-${TARGET}/gwells/api/v2/
+                  value: http://gwells-${ENV_NAME}/gwells/api/v2/
                 - name: BACKEND_URL
-                  value: http://${APP}-${TARGET}
+                  value: http://gwells-${ENV_NAME}
               ports:
                 - name: container-port
                   containerPort: 3000
@@ -102,15 +89,15 @@ objects:
     apiVersion: route.openshift.io/v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}-${NAME_SUFFIX}
+        app: gwells-${ENV_NAME}
+      name: gwells-${ENV_NAME}-frontend-${NAME_SUFFIX}
     spec:
-      host: gwells-${TARGET}.apps.silver.devops.gov.bc.ca
+      host: gwells-${ENV_NAME}.apps.silver.devops.gov.bc.ca
       port:
         targetPort: 3005-tcp
       to:
         kind: Service
-        name: ${APP}-${TARGET}-${COMPONENT}
+        name: gwells-${ENV_NAME}-frontend
         weight: 100
       tls:
         termination: edge

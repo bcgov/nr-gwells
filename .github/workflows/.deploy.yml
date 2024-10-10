@@ -136,6 +136,6 @@ jobs:
           oc_version: "4.14.30"
           file: frontend/openshift.deploy.yml
           parameters:
-            -p TAG=-dev-${{ github.event.number }}
-            -p TARGET=dev
             -p NAME_SUFFIX=-dev-${{ github.event.number }}
+            -p ENV_NAME=dev
+
