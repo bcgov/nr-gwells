@@ -66,7 +66,7 @@ objects:
                 - name: VUE_APP_AXIOS_BASE_URL
                   value: http://${APP}-${TARGET}/gwells/api/v2/
                 - name: BACKEND_URL
-                  value: http://${APP}-${TARGET}/gwells/api/v2/
+                  value: http://${APP}-${TARGET}
               ports:
                 - name: http
                   containerPort: 5173
