@@ -12,7 +12,7 @@ objects:
     apiVersion: v1
     metadata:
       labels:
-        app: gwells${NAME_SUFFIX}
+        app: gwells${NAME_SUFFIX}frontend
       name: gwells${NAME_SUFFIX}-frontend
     spec:
       type: ClusterIP
@@ -27,7 +27,7 @@ objects:
     apiVersion: apps/v1
     metadata:
       labels:
-        app: gwells${NAME_SUFFIX}
+        app: gwells${NAME_SUFFIX}frontend
         deployment: gwells${NAME_SUFFIX}-frontend
       name: gwells${NAME_SUFFIX}-frontend
     spec:
@@ -39,13 +39,13 @@ objects:
       template:
         metadata:
           labels:
-            app: gwells${NAME_SUFFIX}
+            app: gwells${NAME_SUFFIX}frontend
             deployment: gwells${NAME_SUFFIX}-frontend
             service: gwells${NAME_SUFFIX}-frontend
         spec:
           containers:
             - name: gwells${NAME_SUFFIX}-frontend
-              # image: ghcr.io/bcgov/gwells/frontend:${NAME_SUFFIX}
+              # image: ghcr.io/bcgov/gwells/frontend:${NAME_SUFFIX}-frontend
               image: ghcr.io/bcgov/nr-gwells/frontend:69
               securityContext:
                 capabilities:
@@ -55,9 +55,9 @@ objects:
                 - name: LOG_LEVEL
                   value: info
                 - name: VUE_APP_AXIOS_BASE_URL
-                  value: http://gwells${NAME_SUFFIX}/gwells/api/v2/
+                  value: http://gwells${NAME_SUFFIX}-frontend/gwells/api/v2/
                 - name: BACKEND_URL
-                  value: http://gwells${NAME_SUFFIX}
+                  value: http://gwells${NAME_SUFFIX}-frontend
               ports:
                 - name: container-port
                   containerPort: 3000
@@ -93,10 +93,10 @@ objects:
     apiVersion: route.openshift.io/v1
     metadata:
       labels:
-        app: gwells${NAME_SUFFIX}
+        app: gwells${NAME_SUFFIX}-frontend
       name: gwells${NAME_SUFFIX}-frontend
     spec:
-      host: gwells${NAME_SUFFIX}.apps.silver.devops.gov.bc.ca
+      host: gwells${NAME_SUFFIX}frontend.apps.silver.devops.gov.bc.ca
       port:
         targetPort: 3000-tcp
       to:
