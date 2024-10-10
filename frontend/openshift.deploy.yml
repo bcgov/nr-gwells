@@ -1,6 +1,10 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 parameters:
+  - name: NAME_SUFFIX
+    displayName: Name Suffix
+    description: A suffix appended to all objects
+    required: true
   - name: APP
     description: Application name
     value: gwells
@@ -37,19 +41,19 @@ objects:
     metadata:
       labels:
         app: ${APP}-${TARGET}
-        deployment: ${APP}-${TARGET}-${COMPONENT}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        deployment: ${APP}-${TARGET}-${COMPONENT}-${NAME_SUFFIX}
+      name: ${APP}-${TARGET}-${COMPONENT}-${NAME_SUFFIX}
     spec:
       strategy:
         type: Recreate
       selector:
         matchLabels:
-          deployment: ${APP}-${TARGET}-${COMPONENT}
+          deployment: ${APP}-${TARGET}-${COMPONENT}-${NAME_SUFFIX}
       template:
         metadata:
           labels:
             app: ${APP}-${TARGET}
-            deployment: ${APP}-${TARGET}-${COMPONENT}
+            deployment: ${APP}-${TARGET}-${COMPONENT}-${NAME_SUFFIX}
             service: ${APP}-${TARGET}-${COMPONENT}
         spec:
           containers:
@@ -99,7 +103,7 @@ objects:
     metadata:
       labels:
         app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}
+      name: ${APP}-${TARGET}-${COMPONENT}-${NAME_SUFFIX}
     spec:
       host: gwells-${TARGET}.apps.silver.devops.gov.bc.ca
       port:

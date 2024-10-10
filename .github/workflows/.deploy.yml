@@ -138,3 +138,4 @@ jobs:
           parameters:
             -p TAG=-dev-${{ github.event.number }}
             -p TARGET=dev
+            -p NAME_SUFFIX=-dev-${{ github.event.number }}
