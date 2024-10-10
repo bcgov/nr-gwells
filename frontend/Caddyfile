@@ -5,7 +5,7 @@
 		metrics
 	}
 }
-:3005 {
+:3000 {
 	log {
 		output stdout
 		format console {
