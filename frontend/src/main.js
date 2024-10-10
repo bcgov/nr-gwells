@@ -34,13 +34,13 @@ import filters from '@/common/filters'
 // GWELLS js API library (helper methods for working with API)
 import ApiService from '@/common/services/ApiService.js'
 
-const PRODUCTION_GWELLS_URL = 'https://apps.nrs.gov.bc.ca/gwells';
-const STAGING_GWELLS_URLS = ['testapps.nrs.gov.bc.ca', 'gwells-staging.apps.silver.devops.gov.bc.ca'];
-const BASE_PATH = '/gwells/';
-const PRODUCTION_MATOMO_HOST = 'https://water-matomo.apps.silver.devops.gov.bc.ca/';
-const TEST_MATOMO_HOST = 'https://water-matomo-staging.apps.silver.devops.gov.bc.ca/';
+const PRODUCTION_GWELLS_URL = 'https://apps.nrs.gov.bc.ca/gwells'
+const STAGING_GWELLS_URLS = ['testapps.nrs.gov.bc.ca', 'gwells-staging.apps.silver.devops.gov.bc.ca']
+const BASE_PATH = '/gwells/'
+// const PRODUCTION_MATOMO_HOST = 'https://water-matomo.apps.silver.devops.gov.bc.ca/';
+// const TEST_MATOMO_HOST = 'https://water-matomo-staging.apps.silver.devops.gov.bc.ca/';
 
-const isProduction = () => (window.location.href.includes(PRODUCTION_GWELLS_URL))//Does not return true for the production site @https://gwells.apps.silver.devops.gov.bc.ca/gwells
+const isProduction = () => (window.location.href.includes(PRODUCTION_GWELLS_URL))// Does not return true for the production site @https://gwells.apps.silver.devops.gov.bc.ca/gwells
 const isStaging = () => (
   window.location.pathname.includes(BASE_PATH) && STAGING_GWELLS_URLS.includes(window.location.hostname)
 )
@@ -72,28 +72,27 @@ Vue.component('form-input', FormInput)
 // set baseURL and default headers
 ApiService.init()
 
-if (isProduction()) {
-  Vue.use(VueMatomo, {
-    host: PRODUCTION_MATOMO_HOST,
-    siteId: 2,
-    router: router,
-    domains: 'apps.nrs.gov.bc.ca'
-  })
-}
-else if (isStaging()) {
-  Vue.use(VueMatomo, {
-    host: TEST_MATOMO_HOST,
-    siteId: 1,
-    router: router,
-    domains: STAGING_GWELLS_URLS
-  })
-} else { //Local & DEV and anything else
-  Vue.use(VueMatomo, {
-    host: TEST_MATOMO_HOST,
-    siteId: 3,
-    router: router
-  })
-}
+// if (isProduction()) {
+//   Vue.use(VueMatomo, {
+//     host: PRODUCTION_MATOMO_HOST,
+//     siteId: 2,
+//     router: router,
+//     domains: 'apps.nrs.gov.bc.ca'
+//   })
+// } else if (isStaging()) {
+//   Vue.use(VueMatomo, {
+//     host: TEST_MATOMO_HOST,
+//     siteId: 1,
+//     router: router,
+//     domains: STAGING_GWELLS_URLS
+//   })
+// } else { // Local & DEV and anything else
+//   Vue.use(VueMatomo, {
+//     host: TEST_MATOMO_HOST,
+//     siteId: 3,
+//     router: router
+//   })
+// }
 
 Vue.config.productionTip = false
 Vue.config.devtools = process.env.NODE_ENV !== 'production'
@@ -113,6 +112,6 @@ new Vue({
   },
   created () {
     this.FETCH_CONFIG()
-    window._paq.push(['trackPageView']); //To track pageview - Matomo
+    window._paq.push(['trackPageView']) // To track pageview - Matomo
   }
 })

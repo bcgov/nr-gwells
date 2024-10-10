@@ -4,8 +4,8 @@ import { triggerDownload } from '../helpers/download'
 
 const ApiService = {
   init () {
-    axios.defaults.baseURL = process.env.VUE_APP_AXIOS_BASE_URL
-    this.baseURL = axios.defaults.baseURL
+    axios.defaults.baseURL = 'http://localhost:8000/gwells/api/v2/'
+    this.baseURL = 'http://localhost:8000/gwells/api/v2/'
 
     axios.interceptors.request.use(function (request) {
       // log requests to console while logging is on
@@ -18,8 +18,9 @@ const ApiService = {
     }, function (error) {
       return Promise.reject(error)
     })
+
     axios.interceptors.response.use(function (response) {
-      return response
+      return response 
     }, function (error) {
       return Promise.reject(error)
     })

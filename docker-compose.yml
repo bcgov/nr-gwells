@@ -104,27 +104,55 @@ services:
 ###                                       Frontend                                        ###
 #############################################################################################
   frontend:
-    working_dir: /app
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: node:14.21.3
     hostname: frontend
+    # working_dir: /app/frontend
+    # build:
+    #   context: ./frontend
+    #   dockerfile: Dockerfile
     environment:
       DEBUG: "true"
-      VUE_APP_AXIOS_BASE_URL: /api/
+      VUE_APP_AXIOS_BASE_URL: "http://backend:8000/gwells/api/v2/"
       VUE_APP_VECTOR_TILE_BASE_URL: "/tiles/"
       VECTOR_TILE_SERVER: "http://tileserv:7800/"
-      API_TARGET: "${API_TARGET:-http://backend:8000/}"
-    command: /bin/bash -c "
-        npm run serve"
+      API_TARGET: "http://backend:8000/"
+      BACKEND_URL: "http://backend:8000"
+      LOG_LEVEL: "info"
+    command: /bin/bash -c "cd /frontend && npm install && npm run serve"
     ports:
-      - "8080:8080"
+      - "3000:8080"
     volumes:
       - ./frontend:/frontend
       - /frontend/node_modules/
     depends_on:
       backend:
         condition: service_started
+
+  caddy:
+    container_name: caddy
+    profiles: ["caddy"]
+    build: ./frontend
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      BACKEND_URL: http://backend:8000
+      LOG_LEVEL: info
+      # VUE_APP_AXIOS_BASE_URL: "http://backend:8000/gwells/api/v2/"
+      # VUE_APP_VECTOR_TILE_BASE_URL: "/tiles/"
+      # VECTOR_TILE_SERVER: "http://tileserv:7800/"
+      # API_TARGET: "http://backend:8000/"
+      # LOG_LEVEL: "info"
+    ports: ["3005:3000"]
+    volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3005"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 20s
+    depends_on:
+      backend:
+        condition: service_healthy
 
 #############################################################################################
 ###                                       Backend                                         ###
@@ -189,9 +217,14 @@ services:
       LOAD_FIXTURES: "true"
     volumes:
       - ./backend:/backend
+    healthcheck:
+      test: timeout 3s bash -c 'true > /dev/tcp/127.0.0.1/8000'
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 20s
     ports:
       - "8000:8000"
-      - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
