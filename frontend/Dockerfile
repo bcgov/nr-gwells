@@ -40,7 +40,7 @@ FROM caddy:2.8.4-alpine
 RUN apk add --no-cache ca-certificates
 
 # Copy static files, verify Caddyfile formatting
-COPY --from=build /app/dist /srv/gwells
+COPY --from=build /app/dist /srv
 COPY Caddyfile /etc/caddy/Caddyfile
 RUN caddy fmt /etc/caddy/Caddyfile
 
