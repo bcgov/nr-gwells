@@ -96,7 +96,7 @@ objects:
         app: gwells${NAME_SUFFIX}-frontend
       name: gwells${NAME_SUFFIX}-frontend
     spec:
-      host: gwells${NAME_SUFFIX}frontend.apps.silver.devops.gov.bc.ca
+      host: gwells${NAME_SUFFIX}-frontend.apps.silver.devops.gov.bc.ca
       port:
         targetPort: 3000-tcp
       to:
