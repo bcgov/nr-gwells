@@ -64,17 +64,21 @@ objects:
               # command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
               readinessProbe:
                 httpGet:
-                  port: container-port
-                initialDelaySeconds: 90
-                periodSeconds: 10
-                timeoutSeconds: 10
-                successThreshold: 3
+                  path: /health
+                  port: 3001
+                  scheme: HTTP
+                initialDelaySeconds: 5
+                periodSeconds: 2
+                timeoutSeconds: 2
+                successThreshold: 1
                 failureThreshold: 30
               livenessProbe:
                 successThreshold: 1
                 failureThreshold: 3
                 httpGet:
-                  port: container-port
+                  path: /health
+                  port: 3001
+                  scheme: HTTP
                 initialDelaySeconds: 15
                 periodSeconds: 30
                 timeoutSeconds: 5
