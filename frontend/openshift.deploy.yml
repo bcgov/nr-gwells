@@ -18,9 +18,9 @@ objects:
       type: ClusterIP
       ports:
         - port: 80
-          targetPort: 3005
+          targetPort: 3000
           protocol: TCP
-          name: 3005-tcp
+          name: 3000-tcp
       selector:
         service: gwells${NAME_SUFFIX}-frontend
   - kind: Deployment
@@ -94,7 +94,7 @@ objects:
     spec:
       host: gwells${NAME_SUFFIX}.apps.silver.devops.gov.bc.ca
       port:
-        targetPort: 3005-tcp
+        targetPort: 3000-tcp
       to:
         kind: Service
         name: gwells${NAME_SUFFIX}-frontend
