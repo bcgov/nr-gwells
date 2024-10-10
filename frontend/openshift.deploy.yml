@@ -18,9 +18,9 @@ objects:
       type: ClusterIP
       ports:
         - port: 80
-          targetPort: 3000
+          targetPort: 3005
           protocol: TCP
-          name: 3000-tcp
+          name: 3005-tcp
       selector:
         service: gwells${NAME_SUFFIX}-frontend
   - kind: Deployment
@@ -60,7 +60,7 @@ objects:
                   value: http://gwells${NAME_SUFFIX}-frontend
               ports:
                 - name: container-port
-                  containerPort: 3000
+                  containerPort: 3005
               # command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
               readinessProbe:
                 httpGet:
@@ -98,7 +98,7 @@ objects:
     spec:
       host: gwells${NAME_SUFFIX}-frontend.apps.silver.devops.gov.bc.ca
       port:
-        targetPort: 3000-tcp
+        targetPort: 3005-tcp
       to:
         kind: Service
         name: gwells${NAME_SUFFIX}-frontend
