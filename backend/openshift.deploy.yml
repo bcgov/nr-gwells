@@ -84,11 +84,11 @@ objects:
 - kind: ImageStream
   apiVersion: v1
   metadata:
-    name: gwells${NAME_SUFFIX}
+    name: gwells${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
       base-name: gwells
-      appver: gwells${NAME_SUFFIX}
+      appver: gwells${NAME_SUFFIX}-backend
     annotations:
       description: Keeps track of changes in the application image
   spec:
@@ -98,10 +98,10 @@ objects:
   apiVersion: v1
   metadata:
     creationTimestamp: 
-    name: gwells-global-config${NAME_SUFFIX}
+    name: gwells-global-config${NAME_SUFFIX}-backend
     labels:
-      appver: gwells${NAME_SUFFIX}
-      app: gwells${NAME_SUFFIX}
+      appver: gwells${NAME_SUFFIX}-backend
+      app: gwells${NAME_SUFFIX}-backend
   data:
     DB_REPLICATE: ${DB_REPLICATE}
     DJANGO_DEBUG: ${DJANGO_DEBUG}
@@ -133,10 +133,10 @@ objects:
 - kind: Deployment
   apiVersion: apps/v1
   metadata:
-    name: gwells${NAME_SUFFIX}
+    name: gwells${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
-      appver: gwells${NAME_SUFFIX}
+      appver: gwells${NAME_SUFFIX}-backend
     annotations:
       description: Defines how to deploy the application server
   spec:
@@ -150,48 +150,48 @@ objects:
         #     command:
         #     - "/usr/bin/container-entrypoint"
         #     - "/opt/app-root/src/scripts/pre-deploy.sh"
-        #     containerName: gwells-app${NAME_SUFFIX}
+        #     containerName: gwells-app${NAME_SUFFIX}-backend
         #     env:
         #     - name: PGDATABASE
         #       valueFrom:
         #         secretKeyRef:
-        #           name: gwells-pg12${NAME_SUFFIX}
+        #           name: gwells-pg12${NAME_SUFFIX}-backend
         #           key: database-name
         #     - name: PGUSER
         #       valueFrom:
         #         secretKeyRef:
-        #           name: gwells-pg12${NAME_SUFFIX}
+        #           name: gwells-pg12${NAME_SUFFIX}-backend
         #           key: database-user
         #     - name: PGPASSWORD
         #       valueFrom:
         #         secretKeyRef:
-        #           name: gwells-pg12${NAME_SUFFIX}
+        #           name: gwells-pg12${NAME_SUFFIX}-backend
         #           key: database-password
         #     - name: PGHOST
-        #       value: gwells-pg12${NAME_SUFFIX}
+        #       value: gwells-pg12${NAME_SUFFIX}-backend
       resources: {}
       activeDeadlineSeconds: 21600
     replicas: 2
     test: false
     selector:
-      name: gwells${NAME_SUFFIX}
+      name: gwells${NAME_SUFFIX}-backend
       matchLabels:
-        deployment: gwells${NAME_SUFFIX}
+        deployment: gwells${NAME_SUFFIX}-backend
     template:
       metadata:
-        name: gwells${NAME_SUFFIX}
+        name: gwells${NAME_SUFFIX}-backend
         creationTimestamp: 
         labels:
-          name: gwells${NAME_SUFFIX}
-          appver: gwells${NAME_SUFFIX}
-          deployment: gwells${NAME_SUFFIX}
+          name: gwells${NAME_SUFFIX}-backend
+          appver: gwells${NAME_SUFFIX}-backend
+          deployment: gwells${NAME_SUFFIX}-backend
       spec:
         volumes:
           - name: staticfiles
             emptyDir:
               sizeLimit: 250Mi
         containers:
-        - name: gwells-app${NAME_SUFFIX}
+        - name: gwells-app${NAME_SUFFIX}-backend
           image: 'ghcr.io/bcgov/nr-gwells/backend:54'
           volumeMounts:
             - name: staticfiles
@@ -472,23 +472,23 @@ objects:
   metadata:
     creationTimestamp: 
     labels:
-      appver: gwells${NAME_SUFFIX}
-    name: gwells${NAME_SUFFIX}
+      appver: gwells${NAME_SUFFIX}-backend
+    name: gwells${NAME_SUFFIX}-backend
   spec:
     maxReplicas: 5
     minReplicas: 2
     scaleTargetRef:
       apiVersion: v1
       kind: Deployment
-      name: gwells${NAME_SUFFIX}
+      name: gwells${NAME_SUFFIX}-backend
     targetCPUUtilizationPercentage: 90
 - kind: Service
   apiVersion: v1
   metadata:
-    name: gwells${NAME_SUFFIX}
+    name: gwells${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
-      appver: gwells${NAME_SUFFIX}
+      appver: gwells${NAME_SUFFIX}-backend
     annotations:
       description: Exposes and load balances the application pods
   spec:
@@ -498,24 +498,24 @@ objects:
       port: 8080
       targetPort: 8080
     selector:
-      name: gwells${NAME_SUFFIX}
+      name: gwells${NAME_SUFFIX}-backend
     type: ClusterIP
     sessionAffinity: None
 - kind: Route
   apiVersion: v1
   metadata:
-    name: gwells${NAME_SUFFIX}
+    name: gwells${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
       frontend: 'true'
-      appver: gwells${NAME_SUFFIX}
+      appver: gwells${NAME_SUFFIX}-backend
     annotations: {}
   spec:
     host: "${HOST}"
     path: "/gwells"
     to:
       kind: Service
-      name: gwells${NAME_SUFFIX}
+      name: gwells${NAME_SUFFIX}-backend
       weight: 100
     port:
       targetPort: web
