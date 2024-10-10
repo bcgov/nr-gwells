@@ -40,12 +40,12 @@ FROM caddy:2.8.4-alpine
 RUN apk add --no-cache ca-certificates
 
 # Copy static files, verify Caddyfile formatting
-COPY --from=build /app/dist /srv
+COPY --from=build /app/dist /srv/gwells
 COPY Caddyfile /etc/caddy/Caddyfile
 RUN caddy fmt /etc/caddy/Caddyfile
 
 # Boilerplate, not used in OpenShift/Kubernetes
-EXPOSE 3000 3001
+EXPOSE 3005 3001
 HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost:3001/health
 
 # Nonroot user

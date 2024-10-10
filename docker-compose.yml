@@ -104,11 +104,12 @@ services:
 ###                                       Frontend                                        ###
 #############################################################################################
   frontend:
-    working_dir: /app
+    image: node:14.21.3
+    hostname: frontend
+    # working_dir: /app/frontend
     # build:
     #   context: ./frontend
     #   dockerfile: Dockerfile
-    hostname: frontend
     environment:
       DEBUG: "true"
       VUE_APP_AXIOS_BASE_URL: "http://localhost:8000/gwells/api/v2/"
@@ -117,8 +118,10 @@ services:
       API_TARGET: "http://localhost:8000/"
       BACKEND_URL: "http://localhost:8000"
       LOG_LEVEL: "info"
-    command: npm i && npm run server
-    image: node:14.21.3
+    command: /bin/bash -c "
+            cd /frontend &&
+            npm install &&
+            npm run serve"
     ports:
       - "3000:3000"
     volumes:
@@ -134,16 +137,16 @@ services:
     build: ./frontend
     environment:
       NODE_ENV: development
-      PORT: 3000
-      BACKEND_URL: http://backend:3000
+      PORT: 3005
+      BACKEND_URL: http://backend:8000
       LOG_LEVEL: info
-    ports: ["3005:3000"]
+    ports: ["3005:3006"]
     volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-    depends_on:
-      backend:
-        condition: service_healthy
+      test: ["CMD", "curl", "-f", "http://localhost:3005"]
+    # depends_on:
+    #   backend:
+    #     condition: service_healthy
 
 #############################################################################################
 ###                                       Backend                                         ###
@@ -208,6 +211,8 @@ services:
       LOAD_FIXTURES: "true"
     volumes:
       - ./backend:/backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
     ports:
       - "8000:8000"
     depends_on:
