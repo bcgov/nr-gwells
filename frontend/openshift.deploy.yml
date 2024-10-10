@@ -57,7 +57,8 @@ objects:
               # image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${TAG}
               image: ghcr.io/bcgov/nr-gwells/frontend:69
               securityContext:
-                runAsUser: 1011540000
+                runAsUser: 10001
+                runAsNonRoot: True
               imagePullPolicy: Always
               env:
                 - name: LOG_LEVEL
