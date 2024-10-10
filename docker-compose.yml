@@ -140,13 +140,13 @@ services:
       PORT: 3005
       BACKEND_URL: http://backend:8000
       LOG_LEVEL: info
-    ports: ["3005:3006"]
+    ports: ["3005:3000"]
     volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3005"]
-    # depends_on:
-    #   backend:
-    #     condition: service_healthy
+    depends_on:
+      backend:
+        condition: service_healthy
 
 #############################################################################################
 ###                                       Backend                                         ###
