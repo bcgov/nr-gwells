@@ -192,7 +192,7 @@ objects:
               sizeLimit: 250Mi
         containers:
         - name: gwells-app${NAME_SUFFIX}-backend
-          image: 'ghcr.io/bcgov/nr-gwells/backend:54'
+          image: 'ghcr.io/bcgov/nr-gwells/backend:69'
           volumeMounts:
             - name: staticfiles
               mountPath: /app/staticfiles
