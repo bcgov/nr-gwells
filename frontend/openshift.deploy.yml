@@ -27,9 +27,9 @@ objects:
       type: ClusterIP
       ports:
         - port: 80
-          targetPort: 5173
+          targetPort: 3000
           protocol: TCP
-          name: http-5173
+          name: 3000-tcp
       selector:
         service: ${APP}-${TARGET}-${COMPONENT}
   - kind: Deployment
@@ -68,15 +68,12 @@ objects:
                 - name: BACKEND_URL
                   value: http://${APP}-${TARGET}
               ports:
-                - name: http
-                  containerPort: 5173
-                  protocol: TCP
+                - name: container-port
+                  containerPort: 3000
               # command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
               readinessProbe:
                 httpGet:
-                  path: /
-                  port: http
-                  scheme: HTTP
+                  port: container-port
                 initialDelaySeconds: 90
                 periodSeconds: 10
                 timeoutSeconds: 10
@@ -86,9 +83,7 @@ objects:
                 successThreshold: 1
                 failureThreshold: 3
                 httpGet:
-                  path: /
-                  port: http
-                  scheme: HTTP
+                  port: container-port
                 initialDelaySeconds: 15
                 periodSeconds: 30
                 timeoutSeconds: 5
@@ -108,7 +103,7 @@ objects:
     spec:
       host: gwells-${TARGET}.apps.silver.devops.gov.bc.ca
       port:
-        targetPort: http-5173
+        targetPort: 3000-tcp
       to:
         kind: Service
         name: ${APP}-${TARGET}-${COMPONENT}
