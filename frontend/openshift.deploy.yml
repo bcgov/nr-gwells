@@ -57,8 +57,8 @@ objects:
               # image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${TAG}
               image: ghcr.io/bcgov/nr-gwells/frontend:69
               securityContext:
-                runAsUser: 10001
-                runAsNonRoot: True
+                capabilities:
+                  add: ["NET_BIND_SERVICE"]
               imagePullPolicy: Always
               env:
                 - name: LOG_LEVEL
