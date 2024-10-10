@@ -145,7 +145,7 @@ services:
     ports: ["3005:3000"]
     volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
     healthcheck:
-      test: timeout 3s bash -c 'true > /dev/tcp/127.0.0.1/8000'
+      test: ["CMD", "curl", "-f", "http://localhost:3005"]
       interval: 5s
       timeout: 3s
       retries: 10
