@@ -17,7 +17,7 @@ objects:
     spec:
       type: ClusterIP
       ports:
-        - port: 80
+        - port: 3005
           targetPort: 3000
           protocol: TCP
           name: 3000-tcp
@@ -97,7 +97,6 @@ objects:
       name: gwells${NAME_SUFFIX}-frontend
     spec:
       host: gwells${NAME_SUFFIX}-frontend.apps.silver.devops.gov.bc.ca
-      path: /gwells
       port:
         targetPort: 3000-tcp
       to:
