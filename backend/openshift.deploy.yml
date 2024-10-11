@@ -495,8 +495,8 @@ objects:
     ports:
     - name: web
       protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: 8000
+      targetPort: 8000
     selector:
       name: gwells${NAME_SUFFIX}-backend
     type: ClusterIP
