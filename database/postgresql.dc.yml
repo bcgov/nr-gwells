@@ -139,7 +139,7 @@ objects:
           protocol: TCP
           targetPort: 5432
       selector:
-        name: ${DATABASE_SERVICE_NAME}
+        deployment: ${DATABASE_SERVICE_NAME}
       sessionAffinity: None
       type: ClusterIP
     status:
@@ -166,7 +166,8 @@ objects:
     spec:
       replicas: 1
       selector:
-        name: ${DATABASE_SERVICE_NAME}
+        matchLabels:
+          deployment: ${DATABASE_SERVICE_NAME}
       strategy:
         type: Recreate
       template:
@@ -174,6 +175,7 @@ objects:
           labels:
             name: ${DATABASE_SERVICE_NAME}
             appver: gwells${NAME_SUFFIX}
+            deployment: ${DATABASE_SERVICE_NAME}
         spec:
           containers:
             - capabilities: {}
@@ -280,16 +282,4 @@ objects:
             - configMap:
                 name: ${DATABASE_SERVICE_NAME}-setupcfg
               name: ${DATABASE_SERVICE_NAME}-setupcfg
-      triggers:
-        - imageChangeParams:
-            automatic: true
-            containerNames:
-              - postgresql
-            from:
-              kind: ImageStreamTag
-              name: ${IMAGE_STREAM_NAME}:${IMAGE_STREAM_VERSION}
-              namespace: ${IMAGE_STREAM_NAMESPACE}
-            lastTriggeredImage: ""
-          type: ImageChange
-        - type: ConfigChange
     status: {}
