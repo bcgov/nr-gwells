@@ -441,7 +441,7 @@ objects:
               memory: "${MEMORY_REQUEST}"
           readinessProbe:
             httpGet:
-              path: /health
+              path: /gwells/health
               port: 8000
               scheme: HTTP
             initialDelaySeconds: 20
@@ -451,7 +451,7 @@ objects:
             failureThreshold: 5
           livenessProbe:
             httpGet:
-              path: /health
+              path: /gwells/health
               port: 8000
               scheme: HTTP
             initialDelaySeconds: 20
@@ -512,6 +512,7 @@ objects:
     annotations: {}
   spec:
     host: "${HOST}"
+    path: "/gwells"
     to:
       kind: Service
       name: gwells${NAME_SUFFIX}-backend
