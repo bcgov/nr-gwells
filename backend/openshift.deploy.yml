@@ -100,8 +100,8 @@ objects:
     creationTimestamp: 
     name: gwells-global-config${NAME_SUFFIX}
     labels:
-      appver: gwells${NAME_SUFFIX}-backend
-      app: gwells${NAME_SUFFIX}-backend
+      appver: gwells${NAME_SUFFIX}
+      app: gwells${NAME_SUFFIX}
   data:
     DB_REPLICATE: ${DB_REPLICATE}
     DJANGO_DEBUG: ${DJANGO_DEBUG}
