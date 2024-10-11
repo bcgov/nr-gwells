@@ -441,8 +441,8 @@ objects:
               memory: "${MEMORY_REQUEST}"
           readinessProbe:
             httpGet:
-              path: /health
-              port: 8000
+              path: /gwells/health
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 20
             timeoutSeconds: 3
@@ -451,8 +451,8 @@ objects:
             failureThreshold: 5
           livenessProbe:
             httpGet:
-              path: /health
-              port: 8000
+              path: /gwells/health
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 20
             timeoutSeconds: 3
@@ -495,8 +495,8 @@ objects:
     ports:
     - name: web
       protocol: TCP
-      port: 8000
-      targetPort: 8000
+      port: 8080
+      targetPort: 8080
     selector:
       name: gwells${NAME_SUFFIX}-backend
     type: ClusterIP
@@ -512,6 +512,7 @@ objects:
     annotations: {}
   spec:
     host: "${HOST}"
+    path: "/gwells"
     to:
       kind: Service
       name: gwells${NAME_SUFFIX}-backend
