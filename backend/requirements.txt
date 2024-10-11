@@ -2,7 +2,7 @@ django==3.2.4
 pygdal==3.6.2.11
 gdal==3.0.0
 pytz==2024.1
-sqlparse==0.4.4
+sqlparse==0.5.0
 
 django-debug-toolbar==3.8.1
 psycopg2-binary==2.9.9
