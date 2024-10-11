@@ -1,88 +1,83 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 parameters:
-  - name: APP
-    description: Application name
-    value: gwells
-  - name: COMPONENT
-    description: Component name
-    value: frontend
-  - name: ORG
-    description: Organization name; e.g. bcgov or bcdevops
-    value: bcgov
-  - name: TAG
-    description: Image tag; e.g. PR number or latest
+  - name: NAME_SUFFIX
+    displayName: Name Suffix
+    description: A suffix appended to all objects
     required: true
-  - name: TARGET
-    description: Deployment target; e.g. PR number, test or prod
+  - name: ENV_NAME
     required: true
 objects:
   - kind: Service
     apiVersion: v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: gwells${NAME_SUFFIX}frontend
+      name: gwells${NAME_SUFFIX}-frontend
     spec:
       type: ClusterIP
       ports:
-        - port: 80
-          targetPort: 5173
+        - port: 3005
+          targetPort: 3000
           protocol: TCP
-          name: http-5173
+          name: 3000-tcp
       selector:
-        service: ${APP}-${TARGET}-${COMPONENT}
+        service: gwells${NAME_SUFFIX}-frontend
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-        deployment: ${APP}-${TARGET}-${COMPONENT}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: gwells${NAME_SUFFIX}frontend
+        deployment: gwells${NAME_SUFFIX}-frontend
+      name: gwells${NAME_SUFFIX}-frontend
     spec:
       strategy:
         type: Recreate
       selector:
         matchLabels:
-          deployment: ${APP}-${TARGET}-${COMPONENT}
+          deployment: gwells${NAME_SUFFIX}-frontend
       template:
         metadata:
           labels:
-            app: ${APP}-${TARGET}
-            deployment: ${APP}-${TARGET}-${COMPONENT}
-            service: ${APP}-${TARGET}-${COMPONENT}
+            app: gwells${NAME_SUFFIX}frontend
+            deployment: gwells${NAME_SUFFIX}-frontend
+            service: gwells${NAME_SUFFIX}-frontend
         spec:
           containers:
-            - name: ${APP}-${TARGET}-${COMPONENT}
-              image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${TAG}
-              # securityContext:
-              #   runAsUser: 1011540000
+            - name: gwells${NAME_SUFFIX}-frontend
+              # image: ghcr.io/bcgov/gwells/frontend:${NAME_SUFFIX}-frontend
+              image: ghcr.io/bcgov/nr-gwells/frontend:69
+              securityContext:
+                capabilities:
+                  add: ["NET_BIND_SERVICE"]
               imagePullPolicy: Always
               env:
                 - name: LOG_LEVEL
                   value: info
                 - name: VUE_APP_AXIOS_BASE_URL
-                  value: http://${APP}-${TARGET}/gwells/api/v2/
+                  value: http://gwells${NAME_SUFFIX}-frontend/gwells/api/v2/
+                - name: BACKEND_URL
+                  value: http://gwells${NAME_SUFFIX}-frontend
               ports:
-                - name: http
-                  containerPort: 5173
-                  protocol: TCP
+                - name: container-port
+                  containerPort: 3000
+              # command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
               readinessProbe:
                 httpGet:
-                  path: /
-                  port: http
+                  path: /health
+                  port: 3001
                   scheme: HTTP
-                initialDelaySeconds: 90
-                periodSeconds: 10
-                timeoutSeconds: 10
-                successThreshold: 3
+                initialDelaySeconds: 5
+                periodSeconds: 2
+                timeoutSeconds: 2
+                successThreshold: 1
                 failureThreshold: 30
               livenessProbe:
                 successThreshold: 1
                 failureThreshold: 3
                 httpGet:
-                  path: /
-                  port: http
+                  path: /health
+                  port: 3001
                   scheme: HTTP
                 initialDelaySeconds: 15
                 periodSeconds: 30
@@ -98,15 +93,15 @@ objects:
     apiVersion: route.openshift.io/v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: gwells${NAME_SUFFIX}-frontend
+      name: gwells${NAME_SUFFIX}-frontend
     spec:
-      host: gwells-${TARGET}.apps.silver.devops.gov.bc.ca
+      host: gwells${NAME_SUFFIX}-frontend.apps.silver.devops.gov.bc.ca
       port:
-        targetPort: http-5173
+        targetPort: 3000-tcp
       to:
         kind: Service
-        name: ${APP}-${TARGET}-${COMPONENT}
+        name: gwells${NAME_SUFFIX}-frontend
         weight: 100
       tls:
         termination: edge

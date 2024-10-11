@@ -9,13 +9,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # # https://github.com/bcgov-nr/action-builder-ghcr
+  # https://github.com/bcgov-nr/action-builder-ghcr
   builds:
     name: Builds
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: [database, backend]
+        package: [database, backend, frontend]
     timeout-minutes: 20
     steps:
       - uses: bcgov-nr/action-builder-ghcr@v2.2.0
