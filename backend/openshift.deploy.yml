@@ -441,8 +441,8 @@ objects:
               memory: "${MEMORY_REQUEST}"
           readinessProbe:
             httpGet:
-              path: /
-              port: 8080
+              path: /gwells/health
+              port: 8000
               scheme: HTTP
             initialDelaySeconds: 20
             timeoutSeconds: 3
@@ -451,8 +451,8 @@ objects:
             failureThreshold: 5
           livenessProbe:
             httpGet:
-              path: /
-              port: 8080
+              path: /gwells/health
+              port: 8000
               scheme: HTTP
             initialDelaySeconds: 20
             timeoutSeconds: 3
