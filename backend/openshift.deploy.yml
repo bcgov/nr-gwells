@@ -258,103 +258,103 @@ objects:
           - name: E_LICENSING_URL
             valueFrom:
               configMapKeyRef:
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
                 key: E_LICENSING_URL
           - name: DJANGO_DEBUG
             valueFrom:
               configMapKeyRef:
                 key: DJANGO_DEBUG
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: GDAL_LIBRARY_PATH
             valueFrom:
               configMapKeyRef:
                 key: GDAL_LIBRARY_PATH
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: GEOS_LIBRARY_PATH
             valueFrom:
               configMapKeyRef:
                 key: GEOS_LIBRARY_PATH
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: S3_AQUIFER_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_AQUIFER_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: S3_REGISTRANT_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_REGISTRANT_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: S3_PRIVATE_ROOT_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_ROOT_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: S3_PRIVATE_AQUIFER_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_AQUIFER_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: S3_PRIVATE_REGISTRANT_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_REGISTRANT_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: S3_PRIVATE_WELL_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_WELL_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: SSO_CLIENT
             valueFrom:
               configMapKeyRef:
                 key: SSO_CLIENT
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: SSO_PUBKEY
             valueFrom:
               configMapKeyRef:
                 key: SSO_PUBKEY
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: SSO_AUTH_HOST
             valueFrom:
               configMapKeyRef:
                 key: SSO_AUTH_HOST
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: SSO_AUDIENCE
             valueFrom:
               configMapKeyRef:
                 key: SSO_AUDIENCE
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: SSO_REALM
             valueFrom:
               configMapKeyRef:
                 key: SSO_REALM
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: SSO_PORT
             valueFrom:
               configMapKeyRef:
                 key: SSO_PORT
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: SSO_TEST_CLIENT
             valueFrom:
               configMapKeyRef:
                 key: SSO_TEST_CLIENT
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: SSO_TEST_AUDIENCE
             valueFrom:
               configMapKeyRef:
                 key: SSO_TEST_AUDIENCE
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: ENABLE_ADDITIONAL_DOCUMENTS
             valueFrom:
               configMapKeyRef:
                 key: ENABLE_ADDITIONAL_DOCUMENTS
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: ENABLE_AQUIFERS_SEARCH
             valueFrom:
               configMapKeyRef:
                 key: ENABLE_AQUIFERS_SEARCH
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config${NAME_SUFFIX}-backend
           - name: APP_CONTEXT_ROOT
             value: gwells
           - name: SESSION_COOKIE_SECURE
