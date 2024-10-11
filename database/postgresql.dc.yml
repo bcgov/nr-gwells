@@ -225,7 +225,7 @@ objects:
                     secretKeyRef:
                         key: PG_ROOT_PASSWORD
                         name: crunchy-db-credentials
-              image: " "
+              image: "ghcr.io/bcgov/nr-gwells/database:76"
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
