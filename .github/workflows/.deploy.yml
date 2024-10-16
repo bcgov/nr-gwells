@@ -44,7 +44,7 @@ jobs:
             -p E_LICENSING_AUTH_PASSWORD=${{ secrets.E_LICENSING_AUTH_PASSWORD }}
             -p PG_MODE=${{ vars.PG_MODE }}
             -p PG_PRIMARY_PASSWORD=${{ secrets.PG_PRIMARY_PASSWORD }}
-            -p PG_PRIMARY_USER=${{ secrets.G_PRIMARY_USER }}
+            -p PG_PRIMARY_USER=${{ secrets.PG_PRIMARY_USER }}
             -p PG_ROOT_PASSWORD=${{ secrets.PG_ROOT_PASSWORD }}
             # -p S3_PUBLIC_ACCESS_KEY=${{ secrets.S3_PUBLIC_ACCESS_KEY }}
             # -p S3_PUBLIC_SECRET_KEY=${{ secrets.S3_PUBLIC_SECRET_KEY }}
