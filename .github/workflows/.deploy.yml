@@ -42,6 +42,10 @@ jobs:
             -p DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
             -p E_LICENSING_AUTH_USERNAME=${{ secrets.E_LICENSING_AUTH_USERNAME }}
             -p E_LICENSING_AUTH_PASSWORD=${{ secrets.E_LICENSING_AUTH_PASSWORD }}
+            -p PG_MODE=${{ vars.PG_MODE }}
+            -p PG_PRIMARY_PASSWORD=${{ secrets.PG_PRIMARY_PASSWORD }}
+            -p PG_PRIMARY_USER=${{ secrets.G_PRIMARY_USER }}
+            -p PG_ROOT_PASSWORD=${{ secrets.PG_ROOT_PASSWORD }}
             # -p S3_PUBLIC_ACCESS_KEY=${{ secrets.S3_PUBLIC_ACCESS_KEY }}
             # -p S3_PUBLIC_SECRET_KEY=${{ secrets.S3_PUBLIC_SECRET_KEY }}
             # -p S3_HOST=${{ secrets.S3_HOST }}
@@ -76,10 +80,6 @@ jobs:
             -p REQUEST_MEMORY=512Mi
             -p LIMIT_CPU=500m
             -p LIMIT_MEMORY=1Gi
-            -p PG_MODE=${{ vars.PG_MODE }}
-            -p PG_PRIMARY_PASSWORD=${{ secrets.PG_PRIMARY_PASSWORD }}
-            -p PG_PRIMARY_USER=${{ secrets.G_PRIMARY_USER }}
-            -p PG_ROOT_PASSWORD=${{ secrets.PG_ROOT_PASSWORD }}
 
   backend:
     name: Backend
