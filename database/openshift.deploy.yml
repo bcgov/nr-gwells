@@ -55,6 +55,8 @@ parameters:
     value: centos7-12.4-3.0-4.5.0
   - name: NAME_SUFFIX
     required: true
+  - name: IMAGE_TAG
+    required: true 
   - description: Storage class for PVCs.
     displayName: Storage class for PVCs.
     name: STORAGE_CLASS
@@ -225,7 +227,7 @@ objects:
                 #     secretKeyRef:
                 #         key: PG_ROOT_PASSWORD
                 #         name: crunchy-db-credentials
-              image: "ghcr.io/bcgov/nr-gwells/database:76"
+              image: "ghcr.io/bcgov/nr-gwells/database:${IMAGE_TAG}"
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
