@@ -5,6 +5,8 @@ parameters:
   displayName: Name Suffix
   description: A suffix appended to all objects
   required: true
+- name: IMAGE_TAG
+  required: true
 - name: ENV_NAME
   required: true
 - name: HOST
@@ -192,7 +194,7 @@ objects:
               sizeLimit: 250Mi
         containers:
         - name: gwells-app${NAME_SUFFIX}-backend
-          image: 'ghcr.io/bcgov/nr-gwells/backend:69'
+          image: 'ghcr.io/bcgov/nr-gwells/backend:${IMAGE_TAG}'
           volumeMounts:
             - name: staticfiles
               mountPath: /app/staticfiles

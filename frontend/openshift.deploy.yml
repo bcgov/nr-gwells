@@ -5,6 +5,8 @@ parameters:
     displayName: Name Suffix
     description: A suffix appended to all objects
     required: true
+  - name: IMAGE_TAG
+    required: true
   - name: ENV_NAME
     required: true
 objects:
@@ -46,7 +48,7 @@ objects:
           containers:
             - name: gwells${NAME_SUFFIX}-frontend
               # image: ghcr.io/bcgov/gwells/frontend:${NAME_SUFFIX}-frontend
-              image: ghcr.io/bcgov/nr-gwells/frontend:69
+              image: ghcr.io/bcgov/nr-gwells/frontend:${IMAGE_TAG}
               securityContext:
                 capabilities:
                   add: ["NET_BIND_SERVICE"]
