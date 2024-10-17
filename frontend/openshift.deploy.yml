@@ -63,6 +63,7 @@ objects:
               ports:
                 - name: container-port
                   containerPort: 3000
+                  protocol: TCP
               # command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
               # readinessProbe:
               #   httpGet:
