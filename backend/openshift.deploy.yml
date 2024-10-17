@@ -173,7 +173,7 @@ objects:
         #       value: gwells-pg12${NAME_SUFFIX}-backend
       resources: {}
       activeDeadlineSeconds: 21600
-    replicas: 2
+    replicas: 1
     test: false
     selector:
       name: gwells${NAME_SUFFIX}-backend
