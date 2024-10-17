@@ -89,7 +89,7 @@ objects:
                   cpu: 150m
                   memory: 250Mi
                 requests:
-                  cpu: 50m
+                  cpu: 20m
                   memory: 175Mi
   - kind: Route
     apiVersion: route.openshift.io/v1

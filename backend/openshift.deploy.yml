@@ -14,7 +14,7 @@ parameters:
   value: ''
 - name: CPU_REQUEST
   required: false
-  value: 100m
+  value: 50m
 - name: CPU_LIMIT
   required: false
   value: 100m

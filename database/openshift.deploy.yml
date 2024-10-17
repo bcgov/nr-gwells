@@ -32,7 +32,7 @@ parameters:
     displayName: CPU resource request
     name: REQUEST_CPU
     required: false
-    value: 100m
+    value: 20m
   - description: Request for memory resources measured in bytes, e.g. 512Mi, 1Gi.
     displayName: Memory resource request
     name: REQUEST_MEMORY
