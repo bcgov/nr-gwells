@@ -53,33 +53,33 @@ jobs:
             # -p MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
             # -p MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
 
-  # database:
-  #   name: Database
-  #   needs: init
-  #   # environment: ${{ inputs.environment }}
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Database
-  #       uses: bcgov-nr/action-deployer-openshift@v3.0.1
-  #       with:
-  #         oc_namespace: ${{ vars.OC_NAMESPACE }}
-  #         oc_server: ${{ vars.OC_SERVER }}
-  #         oc_token: ${{ secrets.OC_TOKEN }}
-  #         oc_version: "4.14.37"
-  #         file: database/openshift.deploy.yml
-  #         overwrite: true
-  #         parameters:
-  #           -p DATABASE_SERVICE_NAME=gwells-pg12-dev-${{ github.event.number }}
-  #           -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
-  #           -p IMAGE_STREAM_NAME=crunchy-postgres-gis
-  #           -p IMAGE_TAG=${{ github.event.number }}
-  #           -p NAME_SUFFIX=-dev-${{ github.event.number }}
-  #           -p VOLUME_CAPACITY=512Mi
-  #           -p STORAGE_CLASS=netapp-file-standard
-  #           -p REQUEST_CPU=200m
-  #           -p REQUEST_MEMORY=512Mi
-  #           -p LIMIT_CPU=500m
-  #           -p LIMIT_MEMORY=1Gi
+  database:
+    name: Database
+    needs: init
+    # environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Database
+        uses: bcgov-nr/action-deployer-openshift@v3.0.1
+        with:
+          oc_namespace: ${{ vars.OC_NAMESPACE }}
+          oc_server: ${{ vars.OC_SERVER }}
+          oc_token: ${{ secrets.OC_TOKEN }}
+          oc_version: "4.14.37"
+          file: database/openshift.deploy.yml
+          overwrite: true
+          parameters:
+            -p DATABASE_SERVICE_NAME=gwells-pg12-dev-${{ github.event.number }}
+            -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
+            -p IMAGE_STREAM_NAME=crunchy-postgres-gis
+            -p IMAGE_TAG=${{ github.event.number }}
+            -p NAME_SUFFIX=-dev-${{ github.event.number }}
+            -p VOLUME_CAPACITY=512Mi
+            -p STORAGE_CLASS=netapp-file-standard
+            -p REQUEST_CPU=200m
+            -p REQUEST_MEMORY=512Mi
+            -p LIMIT_CPU=500m
+            -p LIMIT_MEMORY=1Gi
 
   backend:
     name: Backend
