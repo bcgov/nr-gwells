@@ -1,9 +1,9 @@
-FROM node:14.21.3-slim AS build
+FROM node:14.21.3 AS build
 
 ENV LOG_LEVEL="info"
 
 RUN apt-get update && \
-    apt-get install -y git build-essential python2 python3 python3-pip make g++ && \
+    apt-get install -y git build-essential python3 python3-pip make g++ && \
     apt-get autoremove -y && \
     apt-get clean
 
