@@ -5,6 +5,8 @@ parameters:
   displayName: Name Suffix
   description: A suffix appended to all objects
   required: true
+- name: IMAGE_TAG
+  required: true
 - name: ENV_NAME
   required: true
 - name: HOST
@@ -12,16 +14,16 @@ parameters:
   value: ''
 - name: CPU_REQUEST
   required: false
-  value: 100m
+  value: 50m
 - name: CPU_LIMIT
   required: false
-  value: 500m
+  value: 100m
 - name: MEMORY_REQUEST
   required: false
-  value: 1Gi
+  value: 512Mi
 - name: MEMORY_LIMIT
   required: false
-  value: 2Gi
+  value: 1Gi
 - name: PSQL_IMAGE
   description: A psql client image (a PostgreSQL image will suffice)
   required: true
@@ -171,7 +173,7 @@ objects:
         #       value: gwells-pg12${NAME_SUFFIX}-backend
       resources: {}
       activeDeadlineSeconds: 21600
-    replicas: 2
+    replicas: 1
     test: false
     selector:
       name: gwells${NAME_SUFFIX}-backend
@@ -192,7 +194,7 @@ objects:
               sizeLimit: 250Mi
         containers:
         - name: gwells-app${NAME_SUFFIX}-backend
-          image: 'ghcr.io/bcgov/nr-gwells/backend:69'
+          image: 'ghcr.io/bcgov/nr-gwells/backend:${IMAGE_TAG}'
           volumeMounts:
             - name: staticfiles
               mountPath: /app/staticfiles
@@ -476,7 +478,7 @@ objects:
     name: gwells${NAME_SUFFIX}-backend
   spec:
     maxReplicas: 5
-    minReplicas: 2
+    minReplicas: 1
     scaleTargetRef:
       apiVersion: v1
       kind: Deployment
