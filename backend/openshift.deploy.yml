@@ -17,13 +17,13 @@ parameters:
   value: 100m
 - name: CPU_LIMIT
   required: false
-  value: 500m
+  value: 100m
 - name: MEMORY_REQUEST
   required: false
-  value: 1Gi
+  value: 512Mi
 - name: MEMORY_LIMIT
   required: false
-  value: 2Gi
+  value: 1Gi
 - name: PSQL_IMAGE
   description: A psql client image (a PostgreSQL image will suffice)
   required: true
