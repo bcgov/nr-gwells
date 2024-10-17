@@ -91,3 +91,26 @@ objects:
     stringData:
       E_LICENSING_AUTH_PASSWORD: ${E_LICENSING_AUTH_PASSWORD}
       E_LICENSING_AUTH_USERNAME: ${E_LICENSING_AUTH_USERNAME}
+  - apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: allow-from-openshift-ingress
+      labels:
+        template: openshift-test
+    spec:
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  network.openshift.io/policy-group: ingress
+      policyTypes:
+        - Ingress
+  - apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: allow-same-namespace
+      labels:
+        template: nr-gwells-backend-network-security-policy
+    spec:
+      policyTypes:
+        - Ingress
