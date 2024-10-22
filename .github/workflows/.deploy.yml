@@ -157,7 +157,7 @@ jobs:
           oc_server: ${{ vars.OC_SERVER }}
           oc_token: ${{ secrets.OC_TOKEN }}
           oc_version: "4.14.37"
-          file: minio/openshift.deploy.yml
+          file: ./minio/openshift.deploy.yml
           parameters:
             # -p NAME_SUFFIX=-dev-${{ github.event.number }}
             -p IMAGE_TAG=${{ github.event.number }}
