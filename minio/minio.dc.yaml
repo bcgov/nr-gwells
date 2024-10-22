@@ -21,9 +21,9 @@ parameters:
   - name: "SRC_IMAGE"
     displayName: "Name of source image"
     value: "minio"
-  - name: "SRC_TAG"
-    displayName: "Tag of source image"
-    value: "latest"
+  # - name: "SRC_TAG"
+  #   displayName: "Tag of source image"
+    #value: "latest"
   - name: "DEST_PVC_SIZE"
     displayName: "PVC size"
     value: "10Gi"
@@ -33,6 +33,8 @@ parameters:
   - name: "DEST_PVC_ACCESS"
     displayName: "PVC access mode"
     value: "ReadWriteOnce"
+  - name: "IMAGE_TAG"
+    required: true
 objects:
   - apiVersion: v1
     kind: PersistentVolumeClaim
@@ -100,7 +102,7 @@ objects:
               value: /opt/minio/s3/data
             - name: MINIO_CONFIG_DIR
               value: /opt/minio/s3/config
-            image: docker-registry.default.svc:5000/${SRC_NAMESPACE}/${SRC_IMAGE}:${SRC_TAG}
+            image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
             imagePullPolicy: Always
             name: "${NAME}"
             ports:
