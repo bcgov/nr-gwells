@@ -12,9 +12,9 @@ parameters:
   - name: "NAME"
     displayName: "App to deploy"
     value: "minio"
-  - name: "SECRETS"
-    displayName: "Secret object to reference"
-    value: "minio-secrets"
+  # - name: "SECRETS"
+  #   displayName: "Secret object to reference"
+  #   value: "minio-secrets"
   - name: "SRC_NAMESPACE"
     displayName: "Namespace containing the deployment source"
     value: "moe-gwells-tools"
@@ -27,9 +27,9 @@ parameters:
   - name: "DEST_PVC_SIZE"
     displayName: "PVC size"
     value: "100Mi"
-  - name: "DEST_PVC_CLASS"
-    displayName: "PVC class"
-    value: "gluster-file"
+  # - name: "DEST_PVC_CLASS"
+  #   displayName: "PVC class"
+  #   value: "gluster-file"
   - name: "DEST_PVC_ACCESS"
     displayName: "PVC access mode"
     value: "ReadWriteOnce"
@@ -60,7 +60,7 @@ objects:
       resources:
         requests:
           storage: ${DEST_PVC_SIZE}
-      storageClassName: ${DEST_PVC_CLASS}
+      storageClassName: netapp-file-standard
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
@@ -75,7 +75,7 @@ objects:
       resources:
         requests:
           storage: ${DEST_PVC_SIZE}
-      storageClassName: ${DEST_PVC_CLASS}
+      storageClassName: netapp-file-standard
   - apiVersion: apps.openshift.io/v1
     kind: DeploymentConfig
     metadata:
@@ -101,7 +101,7 @@ objects:
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: ${SECRETS}
+                  name: minio${NAME_SUFFIX}
                   key: MINIO_ACCESS_KEY
             - name: MINIO_SECRET_KEY
               valueFrom:
