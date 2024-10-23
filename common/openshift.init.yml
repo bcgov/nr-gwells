@@ -45,7 +45,6 @@ parameters:
   - name: PG_ROOT_PASSWORD
     required: true
   - name: MINIO_ACCESS_KEY
-    required: true
     value: ""
   - name: MINIO_SECRET_KEY
     value: ""
