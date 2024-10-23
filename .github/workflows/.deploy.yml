@@ -46,12 +46,12 @@ jobs:
             -p PG_PRIMARY_PASSWORD=${{ secrets.PG_PRIMARY_PASSWORD }}
             -p PG_PRIMARY_USER=${{ secrets.PG_PRIMARY_USER }}
             -p PG_ROOT_PASSWORD=${{ secrets.PG_ROOT_PASSWORD }}
-            # -p MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
-            # -p MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
             -p S3_PUBLIC_ACCESS_KEY=${{ secrets.S3_PUBLIC_ACCESS_KEY }}
             -p S3_PUBLIC_SECRET_KEY=${{ secrets.S3_PUBLIC_SECRET_KEY }}
             -p S3_HOST=${{ secrets.S3_HOST }}
             -p S3_ROOT_BUCKET=${{ secrets.S3_ROOT_BUCKET }}
+            # -p MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
+            # -p MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
 
   # database:
   #   name: Database
