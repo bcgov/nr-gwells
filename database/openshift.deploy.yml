@@ -27,7 +27,7 @@ parameters:
     displayName: Volume Capacity
     name: VOLUME_CAPACITY
     required: true
-    value: 512Mi
+    value: 200Mi
   - description: Request for CPU resources measured in cpu units, e.g. 200m
     displayName: CPU resource request
     name: REQUEST_CPU
@@ -37,17 +37,17 @@ parameters:
     displayName: Memory resource request
     name: REQUEST_MEMORY
     required: false
-    value: 512Mi
+    value: 150Mi
   - description: Limit for CPU resources measured in cpu units, e.g. 200m
     displayName: CPU resource limit
     name: LIMIT_CPU
     required: false
-    value: 200m
+    value: 100m
   - description: Limit for memory resources measured in bytes, e.g. 512Mi, 1Gi.
     displayName: Memory resource limit
     name: LIMIT_MEMORY
     required: false
-    value: 1Gi
+    value: 450Mi
   - description: Version of PostgreSQL image to be used (9.5 or 9.6).
     displayName: Version of PostgreSQL Image
     name: IMAGE_STREAM_VERSION
