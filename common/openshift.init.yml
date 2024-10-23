@@ -77,10 +77,10 @@ objects:
     stringData:
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-      S3_HOST: ${S3_HOST}
-      S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
       S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
       S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
+      S3_HOST: ${S3_HOST}
+      S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
   - apiVersion: v1
     kind: Secret
     metadata:
