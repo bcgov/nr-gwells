@@ -44,10 +44,10 @@ parameters:
     required: true
   - name: PG_ROOT_PASSWORD
     required: true
-  # - name: MINIO_ACCESS_KEY
-  #   required: true
-  # - name: MINIO_SECRET_KEY
-  #   required: true
+  - name: MINIO_ACCESS_KEY
+    required: true
+  - name: MINIO_SECRET_KEY
+    required: true
   - name: S3_PUBLIC_ACCESS_KEY
     required: true
   - name: S3_PUBLIC_SECRET_KEY
@@ -74,9 +74,9 @@ objects:
     metadata:
       name: minio${NAME_SUFFIX}
       creationTimestamp: 
-    stringData:
-      # MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-      # MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+    data:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
       S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
       S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
       S3_HOST: ${S3_HOST}
