@@ -35,10 +35,6 @@ parameters:
     value: "ReadWriteOnce"
   - name: "IMAGE_TAG"
     required: true
-  - name: "MINIO_ACCESS_KEY"
-    required: true
-  - name: "MINIO_SECRET_KEY"
-    required: true
   - name: "MINIO_DATA_DIR"
     required: true
   - name: "ENV_NAME"
@@ -106,7 +102,7 @@ objects:
             - name: MINIO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: ${SECRETS}
+                  name: minio${NAME_SUFFIX}
                   key: MINIO_SECRET_KEY
             - name: MINIO_DATA_DIR
               value: /opt/minio/s3/data
