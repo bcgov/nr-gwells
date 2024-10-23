@@ -127,24 +127,24 @@ jobs:
   #             -p EMAIL_NOTIFICATION_RECIPIENT=${{ vars.EMAIL_NOTIFICATION_RECIPIENT }}
   #             -p GEOCODER_ADDRESS_API_BASE=${{ vars.GEOCODER_ADDRESS_API_BASE }}
 
-  # frontend: 
-  #   name: Frontend
-  #   needs: [ init, database, backend ]
-  #   # environment: ${{ inputs.environment }}
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Deploy Frontend
-  #       uses: bcgov-nr/action-deployer-openshift@v3.0.1
-  #       with:
-  #         oc_namespace: ${{ vars.OC_NAMESPACE }}
-  #         oc_server: ${{ vars.OC_SERVER }}
-  #         oc_token: ${{ secrets.OC_TOKEN }}
-  #         oc_version: "4.14.37"
-  #         file: frontend/openshift.deploy.yml
-  #         parameters:
-  #           -p NAME_SUFFIX=-dev-${{ github.event.number }}
-  #           -p IMAGE_TAG=${{ github.event.number }}
-  #           -p ENV_NAME=dev
+  frontend: 
+    name: Frontend
+    needs: [ init, database, backend ]
+    # environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Frontend
+        uses: bcgov-nr/action-deployer-openshift@v3.0.1
+        with:
+          oc_namespace: ${{ vars.OC_NAMESPACE }}
+          oc_server: ${{ vars.OC_SERVER }}
+          oc_token: ${{ secrets.OC_TOKEN }}
+          oc_version: "4.14.37"
+          file: frontend/openshift.deploy.yml
+          parameters:
+            -p NAME_SUFFIX=-dev-${{ github.event.number }}
+            -p IMAGE_TAG=${{ github.event.number }}
+            -p ENV_NAME=dev
   minio:
     name: Minio
     #needs: [ init, database, backend, frontend ]
@@ -157,11 +157,11 @@ jobs:
           oc_server: ${{ vars.OC_SERVER }}
           oc_token: ${{ secrets.OC_TOKEN }}
           oc_version: "4.14.37"
-          file: ./minio/openshift.deploy.yml
+          file: minio/openshift.deploy.yml
           parameters:
-            # -p NAME_SUFFIX=-dev-${{ github.event.number }}
+            -p NAME_SUFFIX=-dev-${{ github.event.number }}
             -p IMAGE_TAG=${{ github.event.number }}
-            # -p ENV_NAME=dev
+            -p ENV_NAME=dev
             -p MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
             -p MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
             -p MINIO_DATA_DIR=/data
