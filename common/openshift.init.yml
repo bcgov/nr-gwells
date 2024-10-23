@@ -36,6 +36,14 @@ parameters:
     required: true
   - name: E_LICENSING_AUTH_PASSWORD
     required: true
+  - name: PG_MODE
+    required: true
+  - name: PG_PRIMARY_PASSWORD
+    required: true
+  - name: PG_PRIMARY_USER
+    required: true
+  - name: PG_ROOT_PASSWORD
+    required: true
   # - name: MINIO_ACCESS_KEY
   #   required: true
   # - name: MINIO_SECRET_KEY
@@ -91,3 +99,36 @@ objects:
     stringData:
       E_LICENSING_AUTH_PASSWORD: ${E_LICENSING_AUTH_PASSWORD}
       E_LICENSING_AUTH_USERNAME: ${E_LICENSING_AUTH_USERNAME}
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      creationTimestamp:
+      name: crunchy-db-credentials
+    stringData:
+      PG_MODE: ${PG_MODE}
+      PG_PRIMARY_PASSWORD: ${PG_PRIMARY_PASSWORD}
+      PG_PRIMARY_USER: ${PG_PRIMARY_USER}
+      PG_ROOT_PASSWORD: ${PG_ROOT_PASSWORD}
+  - apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: allow-from-openshift-ingress
+      labels:
+        template: openshift-test
+    spec:
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  network.openshift.io/policy-group: ingress
+      policyTypes:
+        - Ingress
+  - apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: allow-same-namespace
+      labels:
+        template: nr-gwells-backend-network-security-policy
+    spec:
+      policyTypes:
+        - Ingress
