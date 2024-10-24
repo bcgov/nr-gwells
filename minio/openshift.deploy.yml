@@ -12,27 +12,35 @@ parameters:
   - name: "NAME"
     displayName: "App to deploy"
     value: "minio"
-  - name: "SECRETS"
-    displayName: "Secret object to reference"
-    value: "minio-secrets"
+  # - name: "SECRETS"
+  #   displayName: "Secret object to reference"
+  #   value: "minio-secrets"
   - name: "SRC_NAMESPACE"
     displayName: "Namespace containing the deployment source"
     value: "moe-gwells-tools"
   - name: "SRC_IMAGE"
     displayName: "Name of source image"
     value: "minio"
-  - name: "SRC_TAG"
-    displayName: "Tag of source image"
-    value: "latest"
+  # - name: "SRC_TAG"
+  #   displayName: "Tag of source image"
+    #value: "latest"
   - name: "DEST_PVC_SIZE"
     displayName: "PVC size"
-    value: "10Gi"
-  - name: "DEST_PVC_CLASS"
-    displayName: "PVC class"
-    value: "gluster-file"
+    value: "100Mi"
+  # - name: "DEST_PVC_CLASS"
+  #   displayName: "PVC class"
+  #   value: "gluster-file"
   - name: "DEST_PVC_ACCESS"
     displayName: "PVC access mode"
     value: "ReadWriteOnce"
+  - name: "IMAGE_TAG"
+    required: true
+  - name: "MINIO_DATA_DIR"
+    required: true
+  - name: "ENV_NAME"
+    required: true
+  - name: "NAME_SUFFIX"
+    required: false
 objects:
   - apiVersion: v1
     kind: PersistentVolumeClaim
@@ -48,7 +56,7 @@ objects:
       resources:
         requests:
           storage: ${DEST_PVC_SIZE}
-      storageClassName: ${DEST_PVC_CLASS}
+      storageClassName: netapp-file-standard
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
@@ -63,7 +71,7 @@ objects:
       resources:
         requests:
           storage: ${DEST_PVC_SIZE}
-      storageClassName: ${DEST_PVC_CLASS}
+      storageClassName: netapp-file-standard
   - apiVersion: apps.openshift.io/v1
     kind: DeploymentConfig
     metadata:
@@ -89,18 +97,18 @@ objects:
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: ${SECRETS}
+                  name: minio${NAME_SUFFIX}
                   key: MINIO_ACCESS_KEY
             - name: MINIO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: ${SECRETS}
+                  name: minio${NAME_SUFFIX}
                   key: MINIO_SECRET_KEY
             - name: MINIO_DATA_DIR
               value: /opt/minio/s3/data
             - name: MINIO_CONFIG_DIR
               value: /opt/minio/s3/config
-            image: docker-registry.default.svc:5000/${SRC_NAMESPACE}/${SRC_IMAGE}:${SRC_TAG}
+            image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
             imagePullPolicy: Always
             name: "${NAME}"
             ports:
@@ -108,9 +116,9 @@ objects:
               protocol: TCP
             resources:
               limits:
-                cpu: 250m
-              requests:
                 cpu: 100m
+              requests:
+                cpu: 25m
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:

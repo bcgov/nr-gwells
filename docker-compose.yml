@@ -14,7 +14,7 @@ services:
 #############################################################################################
   minio-public:
     build:
-      context: ./gwells/openshift/docker/minio/
+      context: ./minio/
     hostname: minio
     ports:
       - "9000:9000"
@@ -32,7 +32,7 @@ services:
 #############################################################################################
   minio-private:
     build:
-      context: ./gwells/openshift/docker/minio/
+      context: ./minio/
     hostname: minio
     ports:
       - "9001:9001"
