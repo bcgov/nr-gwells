@@ -112,6 +112,6 @@ new Vue({
   },
   created () {
     this.FETCH_CONFIG()
-    window._paq.push(['trackPageView']) // To track pageview - Matomo
+    // window._paq.push(['trackPageView']) // To track pageview - Matomo
   }
 })
