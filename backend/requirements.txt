@@ -23,7 +23,7 @@ djangorestframework-simplejwt==5.3.0
 cryptography==42.0.8
 geojson==3.1.0
 minio==7.2.6
-openpyxl==2.5.14
+openpyxl==3.1.5
 djangorestframework-csv==3.0.0
 coverage==7.2.0
 MarkupSafe==2.1.5
