@@ -26,8 +26,7 @@ parameters:
   - description: Volume space available for data, e.g. 512Mi, 2Gi.
     displayName: Volume Capacity
     name: VOLUME_CAPACITY
-    required: true
-    value: 200Mi
+    value: 50Mi
   - description: Request for CPU resources measured in cpu units, e.g. 200m
     displayName: CPU resource request
     name: REQUEST_CPU

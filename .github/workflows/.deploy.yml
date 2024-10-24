@@ -74,10 +74,8 @@ jobs:
             -p IMAGE_STREAM_NAME=crunchy-postgres-gis
             -p IMAGE_TAG=${{ github.event.number }}
             -p NAME_SUFFIX=-dev-${{ github.event.number }}
-            -p VOLUME_CAPACITY=512Mi
             -p STORAGE_CLASS=netapp-file-standard
             -p REQUEST_CPU=200m
-            -p REQUEST_MEMORY=512Mi
             -p LIMIT_CPU=500m
             -p LIMIT_MEMORY=1Gi
 
