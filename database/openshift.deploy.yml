@@ -26,28 +26,27 @@ parameters:
   - description: Volume space available for data, e.g. 512Mi, 2Gi.
     displayName: Volume Capacity
     name: VOLUME_CAPACITY
-    required: true
-    value: 1Gi
+    value: 250Mi
   - description: Request for CPU resources measured in cpu units, e.g. 200m
     displayName: CPU resource request
     name: REQUEST_CPU
     required: false
-    value: 100m
+    value: 20m
   - description: Request for memory resources measured in bytes, e.g. 512Mi, 1Gi.
     displayName: Memory resource request
     name: REQUEST_MEMORY
     required: false
-    value: 512Mi
+    value: 150Mi
   - description: Limit for CPU resources measured in cpu units, e.g. 200m
     displayName: CPU resource limit
     name: LIMIT_CPU
     required: false
-    value: 200m
+    value: 100m
   - description: Limit for memory resources measured in bytes, e.g. 512Mi, 1Gi.
     displayName: Memory resource limit
     name: LIMIT_MEMORY
     required: false
-    value: 1Gi
+    value: 450Mi
   - description: Version of PostgreSQL image to be used (9.5 or 9.6).
     displayName: Version of PostgreSQL Image
     name: IMAGE_STREAM_VERSION
@@ -55,6 +54,8 @@ parameters:
     value: centos7-12.4-3.0-4.5.0
   - name: NAME_SUFFIX
     required: true
+  - name: IMAGE_TAG
+    required: true 
   - description: Storage class for PVCs.
     displayName: Storage class for PVCs.
     name: STORAGE_CLASS
@@ -225,7 +226,7 @@ objects:
                     secretKeyRef:
                         key: PG_ROOT_PASSWORD
                         name: crunchy-db-credentials
-              image: "ghcr.io/bcgov/nr-gwells/database:76"
+              image: "ghcr.io/bcgov/nr-gwells/database:${IMAGE_TAG}"
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3

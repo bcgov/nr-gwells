@@ -5,6 +5,8 @@ parameters:
     displayName: Name Suffix
     description: A suffix appended to all objects
     required: true
+  - name: IMAGE_TAG
+    required: true
   - name: ENV_NAME
     required: true
 objects:
@@ -46,7 +48,7 @@ objects:
           containers:
             - name: gwells${NAME_SUFFIX}-frontend
               # image: ghcr.io/bcgov/gwells/frontend:${NAME_SUFFIX}-frontend
-              image: ghcr.io/bcgov/nr-gwells/frontend:69
+              image: ghcr.io/bcgov/nr-gwells/frontend:${IMAGE_TAG}
               securityContext:
                 capabilities:
                   add: ["NET_BIND_SERVICE"]
@@ -61,34 +63,35 @@ objects:
               ports:
                 - name: container-port
                   containerPort: 3000
+                  protocol: TCP
               # command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
-              readinessProbe:
-                httpGet:
-                  path: /health
-                  port: 3001
-                  scheme: HTTP
-                initialDelaySeconds: 5
-                periodSeconds: 2
-                timeoutSeconds: 2
-                successThreshold: 1
-                failureThreshold: 30
-              livenessProbe:
-                successThreshold: 1
-                failureThreshold: 3
-                httpGet:
-                  path: /health
-                  port: 3001
-                  scheme: HTTP
-                initialDelaySeconds: 15
-                periodSeconds: 30
-                timeoutSeconds: 5
+              # readinessProbe:
+              #   httpGet:
+              #     path: /health
+              #     port: 3001
+              #     scheme: HTTP
+              #   initialDelaySeconds: 5
+              #   periodSeconds: 2
+              #   timeoutSeconds: 2
+              #   successThreshold: 1
+              #   failureThreshold: 30
+              # livenessProbe:
+              #   successThreshold: 1
+              #   failureThreshold: 3
+              #   httpGet:
+              #     path: /health
+              #     port: 3001
+              #     scheme: HTTP
+              #   initialDelaySeconds: 15
+              #   periodSeconds: 30
+              #   timeoutSeconds: 5
               resources: # this is optional
                 limits:
-                  cpu: 150m
-                  memory: 250Mi
+                  cpu: 30m
+                  memory: 40Mi
                 requests:
-                  cpu: 50m
-                  memory: 175Mi
+                  cpu: 15m
+                  memory: 20Mi
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:
