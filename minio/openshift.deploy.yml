@@ -131,10 +131,10 @@ objects:
           volumes:
           - name: config-vol
             persistentVolumeClaim:
-              claimName: "${NAME}-config-vol-v2"
+              claimName: "minio-config-vol-v2${NAME_SUFFIX}"
           - name: data-vol
             persistentVolumeClaim:
-              claimName: "${NAME}-data-vol"
+              claimName: "minio-data-vol${NAME_SUFFIX}"
       triggers:
       - type: ConfigChange
   - apiVersion: v1
