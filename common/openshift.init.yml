@@ -44,18 +44,18 @@ parameters:
     required: true
   - name: PG_ROOT_PASSWORD
     required: true
-  # - name: MINIO_ACCESS_KEY
-  #   required: true
-  # - name: MINIO_SECRET_KEY
-  #   required: true
-  # - name: S3_PUBLIC_ACCESS_KEY
-  #   required: true
-  # - name: S3_PUBLIC_SECRET_KEY
-  #   required: true
-  # - name: S3_HOST
-  #   required: true
-  # - name: S3_ROOT_BUCKET
-  #   required: true
+  - name: MINIO_ACCESS_KEY
+    required: true
+  - name: MINIO_SECRET_KEY
+    required: true
+  - name: S3_PUBLIC_ACCESS_KEY
+    required: true
+  - name: S3_PUBLIC_SECRET_KEY
+    required: true
+  - name: S3_HOST
+    required: true
+  - name: S3_ROOT_BUCKET
+    required: true
 objects:
   - apiVersion: v1
     kind: Secret
@@ -69,18 +69,18 @@ objects:
       fdw-database-password: ${FDW_DATABASE_PASSWORD}
       fdw-database-server: "//nrk1-scan.bcgov/envprod1.nrs.bcgov"
       fdw-database-schema: WELLS
-  # - apiVersion: v1
-  #   kind: Secret
-  #   metadata:
-  #     name: minio-access-parameters${NAME_SUFFIX}
-  #     creationTimestamp: 
-  #   stringData:
-  #     MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-  #     MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-  #     S3_HOST: ${S3_HOST}
-  #     S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
-  #     S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
-  #     S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: minio${NAME_SUFFIX}
+      creationTimestamp: 
+    stringdata:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
+      S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
+      S3_HOST: ${S3_HOST}
+      S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
   - apiVersion: v1
     kind: Secret
     metadata:
