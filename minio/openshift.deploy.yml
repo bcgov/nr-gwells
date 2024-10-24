@@ -47,9 +47,9 @@ objects:
     metadata:
       finalizers:
       - kubernetes.io/pvc-protection
-      name: "${NAME}-config-vol-v2"
+      name: "minio-config-vol-v2{NAME_SUFFIX}"
       labels:
-        app: "${NAME}"
+        app: "minio"
     spec:
       accessModes:
       - ${DEST_PVC_ACCESS}
@@ -62,9 +62,9 @@ objects:
     metadata:
       finalizers:
       - kubernetes.io/pvc-protection
-      name: "${NAME}-data-vol"
+      name: "minio-data-vol{NAME_SUFFIX}"
       labels:
-        app: "${NAME}"
+        app: "minio"
     spec:
       accessModes:
       - ${DEST_PVC_ACCESS}
