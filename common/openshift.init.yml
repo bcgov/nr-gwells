@@ -72,7 +72,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: minio${NAME_SUFFIX}
+      name: gwells${NAME_SUFFIX}-minio
       creationTimestamp: 
     stringData:
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
