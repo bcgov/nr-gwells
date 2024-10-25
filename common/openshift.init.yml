@@ -60,7 +60,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: gwells-pg12${NAME_SUFFIX}
+      name: gwells${NAME_SUFFIX}-database
     stringData:
       database-name: ${POSTGRESQL_DATABASE}
       database-password: ${POSTGRESQL_PASSWORD}
