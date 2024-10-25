@@ -1,17 +1,10 @@
 ---
 apiVersion: v1
 kind: Template
-metadata:
-  annotations:
-    description: "Minio deployment"
-  labels:
-    app: "${NAME}"
-    template: "${NAME}-template"
-  name: "${NAME}"
 parameters:
-  - name: "NAME"
-    displayName: "App to deploy"
-    value: "minio"
+  # - name: "NAME"
+  #   displayName: "App to deploy"
+  #   value: "minio"
   # - name: "SECRETS"
   #   displayName: "Secret object to reference"
   #   value: "minio-secrets"
@@ -76,9 +69,9 @@ objects:
     kind: DeploymentConfig
     metadata:
       labels:
-        app: "${NAME}"
-        template: "${NAME}-template"
-      name: "${NAME}"
+        app: "minio${NAME_SUFFIX}"
+        template: "minio${NAME_SUFFIX}-template"
+      name: "minio${NAME_SUFFIX}"
     spec:
       replicas: 1
       strategy:
@@ -89,8 +82,8 @@ objects:
       template:
         metadata:
           labels:
-            app: "${NAME}"
-            template: "${NAME}-template"
+            app: "minio${NAME_SUFFIX}"
+            template: "minio${NAME_SUFFIX}-template"
         spec:
           containers:
           - env:
@@ -110,7 +103,7 @@ objects:
               value: /opt/minio/s3/config
             image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
             imagePullPolicy: Always
-            name: "${NAME}"
+            name: "minio${NAME_SUFFIX}"
             ports:
             - containerPort: 9000
               protocol: TCP
@@ -141,8 +134,8 @@ objects:
     kind: Service
     metadata:
       labels:
-        app: ${NAME}
-      name: ${NAME}
+        app: "minio${NAME_SUFFIX}"
+      name: "minio${NAME_SUFFIX}"
     spec:
       ports:
       - name: 9000-tcp
