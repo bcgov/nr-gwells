@@ -23,9 +23,9 @@ parameters:
   # - name: "DEST_PVC_CLASS"
   #   displayName: "PVC class"
   #   value: "gluster-file"
-  - name: "DEST_PVC_ACCESS"
-    displayName: "PVC access mode"
-    value: "ReadWriteOnce"
+  # - name: "DEST_PVC_ACCESS"
+  #   displayName: "PVC access mode"
+  #   value: "ReadWriteOnce"
   - name: "IMAGE_TAG"
     required: true
   - name: "MINIO_DATA_DIR"
@@ -38,14 +38,10 @@ objects:
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      finalizers:
-      - kubernetes.io/pvc-protection
       name: "minio-config-vol-v2{NAME_SUFFIX}"
-      labels:
-        app: "minio"
     spec:
       accessModes:
-      - ${DEST_PVC_ACCESS}
+      - "ReadWriteOnce"
       resources:
         requests:
           storage: ${DEST_PVC_SIZE}
@@ -53,14 +49,10 @@ objects:
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      finalizers:
-      - kubernetes.io/pvc-protection
       name: "minio-data-vol{NAME_SUFFIX}"
-      labels:
-        app: "minio"
     spec:
       accessModes:
-      - ${DEST_PVC_ACCESS}
+      - "ReadWriteOnce"
       resources:
         requests:
           storage: ${DEST_PVC_SIZE}
