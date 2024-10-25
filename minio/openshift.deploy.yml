@@ -1,10 +1,17 @@
 ---
 apiVersion: v1
 kind: Template
+metadata:
+  annotations:
+    description: "Minio deployment"
+  labels:
+    app: "${NAME}"
+    template: "${NAME}-template"
+  name: "${NAME}"
 parameters:
-  # - name: "NAME"
-  #   displayName: "App to deploy"
-  #   value: "minio"
+  - name: "NAME"
+    displayName: "App to deploy"
+    value: "minio"
   # - name: "SECRETS"
   #   displayName: "Secret object to reference"
   #   value: "minio-secrets"
@@ -23,9 +30,9 @@ parameters:
   # - name: "DEST_PVC_CLASS"
   #   displayName: "PVC class"
   #   value: "gluster-file"
-  # - name: "DEST_PVC_ACCESS"
-  #   displayName: "PVC access mode"
-  #   value: "ReadWriteOnce"
+  - name: "DEST_PVC_ACCESS"
+    displayName: "PVC access mode"
+    value: "ReadWriteOnce"
   - name: "IMAGE_TAG"
     required: true
   - name: "MINIO_DATA_DIR"
@@ -38,10 +45,14 @@ objects:
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: "gwells${NAME_SUFFIX}-minio-config-vol-v2"
+      finalizers:
+      - kubernetes.io/pvc-protection
+      name: "${NAME}-config-vol-v2"
+      labels:
+        app: "${NAME}"
     spec:
       accessModes:
-      - "ReadWriteOnce"
+      - ${DEST_PVC_ACCESS}
       resources:
         requests:
           storage: ${DEST_PVC_SIZE}
@@ -49,10 +60,14 @@ objects:
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: "gwells${NAME_SUFFIX}-minio-data-vol"
+      finalizers:
+      - kubernetes.io/pvc-protection
+      name: "${NAME}-data-vol"
+      labels:
+        app: "${NAME}"
     spec:
       accessModes:
-      - "ReadWriteOnce"
+      - ${DEST_PVC_ACCESS}
       resources:
         requests:
           storage: ${DEST_PVC_SIZE}
@@ -61,9 +76,9 @@ objects:
     kind: DeploymentConfig
     metadata:
       labels:
-        app: "gwells${NAME_SUFFIX}-minio"
-        template: "gwells${NAME_SUFFIX}-minio-template"
-      name: "gwells${NAME_SUFFIX}-minio"
+        app: "${NAME}"
+        template: "${NAME}-template"
+      name: "${NAME}"
     spec:
       replicas: 1
       strategy:
@@ -74,20 +89,20 @@ objects:
       template:
         metadata:
           labels:
-            app: "gwells${NAME_SUFFIX}-minio"
-            template: "gwells${NAME_SUFFIX}-minio-template"
+            app: "${NAME}"
+            template: "${NAME}-template"
         spec:
           containers:
           - env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: gwells${NAME_SUFFIX}-minio
+                  name: minio${NAME_SUFFIX}
                   key: MINIO_ACCESS_KEY
             - name: MINIO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: gwells${NAME_SUFFIX}-minio
+                  name: minio${NAME_SUFFIX}
                   key: MINIO_SECRET_KEY
             - name: MINIO_DATA_DIR
               value: /opt/minio/s3/data
@@ -95,7 +110,7 @@ objects:
               value: /opt/minio/s3/config
             image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
             imagePullPolicy: Always
-            name: "gwells${NAME_SUFFIX}-minio"
+            name: "${NAME}"
             ports:
             - containerPort: 9000
               protocol: TCP
@@ -103,7 +118,7 @@ objects:
               limits:
                 cpu: 100m
               requests:
-                cpu: 75m
+                cpu: 25m
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:
@@ -116,18 +131,18 @@ objects:
           volumes:
           - name: config-vol
             persistentVolumeClaim:
-              claimName: "gwells${NAME_SUFFIX}-minio-config-vol-v2"
+              claimName: "minio-config-vol-v2${NAME_SUFFIX}"
           - name: data-vol
             persistentVolumeClaim:
-              claimName: "gwells${NAME_SUFFIX}-minio-data-vol"
+              claimName: "minio-data-vol${NAME_SUFFIX}"
       triggers:
       - type: ConfigChange
   - apiVersion: v1
     kind: Service
     metadata:
       labels:
-        app: "gwells${NAME_SUFFIX}-minio"
-      name: "gwells${NAME_SUFFIX}-minio"
+        app: ${NAME}
+      name: ${NAME}
     spec:
       ports:
       - name: 9000-tcp
