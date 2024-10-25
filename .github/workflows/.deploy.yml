@@ -146,7 +146,8 @@ jobs:
   
   minio:
     name: Minio
-    needs: [ init, database, backend, frontend ]
+    # needs: [ init, database, backend, frontend ]
+    needs: [ init ]
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Minio
