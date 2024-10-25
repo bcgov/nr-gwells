@@ -60,7 +60,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: gwells-pg12${NAME_SUFFIX}
+      name: gwells${NAME_SUFFIX}-database
     stringData:
       database-name: ${POSTGRESQL_DATABASE}
       database-password: ${POSTGRESQL_PASSWORD}
@@ -74,7 +74,7 @@ objects:
     metadata:
       name: minio${NAME_SUFFIX}
       creationTimestamp: 
-    stringdata:
+    stringData:
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
       S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
