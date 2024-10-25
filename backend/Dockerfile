@@ -50,9 +50,7 @@ ENV LOCAL="true"
 ENV LOAD_FIXTURES="true"
 
 # Install dependencies
-RUN apt-get -y update
-
-RUN apt-get -y install git build-essential gdal-bin libgdal-dev
+RUN apt -y update && apt -y install git build-essential gdal-bin libgdal-dev
 
 ENV PATH="/usr/bin/python3:${PATH}"
 
@@ -72,6 +70,7 @@ RUN chmod +x /app
 # RUN python3 -m pip install -r requirements.txt
 
 RUN python3 -m pip install -r requirements.txt
+
 
 # TODO: move to entrypoint in deployment template?
 # chmod -R 777 /app && \
