@@ -46,12 +46,12 @@ jobs:
             -p PG_PRIMARY_PASSWORD=${{ secrets.PG_PRIMARY_PASSWORD }}
             -p PG_PRIMARY_USER=${{ secrets.PG_PRIMARY_USER }}
             -p PG_ROOT_PASSWORD=${{ secrets.PG_ROOT_PASSWORD }}
-            -p MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
-            -p MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
-            -p S3_PUBLIC_ACCESS_KEY=${{ secrets.S3_PUBLIC_ACCESS_KEY }}
-            -p S3_PUBLIC_SECRET_KEY=${{ secrets.S3_PUBLIC_SECRET_KEY }}
-            -p S3_HOST=${{ secrets.S3_HOST }}
-            -p S3_ROOT_BUCKET=${{ secrets.S3_ROOT_BUCKET }}
+            # -p MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
+            # -p MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
+            # -p S3_PUBLIC_ACCESS_KEY=${{ secrets.S3_PUBLIC_ACCESS_KEY }}
+            # -p S3_PUBLIC_SECRET_KEY=${{ secrets.S3_PUBLIC_SECRET_KEY }}
+            # -p S3_HOST=${{ secrets.S3_HOST }}
+            # -p S3_ROOT_BUCKET=${{ secrets.S3_ROOT_BUCKET }}
 
   # database:
   #   name: Database
@@ -144,22 +144,22 @@ jobs:
   #           -p IMAGE_TAG=${{ github.event.number }}
   #           -p ENV_NAME=dev
   
-  minio:
-    name: Minio
-    # needs: [ init, database, backend, frontend ]
-    needs: [ init ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy Minio
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
-        with:
-          oc_namespace: ${{ vars.OC_NAMESPACE }}
-          oc_server: ${{ vars.OC_SERVER }}
-          oc_token: ${{ secrets.OC_TOKEN }}
-          oc_version: "4.14.37"
-          file: minio/openshift.deploy.yml
-          parameters:
-            -p NAME_SUFFIX=-dev-${{ github.event.number }}
-            -p IMAGE_TAG=${{ github.event.number }}
-            -p ENV_NAME=dev
-            -p MINIO_DATA_DIR=/data
+  # minio:
+  #   name: Minio
+  #   # needs: [ init, database, backend, frontend ]
+  #   needs: [ init ]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Deploy Minio
+  #       uses: bcgov-nr/action-deployer-openshift@v3.0.1
+  #       with:
+  #         oc_namespace: ${{ vars.OC_NAMESPACE }}
+  #         oc_server: ${{ vars.OC_SERVER }}
+  #         oc_token: ${{ secrets.OC_TOKEN }}
+  #         oc_version: "4.14.37"
+  #         file: minio/openshift.deploy.yml
+  #         parameters:
+  #           -p NAME_SUFFIX=-dev-${{ github.event.number }}
+  #           -p IMAGE_TAG=${{ github.event.number }}
+  #           -p ENV_NAME=dev
+  #           -p MINIO_DATA_DIR=/data
