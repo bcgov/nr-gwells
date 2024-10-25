@@ -47,9 +47,9 @@ objects:
     metadata:
       finalizers:
       - kubernetes.io/pvc-protection
-      name: "${NAME}-config-vol-v2"
+      name: "gwells${NAME_SUFFIX}-minio-config-vol-v2"
       labels:
-        app: "${NAME}"
+        app: "gwells${NAME_SUFFIX}-minio"
     spec:
       accessModes:
       - ${DEST_PVC_ACCESS}
@@ -62,9 +62,9 @@ objects:
     metadata:
       finalizers:
       - kubernetes.io/pvc-protection
-      name: "${NAME}-data-vol"
+      name: "gwells${NAME_SUFFIX}-minio-data-vol"
       labels:
-        app: "${NAME}"
+        app: "gwells${NAME_SUFFIX}-minio"
     spec:
       accessModes:
       - ${DEST_PVC_ACCESS}
@@ -76,9 +76,9 @@ objects:
     kind: DeploymentConfig
     metadata:
       labels:
-        app: "${NAME}"
+        app: "gwells${NAME_SUFFIX}-minio"
         template: "${NAME}-template"
-      name: "${NAME}"
+      name: "gwells${NAME_SUFFIX}-minio"
     spec:
       replicas: 1
       strategy:
@@ -89,7 +89,7 @@ objects:
       template:
         metadata:
           labels:
-            app: "${NAME}"
+            app: "gwells${NAME_SUFFIX}-minio"
             template: "${NAME}-template"
         spec:
           containers:
@@ -97,12 +97,12 @@ objects:
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: minio${NAME_SUFFIX}
+                  name: "gwells${NAME_SUFFIX}-minio"
                   key: MINIO_ACCESS_KEY
             - name: MINIO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: minio${NAME_SUFFIX}
+                  name: "gwells${NAME_SUFFIX}-minio"
                   key: MINIO_SECRET_KEY
             - name: MINIO_DATA_DIR
               value: /opt/minio/s3/data
@@ -110,7 +110,7 @@ objects:
               value: /opt/minio/s3/config
             image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
             imagePullPolicy: Always
-            name: "${NAME}"
+            name: "gwells${NAME_SUFFIX}-minio"
             ports:
             - containerPort: 9000
               protocol: TCP
@@ -118,7 +118,7 @@ objects:
               limits:
                 cpu: 100m
               requests:
-                cpu: 25m
+                cpu: 50m
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:
@@ -141,8 +141,8 @@ objects:
     kind: Service
     metadata:
       labels:
-        app: ${NAME}
-      name: ${NAME}
+        app: "gwells${NAME_SUFFIX}-minio"
+      name: "gwells${NAME_SUFFIX}-minio"
     spec:
       ports:
       - name: 9000-tcp
