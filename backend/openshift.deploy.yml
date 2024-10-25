@@ -157,7 +157,7 @@ objects:
         #     - name: PGDATABASE
         #       valueFrom:
         #         secretKeyRef:
-        #           name: gwells${NAME_SUFFIX}-backend
+        #           name: gwells-pg12${NAME_SUFFIX}-backend
         #           key: database-name
         #     - name: PGUSER
         #       valueFrom:
