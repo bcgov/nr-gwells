@@ -69,7 +69,7 @@ jobs:
           file: database/openshift.deploy.yml
           overwrite: true
           parameters:
-            -p DATABASE_SERVICE_NAME=gwells-pg12-dev-${{ github.event.number }}
+            -p DATABASE_SERVICE_NAME=gwells-dev-${{ github.event.number }}-database
             -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
             -p IMAGE_STREAM_NAME=crunchy-postgres-gis
             -p IMAGE_TAG=${{ github.event.number }}
