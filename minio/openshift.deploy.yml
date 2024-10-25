@@ -38,7 +38,7 @@ objects:
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: "wells${NAME_SUFFIX}-minio-config-vol-v2"
+      name: "gwells${NAME_SUFFIX}-minio-config-vol-v2"
     spec:
       accessModes:
       - "ReadWriteOnce"
