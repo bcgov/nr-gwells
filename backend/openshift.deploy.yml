@@ -157,7 +157,7 @@ objects:
         #     - name: PGDATABASE
         #       valueFrom:
         #         secretKeyRef:
-        #           name: gwells-pg12${NAME_SUFFIX}-backend
+        #           name: gwells${NAME_SUFFIX}-backend
         #           key: database-name
         #     - name: PGUSER
         #       valueFrom:
@@ -203,21 +203,21 @@ objects:
             protocol: TCP
           env:
           - name: DATABASE_SERVICE_NAME
-            value: gwells-pg12${NAME_SUFFIX}
+            value: gwells${NAME_SUFFIX}-database
           - name: DATABASE_NAME
             valueFrom:
               secretKeyRef:
-                name: gwells-pg12${NAME_SUFFIX}
+                name: gwells${NAME_SUFFIX}-database
                 key: database-name
           - name: DATABASE_USER
             valueFrom:
               secretKeyRef:
-                name: gwells-pg12${NAME_SUFFIX}
+                name: gwells${NAME_SUFFIX}-database
                 key: database-user
           - name: DATABASE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: gwells-pg12${NAME_SUFFIX}
+                name: gwells${NAME_SUFFIX}-database
                 key: database-password
           - name: DATABASE_SCHEMA
             value: public
