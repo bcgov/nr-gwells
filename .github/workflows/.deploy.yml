@@ -55,7 +55,7 @@ jobs:
 
   minio:
     name: Minio
-    needs: [ init, database, backend, frontend ]
+    needs: [ init ]
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Minio
@@ -100,7 +100,7 @@ jobs:
 
   backend:
     name: Backend
-    needs: [ init, database ]
+    needs: [ init, minio, database ]
     # environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
@@ -146,7 +146,7 @@ jobs:
 
   frontend: 
     name: Frontend
-    needs: [ init, database, backend ]
+    needs: [ init, minio, database, backend ]
     # environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
