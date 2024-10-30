@@ -76,10 +76,12 @@ objects:
     metadata:
       labels:
         app: "${NAME}"
-        template: "${NAME}-template"
       name: "${NAME}"
     spec:
       replicas: 1
+      selector:
+        matchLabels:
+          deployment: ${NAME}
       strategy:
         activeDeadlineSeconds: 3000
         recreateParams:
@@ -88,8 +90,8 @@ objects:
       template:
         metadata:
           labels:
-            app: "${NAME}"
-            template: "${NAME}-template"
+            name: "${NAME}"
+            deployment: "${NAME}"
         spec:
           containers:
           - env:
