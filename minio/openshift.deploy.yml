@@ -1,6 +1,5 @@
----
-apiVersion: v1
 kind: Template
+apiVersion: template.openshift.io/v1
 metadata:
   annotations:
     description: "Minio deployment"
@@ -72,15 +71,17 @@ objects:
         requests:
           storage: ${DEST_PVC_SIZE}
       storageClassName: netapp-file-standard
-  - apiVersion: apps.openshift.io/v1
-    kind: DeploymentConfig
+  - apiVersion: apps/v1
+    kind: Deployment
     metadata:
       labels:
         app: "${NAME}"
-        template: "${NAME}-template"
       name: "${NAME}"
     spec:
       replicas: 1
+      selector:
+        matchLabels:
+          deployment: ${NAME}
       strategy:
         activeDeadlineSeconds: 3000
         recreateParams:
@@ -89,8 +90,8 @@ objects:
       template:
         metadata:
           labels:
-            app: "${NAME}"
-            template: "${NAME}-template"
+            name: "${NAME}"
+            deployment: "${NAME}"
         spec:
           containers:
           - env:
@@ -135,8 +136,6 @@ objects:
           - name: data-vol
             persistentVolumeClaim:
               claimName: "${NAME}-data-vol"
-      triggers:
-      - type: ConfigChange
   - apiVersion: v1
     kind: Service
     metadata:
