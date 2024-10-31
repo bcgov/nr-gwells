@@ -262,8 +262,8 @@
                 :loading="loadingFiles"
                 v-on:fetchFiles="fetchFiles">
               </aquifer-documents>
-              <div v-if="$keycloak.authenticated">
-                <h5 class="mt-5 border-bottom pb-4 main-title">Internal Comments</h5>
+              <div v-if="isAuthenticated">
+                <h5 class="mt-5 border-bottom pb-4 main-title" id="internal-comments-title">Internal Comments</h5>
                 <b-col cols="6" md="3" lg="6" id="aquifer-notes">{{record.notes}}</b-col>
                 <p v-if="!record.notes">
                   No internal comments available for this aquifer.
@@ -623,7 +623,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userRoles']),
+    ...mapGetters(['userRoles', 'keycloak']),
     ...mapGetters('aquiferStore/view', {
       uncorrelatedWells: 'wellsWithoutAquiferCorrelation'
     }),
@@ -648,6 +648,9 @@ export default {
     ...mapState('aquiferStore/view', {
       storedId: 'id'
     }),
+    isAuthenticated() {
+      return this.$keycloak && this.$keycloak.authenticated;
+    },
     id () { return parseInt(this.$route.params.id) || null },
     editMode () { return this.edit },
     viewMode () { return !this.edit },
