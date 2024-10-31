@@ -53,112 +53,112 @@ jobs:
             -p S3_HOST=${{ secrets.S3_HOST }}
             -p S3_ROOT_BUCKET=${{ secrets.S3_ROOT_BUCKET }}
 
-  # minio:
-  #   name: Minio
-  #   needs: [ init ]
+  minio:
+    name: Minio
+    needs: [ init ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Minio
+        uses: bcgov-nr/action-deployer-openshift@v3.0.1
+        with:
+          oc_namespace: ${{ vars.OC_NAMESPACE }}
+          oc_server: ${{ vars.OC_SERVER }}
+          oc_token: ${{ secrets.OC_TOKEN }}
+          oc_version: "4.14.37"
+          file: minio/openshift.deploy.yml
+          parameters:
+            -p NAME_SUFFIX=-dev-${{ github.event.number }}
+            -p IMAGE_TAG=${{ github.event.number }}
+            -p ENV_NAME=dev
+            -p MINIO_DATA_DIR=/data
+          
+  # database:
+  #   name: Database
+  #   needs: init
+  #   # environment: ${{ inputs.environment }}
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - name: Deploy Minio
+  #     - name: Database
   #       uses: bcgov-nr/action-deployer-openshift@v3.0.1
   #       with:
   #         oc_namespace: ${{ vars.OC_NAMESPACE }}
   #         oc_server: ${{ vars.OC_SERVER }}
   #         oc_token: ${{ secrets.OC_TOKEN }}
   #         oc_version: "4.14.37"
-  #         file: minio/openshift.deploy.yml
+  #         file: database/openshift.deploy.yml
+  #         overwrite: true
+  #         parameters:
+  #           -p DATABASE_SERVICE_NAME=gwells-dev-${{ github.event.number }}-database
+  #           -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
+  #           -p IMAGE_STREAM_NAME=crunchy-postgres-gis
+  #           -p IMAGE_TAG=${{ github.event.number }}
+  #           -p NAME_SUFFIX=-dev-${{ github.event.number }}
+  #           -p STORAGE_CLASS=netapp-file-standard
+  #           -p REQUEST_CPU=200m
+  #           -p LIMIT_CPU=500m
+  #           -p LIMIT_MEMORY=1Gi
+
+  # backend:
+  #   name: Backend
+  #   needs: [ init, database ]
+  #   # environment: ${{ inputs.environment }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Deploy Backend
+  #       uses: bcgov-nr/action-deployer-openshift@v3.0.1
+  #       with:
+  #         oc_namespace: ${{ vars.OC_NAMESPACE }}
+  #         oc_server: ${{ vars.OC_SERVER }}
+  #         oc_token: ${{ secrets.OC_TOKEN }}
+  #         oc_version: "4.14.37"
+  #         file: backend/openshift.deploy.yml
+  #         parameters:
+  #             -p NAME_SUFFIX=-dev-${{ github.event.number }}
+  #             -p IMAGE_TAG=${{ github.event.number }}
+  #             -p ENV_NAME=dev
+  #             -p E_LICENSING_URL=${{ vars.E_LICENSING_URL }}
+  #             -p DB_REPLICATE=${{ vars.DB_REPLICATE }}
+  #             -p DJANGO_DEBUG=${{ vars.DJANGO_DEBUG }}
+  #             -p ENABLE_ADDITIONAL_DOCUMENTS=${{ vars.ENABLE_ADDITIONAL_DOCUMENTS }}
+  #             -p S3_PRIVATE_BUCKET=${{ vars.S3_PRIVATE_BUCKET }}
+  #             -p S3_PRIVATE_HOST=${{ vars.S3_PRIVATE_HOST }}
+  #             -p S3_WELL_EXPORT_BUCKET=${{ vars.S3_WELL_EXPORT_BUCKET }}
+  #             -p SSO_AUDIENCE=${{ vars.SSO_AUDIENCE }}
+  #             -p SSO_AUTH_HOST=${{ vars.SSO_AUTH_HOST }}
+  #             -p SSO_CLIENT=${{ vars.SSO_CLIENT }}
+  #             -p SSO_IDP_HINT=${{ vars.SSO_IDP_HINT }}
+  #             -p SSO_PORT=${{ vars.SSO_PORT }}
+  #             -p SSO_PUBKEY=${{ vars.SSO_PUBKEY }}
+  #             -p SSO_REALM=${{ vars.SSO_REALM }}
+  #             -p SSO_TEST_AUDIENCE=${{ vars.SSO_TEST_AUDIENCE }}
+  #             -p SSO_TEST_CLIENT=${{ vars.SSO_TEST_CLIENT }}
+  #             -p GDAL_LIBRARY_PATH=${{ vars.GDAL_LIBRARY_PATH }}
+  #             -p GEOS_LIBRARY_PATH=${{ vars.GEOS_LIBRARY_PATH }}
+  #             -p S3_AQUIFER_BUCKET=${{ vars.S3_AQUIFER_BUCKET }}
+  #             -p S3_REGISTRANT_BUCKET=${{ vars.S3_REGISTRANT_BUCKET }}
+  #             -p S3_PRIVATE_ROOT_BUCKET=${{ vars.S3_PRIVATE_ROOT_BUCKET }}
+  #             -p S3_PRIVATE_AQUIFER_BUCKET=${{ vars.S3_PRIVATE_AQUIFER_BUCKET }}
+  #             -p S3_PRIVATE_REGISTRANT_BUCKET=${{ vars.S3_PRIVATE_REGISTRANT_BUCKET }}
+  #             -p S3_PRIVATE_WELL_BUCKET=${{ vars.S3_PRIVATE_WELL_BUCKET }}
+  #             -p ENABLE_AQUIFERS_SEARCH=${{ vars.ENABLE_AQUIFERS_SEARCH }}
+  #             -p EMAIL_NOTIFICATION_RECIPIENT=${{ vars.EMAIL_NOTIFICATION_RECIPIENT }}
+  #             -p GEOCODER_ADDRESS_API_BASE=${{ vars.GEOCODER_ADDRESS_API_BASE }}
+
+  # frontend: 
+  #   name: Frontend
+  #   needs: [ init, database, backend ]
+  #   # environment: ${{ inputs.environment }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Deploy Frontend
+  #       uses: bcgov-nr/action-deployer-openshift@v3.0.1
+  #       with:
+  #         oc_namespace: ${{ vars.OC_NAMESPACE }}
+  #         oc_server: ${{ vars.OC_SERVER }}
+  #         oc_token: ${{ secrets.OC_TOKEN }}
+  #         oc_version: "4.14.37"
+  #         file: frontend/openshift.deploy.yml
   #         parameters:
   #           -p NAME_SUFFIX=-dev-${{ github.event.number }}
   #           -p IMAGE_TAG=${{ github.event.number }}
   #           -p ENV_NAME=dev
-  #           -p MINIO_DATA_DIR=/data
-          
-  database:
-    name: Database
-    needs: init
-    # environment: ${{ inputs.environment }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Database
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
-        with:
-          oc_namespace: ${{ vars.OC_NAMESPACE }}
-          oc_server: ${{ vars.OC_SERVER }}
-          oc_token: ${{ secrets.OC_TOKEN }}
-          oc_version: "4.14.37"
-          file: database/openshift.deploy.yml
-          overwrite: true
-          parameters:
-            -p DATABASE_SERVICE_NAME=gwells-dev-${{ github.event.number }}-database
-            -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
-            -p IMAGE_STREAM_NAME=crunchy-postgres-gis
-            -p IMAGE_TAG=${{ github.event.number }}
-            -p NAME_SUFFIX=-dev-${{ github.event.number }}
-            -p STORAGE_CLASS=netapp-file-standard
-            -p REQUEST_CPU=200m
-            -p LIMIT_CPU=500m
-            -p LIMIT_MEMORY=1Gi
-
-  backend:
-    name: Backend
-    needs: [ init, database ]
-    # environment: ${{ inputs.environment }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy Backend
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
-        with:
-          oc_namespace: ${{ vars.OC_NAMESPACE }}
-          oc_server: ${{ vars.OC_SERVER }}
-          oc_token: ${{ secrets.OC_TOKEN }}
-          oc_version: "4.14.37"
-          file: backend/openshift.deploy.yml
-          parameters:
-              -p NAME_SUFFIX=-dev-${{ github.event.number }}
-              -p IMAGE_TAG=${{ github.event.number }}
-              -p ENV_NAME=dev
-              -p E_LICENSING_URL=${{ vars.E_LICENSING_URL }}
-              -p DB_REPLICATE=${{ vars.DB_REPLICATE }}
-              -p DJANGO_DEBUG=${{ vars.DJANGO_DEBUG }}
-              -p ENABLE_ADDITIONAL_DOCUMENTS=${{ vars.ENABLE_ADDITIONAL_DOCUMENTS }}
-              -p S3_PRIVATE_BUCKET=${{ vars.S3_PRIVATE_BUCKET }}
-              -p S3_PRIVATE_HOST=${{ vars.S3_PRIVATE_HOST }}
-              -p S3_WELL_EXPORT_BUCKET=${{ vars.S3_WELL_EXPORT_BUCKET }}
-              -p SSO_AUDIENCE=${{ vars.SSO_AUDIENCE }}
-              -p SSO_AUTH_HOST=${{ vars.SSO_AUTH_HOST }}
-              -p SSO_CLIENT=${{ vars.SSO_CLIENT }}
-              -p SSO_IDP_HINT=${{ vars.SSO_IDP_HINT }}
-              -p SSO_PORT=${{ vars.SSO_PORT }}
-              -p SSO_PUBKEY=${{ vars.SSO_PUBKEY }}
-              -p SSO_REALM=${{ vars.SSO_REALM }}
-              -p SSO_TEST_AUDIENCE=${{ vars.SSO_TEST_AUDIENCE }}
-              -p SSO_TEST_CLIENT=${{ vars.SSO_TEST_CLIENT }}
-              -p GDAL_LIBRARY_PATH=${{ vars.GDAL_LIBRARY_PATH }}
-              -p GEOS_LIBRARY_PATH=${{ vars.GEOS_LIBRARY_PATH }}
-              -p S3_AQUIFER_BUCKET=${{ vars.S3_AQUIFER_BUCKET }}
-              -p S3_REGISTRANT_BUCKET=${{ vars.S3_REGISTRANT_BUCKET }}
-              -p S3_PRIVATE_ROOT_BUCKET=${{ vars.S3_PRIVATE_ROOT_BUCKET }}
-              -p S3_PRIVATE_AQUIFER_BUCKET=${{ vars.S3_PRIVATE_AQUIFER_BUCKET }}
-              -p S3_PRIVATE_REGISTRANT_BUCKET=${{ vars.S3_PRIVATE_REGISTRANT_BUCKET }}
-              -p S3_PRIVATE_WELL_BUCKET=${{ vars.S3_PRIVATE_WELL_BUCKET }}
-              -p ENABLE_AQUIFERS_SEARCH=${{ vars.ENABLE_AQUIFERS_SEARCH }}
-              -p EMAIL_NOTIFICATION_RECIPIENT=${{ vars.EMAIL_NOTIFICATION_RECIPIENT }}
-              -p GEOCODER_ADDRESS_API_BASE=${{ vars.GEOCODER_ADDRESS_API_BASE }}
-
-  frontend: 
-    name: Frontend
-    needs: [ init, database, backend ]
-    # environment: ${{ inputs.environment }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy Frontend
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
-        with:
-          oc_namespace: ${{ vars.OC_NAMESPACE }}
-          oc_server: ${{ vars.OC_SERVER }}
-          oc_token: ${{ secrets.OC_TOKEN }}
-          oc_version: "4.14.37"
-          file: frontend/openshift.deploy.yml
-          parameters:
-            -p NAME_SUFFIX=-dev-${{ github.event.number }}
-            -p IMAGE_TAG=${{ github.event.number }}
-            -p ENV_NAME=dev

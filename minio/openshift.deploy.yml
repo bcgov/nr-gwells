@@ -75,13 +75,13 @@ objects:
     kind: Deployment
     metadata:
       labels:
-        app: "${NAME}"
-      name: "${NAME}"
+        app: "gwells${NAME_SUFFIX}-minio"
+      name: "gwells${NAME_SUFFIX}-minio"
     spec:
       replicas: 1
       selector:
         matchLabels:
-          deployment: ${NAME}
+          deployment: "gwells${NAME_SUFFIX}-minio"
       strategy:
         activeDeadlineSeconds: 3000
         recreateParams:
@@ -90,8 +90,8 @@ objects:
       template:
         metadata:
           labels:
-            name: "${NAME}"
-            deployment: "${NAME}"
+            name: "gwells${NAME_SUFFIX}-minio"
+            deployment: "gwells${NAME_SUFFIX}-minio"
         spec:
           containers:
           - env:
@@ -132,10 +132,10 @@ objects:
           volumes:
           - name: config-vol
             persistentVolumeClaim:
-              claimName: "minio-config-vol-v2"
+              claimName: "gwells${NAME_SUFFIX}-minio-config-vol-v2"
           - name: data-vol
             persistentVolumeClaim:
-              claimName: "${NAME}-data-vol"
+              claimName: "gwells${NAME_SUFFIX}-data-vol"
   - apiVersion: v1
     kind: Service
     metadata:
