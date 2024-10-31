@@ -119,7 +119,7 @@ objects:
               limits:
                 cpu: 100m
               requests:
-                cpu: 50m
+                cpu: 75m
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:
