@@ -18,4 +18,4 @@ jobs:
       oc_token: ${{ secrets.OC_TOKEN }}
     with:
       cleanup: label
-      packages: init minio database backend frontend
+      packages: minio database backend frontend
