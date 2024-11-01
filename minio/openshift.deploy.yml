@@ -135,7 +135,7 @@ objects:
               claimName: "gwells${NAME_SUFFIX}-minio-config-vol-v2"
           - name: data-vol
             persistentVolumeClaim:
-              claimName: "gwells${NAME_SUFFIX}-data-vol"
+              claimName: "gwells${NAME_SUFFIX}-minio-data-vol"
   - apiVersion: v1
     kind: Service
     metadata:
