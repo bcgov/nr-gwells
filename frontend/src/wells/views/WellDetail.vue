@@ -124,6 +124,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
                 <div><a class="jump_link" href="#well_yield_fieldset">Well Yield</a></div>
                 <div><a class="jump_link" href="#well_decommissioning_fieldset">Well Decommissioning</a></div>
                 <div><a class="jump_link" href="#well_comments_fieldset">Comments</a></div>
+                <div v-if="isAuthenticated"><a class="jump_link" href="#well_internal_comments_fieldset">Internal Comments</a></div>
                 <div v-if="config && config.enable_documents"><a class="jump_link" href="#documents_fieldset">Documentation</a></div>
                 <div><a class="jump_link" href="#disclaimer_fieldset">Disclaimer</a></div>
               </b-col>
@@ -496,7 +497,8 @@ Licensed under the Apache License, Version 2.0 (the "License");
                   { key: 'specific_yield', label: 'Specific Yield' },
                   { key: 'specific_capacity', label: 'Specific Capacity (L/s/m)' },
                   { key: 'analysis_method', label: 'Analysis Method' },
-                  { key: 'comments', label: 'Comments' }
+                  { key: 'comments', label: 'Comments' },
+                  { key: 'internal_comments', label: 'Internal Comments' }
                 ]"
                 show-empty>
                 <template v-slot:head(pumping_test_description)="data">
@@ -553,6 +555,13 @@ Licensed under the Apache License, Version 2.0 (the "License");
           <legend>Comments</legend>
           <p>
             {{ well.comments ? well.comments : 'No comments submitted' }}
+          </p>
+        </fieldset>
+
+        <fieldset id="well_internal_comments_fieldset" class="my-3 detail-section" v-if="isAuthenticated">
+          <legend>Internal Comments</legend>
+          <p>
+            {{ well.internalComments ? well.internalComments : 'No internal comments submitted' }}
           </p>
         </fieldset>
 
@@ -673,7 +682,10 @@ export default {
     isUnpublished () {
       return !this.well.is_published
     },
-    ...mapGetters(['userRoles', 'config', 'well', 'wellLicence', 'storedWellId', 'codes'])
+    isAuthenticated() {
+      return this.$keycloak && this.$keycloak.authenticated
+    },
+    ...mapGetters(['userRoles', 'config', 'well', 'wellLicence', 'storedWellId', 'codes', 'keycloak'])
   },
   methods: {
     handlePrint () {
