@@ -68,8 +68,8 @@ jobs:
           oc_version: "4.14.37"
           file: minio/openshift.deploy.yml
           parameters:
-            -p NAME_SUFFIX=-dev-${{ github.event.number }}
-            -p IMAGE_TAG=${{ github.event.number }}
+            -p NAME_SUFFIX=-dev-${{ inputs.target }}
+            -p IMAGE_TAG=${{ inputs.tag }}
             -p MINIO_DATA_DIR=/data
           
   database:
