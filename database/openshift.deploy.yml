@@ -152,7 +152,7 @@ objects:
     metadata:
       name: ${DATABASE_SERVICE_NAME}
       labels:
-        app: nr-gwells${NAME_SUFFIX}
+        app: nr-gwells-${NAME_SUFFIX}
       annotations:
         template.openshift.io.bcgov/create: "true"
     spec:
