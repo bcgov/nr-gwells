@@ -122,15 +122,15 @@ objects:
     kind: ConfigMap
     metadata:
       labels:
-        app: nr-gwells${NAME_SUFFIX}
+        app: nr-gwells-${NAME_SUFFIX}
         name: ${DATABASE_SERVICE_NAME}-setupcfg
-        appver: gwells${NAME_SUFFIX}
+        appver: gwells-${NAME_SUFFIX}
       name: ${DATABASE_SERVICE_NAME}-setupcfg
   - apiVersion: v1
     kind: Service
     metadata:
       labels:
-        app: nr-gwells${NAME_SUFFIX}
+        app: nr-gwells-${NAME_SUFFIX}
       annotations:
         template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
       name: ${DATABASE_SERVICE_NAME}
@@ -152,7 +152,7 @@ objects:
     metadata:
       name: ${DATABASE_SERVICE_NAME}
       labels:
-        app: nr-gwells${NAME_SUFFIX}
+        app: nr-gwells-${NAME_SUFFIX}
       annotations:
         template.openshift.io.bcgov/create: "true"
     spec:
@@ -169,7 +169,7 @@ objects:
         template.alpha.openshift.io/wait-for-ready: "true"
       name: ${DATABASE_SERVICE_NAME}
       labels:
-        app: nr-gwells${NAME_SUFFIX}
+        app: nr-gwells-${NAME_SUFFIX}
     spec:
       replicas: 1
       selector:
@@ -181,7 +181,7 @@ objects:
         metadata:
           labels:
             name: ${DATABASE_SERVICE_NAME}
-            appver: gwells${NAME_SUFFIX}
+            appver: gwells-${NAME_SUFFIX}
             deployment: ${DATABASE_SERVICE_NAME}
         spec:
           containers:

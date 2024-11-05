@@ -85,10 +85,10 @@ objects:
   apiVersion: v1
   metadata:
     creationTimestamp: 
-    name: gwells-global-config${NAME_SUFFIX}
+    name: gwells-global-config-${NAME_SUFFIX}
     labels:
-      appver: gwells${NAME_SUFFIX}
-      app: nr-gwells${NAME_SUFFIX}
+      appver: gwells-${NAME_SUFFIX}
+      app: nr-gwells-${NAME_SUFFIX}
   data:
     DB_REPLICATE: ${DB_REPLICATE}
     DJANGO_DEBUG: ${DJANGO_DEBUG}
@@ -120,11 +120,11 @@ objects:
 - kind: Deployment
   apiVersion: apps/v1
   metadata:
-    name: gwells${NAME_SUFFIX}-backend
+    name: gwells-${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
-      app: nr-gwells${NAME_SUFFIX}
-      appver: gwells${NAME_SUFFIX}-backend
+      app: nr-gwells-${NAME_SUFFIX}
+      appver: gwells-${NAME_SUFFIX}-backend
     annotations:
       description: Defines how to deploy the application server
   spec:
@@ -138,48 +138,48 @@ objects:
         #     command:
         #     - "/usr/bin/container-entrypoint"
         #     - "/opt/app-root/src/scripts/pre-deploy.sh"
-        #     containerName: gwells-app${NAME_SUFFIX}-backend
+        #     containerName: gwells-app-${NAME_SUFFIX}-backend
         #     env:
         #     - name: PGDATABASE
         #       valueFrom:
         #         secretKeyRef:
-        #           name: gwells-pg12${NAME_SUFFIX}-backend
+        #           name: gwells-pg12-${NAME_SUFFIX}-backend
         #           key: database-name
         #     - name: PGUSER
         #       valueFrom:
         #         secretKeyRef:
-        #           name: gwells-pg12${NAME_SUFFIX}-backend
+        #           name: gwells-pg12-${NAME_SUFFIX}-backend
         #           key: database-user
         #     - name: PGPASSWORD
         #       valueFrom:
         #         secretKeyRef:
-        #           name: gwells-pg12${NAME_SUFFIX}-backend
+        #           name: gwells-pg12-${NAME_SUFFIX}-backend
         #           key: database-password
         #     - name: PGHOST
-        #       value: gwells-pg12${NAME_SUFFIX}-backend
+        #       value: gwells-pg12-${NAME_SUFFIX}-backend
       resources: {}
       activeDeadlineSeconds: 21600
     replicas: 1
     test: false
     selector:
-      name: gwells${NAME_SUFFIX}-backend
+      name: gwells-${NAME_SUFFIX}-backend
       matchLabels:
-        deployment: gwells${NAME_SUFFIX}-backend
+        deployment: gwells-${NAME_SUFFIX}-backend
     template:
       metadata:
-        name: gwells${NAME_SUFFIX}-backend
+        name: gwells-${NAME_SUFFIX}-backend
         creationTimestamp: 
         labels:
-          name: gwells${NAME_SUFFIX}-backend
-          appver: gwells${NAME_SUFFIX}-backend
-          deployment: gwells${NAME_SUFFIX}-backend
+          name: gwells-${NAME_SUFFIX}-backend
+          appver: gwells-${NAME_SUFFIX}-backend
+          deployment: gwells-${NAME_SUFFIX}-backend
       spec:
         volumes:
           - name: staticfiles
             emptyDir:
               sizeLimit: 250Mi
         containers:
-        - name: gwells-app${NAME_SUFFIX}-backend
+        - name: gwells-app-${NAME_SUFFIX}-backend
           image: 'ghcr.io/bcgov/nr-gwells/backend:${IMAGE_TAG}'
           volumeMounts:
             - name: staticfiles
@@ -189,21 +189,21 @@ objects:
             protocol: TCP
           env:
           - name: DATABASE_SERVICE_NAME
-            value: gwells${NAME_SUFFIX}-database
+            value: gwells-${NAME_SUFFIX}-database
           - name: DATABASE_NAME
             valueFrom:
               secretKeyRef:
-                name: gwells${NAME_SUFFIX}-database
+                name: gwells-${NAME_SUFFIX}-database
                 key: database-name
           - name: DATABASE_USER
             valueFrom:
               secretKeyRef:
-                name: gwells${NAME_SUFFIX}-database
+                name: gwells-${NAME_SUFFIX}-database
                 key: database-user
           - name: DATABASE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: gwells${NAME_SUFFIX}-database
+                name: gwells-${NAME_SUFFIX}-database
                 key: database-password
           - name: DATABASE_SCHEMA
             value: public
@@ -216,133 +216,133 @@ objects:
           - name: DJANGO_SECRET_KEY
             valueFrom:
               secretKeyRef:
-                name: gwells-django${NAME_SUFFIX}
+                name: gwells-django-${NAME_SUFFIX}
                 key: secret_key
           - name: DJANGO_ADMIN_URL
             valueFrom:
               secretKeyRef:
-                name: gwells-django${NAME_SUFFIX}
+                name: gwells-django-${NAME_SUFFIX}
                 key: admin_url
           - name: DJANGO_ADMIN_USER
             valueFrom:
               secretKeyRef:
-                name: gwells-django${NAME_SUFFIX}
+                name: gwells-django-${NAME_SUFFIX}
                 key: admin_user
           - name: DJANGO_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: gwells-django${NAME_SUFFIX}
+                name: gwells-django-${NAME_SUFFIX}
                 key: admin_password
           - name: E_LICENSING_AUTH_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: gwells-e-licensing${NAME_SUFFIX}
+                name: gwells-e-licensing-${NAME_SUFFIX}
                 key: E_LICENSING_AUTH_PASSWORD
           - name: E_LICENSING_AUTH_USERNAME
             valueFrom:
               secretKeyRef:
-                name: gwells-e-licensing${NAME_SUFFIX}
+                name: gwells-e-licensing-${NAME_SUFFIX}
                 key: E_LICENSING_AUTH_USERNAME
           - name: E_LICENSING_URL
             valueFrom:
               configMapKeyRef:
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
                 key: E_LICENSING_URL
           - name: DJANGO_DEBUG
             valueFrom:
               configMapKeyRef:
                 key: DJANGO_DEBUG
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: GDAL_LIBRARY_PATH
             valueFrom:
               configMapKeyRef:
                 key: GDAL_LIBRARY_PATH
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: GEOS_LIBRARY_PATH
             valueFrom:
               configMapKeyRef:
                 key: GEOS_LIBRARY_PATH
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: S3_AQUIFER_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_AQUIFER_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: S3_REGISTRANT_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_REGISTRANT_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: S3_PRIVATE_ROOT_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_ROOT_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: S3_PRIVATE_AQUIFER_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_AQUIFER_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: S3_PRIVATE_REGISTRANT_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_REGISTRANT_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: S3_PRIVATE_WELL_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_WELL_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: SSO_CLIENT
             valueFrom:
               configMapKeyRef:
                 key: SSO_CLIENT
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: SSO_PUBKEY
             valueFrom:
               configMapKeyRef:
                 key: SSO_PUBKEY
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: SSO_AUTH_HOST
             valueFrom:
               configMapKeyRef:
                 key: SSO_AUTH_HOST
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: SSO_AUDIENCE
             valueFrom:
               configMapKeyRef:
                 key: SSO_AUDIENCE
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: SSO_REALM
             valueFrom:
               configMapKeyRef:
                 key: SSO_REALM
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: SSO_PORT
             valueFrom:
               configMapKeyRef:
                 key: SSO_PORT
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: SSO_TEST_CLIENT
             valueFrom:
               configMapKeyRef:
                 key: SSO_TEST_CLIENT
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: SSO_TEST_AUDIENCE
             valueFrom:
               configMapKeyRef:
                 key: SSO_TEST_AUDIENCE
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: ENABLE_ADDITIONAL_DOCUMENTS
             valueFrom:
               configMapKeyRef:
                 key: ENABLE_ADDITIONAL_DOCUMENTS
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: ENABLE_AQUIFERS_SEARCH
             valueFrom:
               configMapKeyRef:
                 key: ENABLE_AQUIFERS_SEARCH
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: APP_CONTEXT_ROOT
             value: gwells
           - name: SESSION_COOKIE_SECURE
@@ -353,57 +353,57 @@ objects:
             valueFrom:
               configMapKeyRef:
                 key: DB_REPLICATE
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           # - name: MINIO_ACCESS_KEY
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       name: minio-access-parameters-${NAME_SUFFIX}
           #       key: MINIO_ACCESS_KEY
           # - name: MINIO_SECRET_KEY
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       name: minio-access-parameters-${NAME_SUFFIX}
           #       key: MINIO_SECRET_KEY
           # - name: S3_PUBLIC_ACCESS_KEY
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       name: minio-access-parameters-${NAME_SUFFIX}
           #       key: S3_PUBLIC_ACCESS_KEY
           # - name: S3_PUBLIC_SECRET_KEY
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       name: minio-access-parameters-${NAME_SUFFIX}
           #       key: S3_PUBLIC_SECRET_KEY
           # - name: S3_HOST
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       name: minio-access-parameters-${NAME_SUFFIX}
           #       key: S3_HOST
           # - name: S3_ROOT_BUCKET
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters${NAME_SUFFIX}
+          #       name: minio-access-parameters-${NAME_SUFFIX}
           #       key: S3_ROOT_BUCKET
           - name: S3_PRIVATE_HOST
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_HOST
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: S3_WELL_EXPORT_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_WELL_EXPORT_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: S3_PRIVATE_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_BUCKET
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: SSO_IDP_HINT
             valueFrom:
               configMapKeyRef:
                 key: SSO_IDP_HINT
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: WEB_CONCURRENCY
             value: '4'
           - name: GUNICORN_WORKERS
@@ -414,12 +414,12 @@ objects:
             valueFrom:
               configMapKeyRef:
                 key: EMAIL_NOTIFICATION_RECIPIENT
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           - name: GEOCODER_ADDRESS_API_BASE
             valueFrom:
               configMapKeyRef:
                 key: GEOCODER_ADDRESS_API_BASE
-                name: gwells-global-config${NAME_SUFFIX}
+                name: gwells-global-config-${NAME_SUFFIX}
           resources:
             limits:
               cpu: "${CPU_LIMIT}"
@@ -460,25 +460,25 @@ objects:
   metadata:
     creationTimestamp: 
     labels:
-      app: nr-gwells${NAME_SUFFIX}
-      appver: gwells${NAME_SUFFIX}-backend
-    name: gwells${NAME_SUFFIX}-backend
+      app: nr-gwells-${NAME_SUFFIX}
+      appver: gwells-${NAME_SUFFIX}-backend
+    name: gwells-${NAME_SUFFIX}-backend
   spec:
     maxReplicas: 5
     minReplicas: 1
     scaleTargetRef:
       apiVersion: v1
       kind: Deployment
-      name: gwells${NAME_SUFFIX}-backend
+      name: gwells-${NAME_SUFFIX}-backend
     targetCPUUtilizationPercentage: 90
 - kind: Service
   apiVersion: v1
   metadata:
-    name: gwells${NAME_SUFFIX}-backend
+    name: gwells-${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
-      app: nr-gwells${NAME_SUFFIX}
-      appver: gwells${NAME_SUFFIX}-backend
+      app: nr-gwells-${NAME_SUFFIX}
+      appver: gwells-${NAME_SUFFIX}-backend
     annotations:
       description: Exposes and load balances the application pods
   spec:
@@ -488,25 +488,25 @@ objects:
       port: 8000
       targetPort: 8000
     selector:
-      name: gwells${NAME_SUFFIX}-backend
+      name: gwells-${NAME_SUFFIX}-backend
     type: ClusterIP
     sessionAffinity: None
 - kind: Route
   apiVersion: v1
   metadata:
-    name: gwells${NAME_SUFFIX}-backend
+    name: gwells-${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
       frontend: 'true'
-      app: nr-gwells${NAME_SUFFIX}
-      appver: gwells${NAME_SUFFIX}-backend
+      app: nr-gwells-${NAME_SUFFIX}
+      appver: gwells-${NAME_SUFFIX}-backend
     annotations: {}
   spec:
     host: "${HOST}"
     path: "/gwells"
     to:
       kind: Service
-      name: gwells${NAME_SUFFIX}-backend
+      name: gwells-${NAME_SUFFIX}-backend
       weight: 100
     port:
       targetPort: web
