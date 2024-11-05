@@ -81,19 +81,6 @@ parameters:
 - name: GEOCODER_ADDRESS_API_BASE
   required: true
 objects:
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: gwells${NAME_SUFFIX}-backend
-    creationTimestamp: 
-    labels:
-      base-name: gwells
-      appver: gwells${NAME_SUFFIX}-backend
-    annotations:
-      description: Keeps track of changes in the application image
-  spec:
-    lookupPolicy:
-      local: false
 - kind: ConfigMap
   apiVersion: v1
   metadata:
@@ -101,7 +88,7 @@ objects:
     name: gwells-global-config${NAME_SUFFIX}
     labels:
       appver: gwells${NAME_SUFFIX}
-      app: gwells${NAME_SUFFIX}
+      app: nr-gwells${NAME_SUFFIX}
   data:
     DB_REPLICATE: ${DB_REPLICATE}
     DJANGO_DEBUG: ${DJANGO_DEBUG}
@@ -136,6 +123,7 @@ objects:
     name: gwells${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
+      app: nr-gwells${NAME_SUFFIX}
       appver: gwells${NAME_SUFFIX}-backend
     annotations:
       description: Defines how to deploy the application server
@@ -472,6 +460,7 @@ objects:
   metadata:
     creationTimestamp: 
     labels:
+      app: nr-gwells${NAME_SUFFIX}
       appver: gwells${NAME_SUFFIX}-backend
     name: gwells${NAME_SUFFIX}-backend
   spec:
@@ -488,6 +477,7 @@ objects:
     name: gwells${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
+      app: nr-gwells${NAME_SUFFIX}
       appver: gwells${NAME_SUFFIX}-backend
     annotations:
       description: Exposes and load balances the application pods
@@ -508,6 +498,7 @@ objects:
     creationTimestamp: 
     labels:
       frontend: 'true'
+      app: nr-gwells${NAME_SUFFIX}
       appver: gwells${NAME_SUFFIX}-backend
     annotations: {}
   spec:
