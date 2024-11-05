@@ -35,7 +35,7 @@ objects:
     metadata:
       finalizers:
       - kubernetes.io/pvc-protection
-      name: "gwells${NAME_SUFFIX}-minio-config-vol-v2"
+      name: "gwells-${NAME_SUFFIX}-minio-config-vol-v2"
       labels:
         app: nr-gwells-${NAME_SUFFIX}
     spec:
@@ -50,7 +50,7 @@ objects:
     metadata:
       finalizers:
       - kubernetes.io/pvc-protection
-      name: "gwells${NAME_SUFFIX}-minio-data-vol"
+      name: "gwells-${NAME_SUFFIX}-minio-data-vol"
       labels:
         app: nr-gwells-${NAME_SUFFIX}
     spec:
@@ -65,12 +65,12 @@ objects:
     metadata:
       labels:
         app: nr-gwells-${NAME_SUFFIX}
-      name: "gwells${NAME_SUFFIX}-minio"
+      name: "gwells-${NAME_SUFFIX}-minio"
     spec:
       replicas: 1
       selector:
         matchLabels:
-          deployment: "gwells${NAME_SUFFIX}-minio"
+          deployment: "gwells-${NAME_SUFFIX}-minio"
       strategy:
         activeDeadlineSeconds: 3000
         recreateParams:
@@ -79,15 +79,15 @@ objects:
       template:
         metadata:
           labels:
-            name: "gwells${NAME_SUFFIX}-minio"
-            deployment: "gwells${NAME_SUFFIX}-minio"
+            name: "gwells-${NAME_SUFFIX}-minio"
+            deployment: "gwells-${NAME_SUFFIX}-minio"
         spec:
           containers:
           - env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: "gwells${NAME_SUFFIX}-minio"
+                  name: "gwells-${NAME_SUFFIX}-minio"
                   key: MINIO_ACCESS_KEY
             - name: MINIO_SECRET_KEY
               valueFrom:
@@ -100,7 +100,7 @@ objects:
               value: /opt/minio/s3/config
             image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
             imagePullPolicy: Always
-            name: "gwells${NAME_SUFFIX}-minio"
+            name: "gwells-${NAME_SUFFIX}-minio"
             ports:
             - containerPort: 9000
               protocol: TCP
@@ -121,16 +121,16 @@ objects:
           volumes:
           - name: config-vol
             persistentVolumeClaim:
-              claimName: "gwells${NAME_SUFFIX}-minio-config-vol-v2"
+              claimName: "gwells-${NAME_SUFFIX}-minio-config-vol-v2"
           - name: data-vol
             persistentVolumeClaim:
-              claimName: "gwells${NAME_SUFFIX}-minio-data-vol"
+              claimName: "gwells-${NAME_SUFFIX}-minio-data-vol"
   - apiVersion: v1
     kind: Service
     metadata:
       labels:
         app: nr-gwells-${NAME_SUFFIX}
-      name: "gwells${NAME_SUFFIX}-minio"
+      name: "gwells-${NAME_SUFFIX}-minio"
     spec:
       ports:
       - name: 9000-tcp
