@@ -69,7 +69,6 @@ jobs:
   #         parameters:
   #           -p NAME_SUFFIX=-${{ github.event.number }}
   #           -p IMAGE_TAG=${{ github.event.number }}
-  #           -p ENV_NAME=dev
   #           -p MINIO_DATA_DIR=/data
           
   database:
@@ -115,7 +114,6 @@ jobs:
           parameters:
               -p NAME_SUFFIX=-${{ github.event.number }}
               -p IMAGE_TAG=${{ github.event.number }}
-              -p ENV_NAME=dev
               -p E_LICENSING_URL=${{ vars.E_LICENSING_URL }}
               -p DB_REPLICATE=${{ vars.DB_REPLICATE }}
               -p DJANGO_DEBUG=${{ vars.DJANGO_DEBUG }}
