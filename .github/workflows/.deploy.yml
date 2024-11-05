@@ -68,7 +68,7 @@ jobs:
   #         file: minio/openshift.deploy.yml
   #         parameters:
   #           -p NAME_SUFFIX=${{ inputs.target }}
-  #           -p IMAGE_TAG=${{ github.event.number }}
+  #           -p IMAGE_TAG=${{ inputs.tag }}
   #           -p MINIO_DATA_DIR=/data
           
   database:
@@ -90,7 +90,7 @@ jobs:
             -p DATABASE_SERVICE_NAME=gwells-${{ github.event.number }}-database
             -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
             -p IMAGE_STREAM_NAME=crunchy-postgres-gis
-            -p IMAGE_TAG=${{ github.event.number }}
+            -p IMAGE_TAG=${{ inputs.tag }}
             -p NAME_SUFFIX=${{ inputs.target }}
             -p STORAGE_CLASS=netapp-file-standard
             -p REQUEST_CPU=200m
@@ -113,7 +113,7 @@ jobs:
           file: backend/openshift.deploy.yml
           parameters:
               -p NAME_SUFFIX=${{ inputs.target }}
-              -p IMAGE_TAG=${{ github.event.number }}
+              -p IMAGE_TAG=${{ inputs.tag }}
               -p E_LICENSING_URL=${{ vars.E_LICENSING_URL }}
               -p DB_REPLICATE=${{ vars.DB_REPLICATE }}
               -p DJANGO_DEBUG=${{ vars.DJANGO_DEBUG }}
@@ -158,4 +158,4 @@ jobs:
           file: frontend/openshift.deploy.yml
           parameters:
             -p NAME_SUFFIX=${{ inputs.target }}
-            -p IMAGE_TAG=${{ github.event.number }}
+            -p IMAGE_TAG=${{ inputs.tag }}
