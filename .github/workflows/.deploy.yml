@@ -21,6 +21,7 @@ on:
 jobs:
   init:
     name: Initialize
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Initialize
@@ -74,7 +75,7 @@ jobs:
   database:
     name: Database
     needs: init
-    # environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Database
@@ -100,7 +101,7 @@ jobs:
   backend:
     name: Backend
     needs: [ init, database ]
-    # environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Backend
@@ -145,7 +146,7 @@ jobs:
   frontend: 
     name: Frontend
     needs: [ init, database, backend ]
-    # environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Frontend
