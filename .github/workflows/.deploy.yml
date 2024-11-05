@@ -33,7 +33,7 @@ jobs:
           file: common/openshift.init.yml
           overwrite: true
           parameters:
-            -p NAME_SUFFIX=-${{ inputs.target }}
+            -p NAME_SUFFIX=${{ inputs.target }}
             -p POSTGRESQL_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             -p FDW_DATABASE_PASSWORD=${{ secrets.FDW_DATABASE_PASSWORD }}
             -p DJANGO_ADMIN_PASSWORD=${{ secrets.DJANGO_ADMIN_PASSWORD }}
