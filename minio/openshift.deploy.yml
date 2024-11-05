@@ -36,8 +36,6 @@ parameters:
     required: true
   - name: "MINIO_DATA_DIR"
     required: true
-  - name: "ENV_NAME"
-    required: true
   - name: "NAME_SUFFIX"
     required: false
 objects:
@@ -48,7 +46,7 @@ objects:
       - kubernetes.io/pvc-protection
       name: "gwells${NAME_SUFFIX}-minio-config-vol-v2"
       labels:
-        app: "gwells${NAME_SUFFIX}-minio"
+        app: nr-gwells-${NAME_SUFFIX}
     spec:
       accessModes:
       - ${DEST_PVC_ACCESS}
@@ -63,7 +61,7 @@ objects:
       - kubernetes.io/pvc-protection
       name: "gwells${NAME_SUFFIX}-minio-data-vol"
       labels:
-        app: "gwells${NAME_SUFFIX}-minio"
+        app: nr-gwells-${NAME_SUFFIX}
     spec:
       accessModes:
       - ${DEST_PVC_ACCESS}
@@ -75,7 +73,7 @@ objects:
     kind: Deployment
     metadata:
       labels:
-        app: "gwells${NAME_SUFFIX}-minio"
+        app: nr-gwells-${NAME_SUFFIX}
       name: "gwells${NAME_SUFFIX}-minio"
     spec:
       replicas: 1
@@ -103,7 +101,7 @@ objects:
             - name: MINIO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: "gwells${NAME_SUFFIX}-minio"
+                  name: minio-${NAME_SUFFIX}
                   key: MINIO_SECRET_KEY
             - name: MINIO_DATA_DIR
               value: /opt/minio/s3/data
@@ -140,7 +138,7 @@ objects:
     kind: Service
     metadata:
       labels:
-        app: "gwells${NAME_SUFFIX}-minio"
+        app: nr-gwells-${NAME_SUFFIX}
       name: "gwells${NAME_SUFFIX}-minio"
     spec:
       ports:
