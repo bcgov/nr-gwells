@@ -92,7 +92,7 @@ objects:
             - name: MINIO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: minio-${NAME_SUFFIX}
+                  name: gwells-${NAME_SUFFIX}-minio
                   key: MINIO_SECRET_KEY
             - name: MINIO_DATA_DIR
               value: /opt/minio/s3/data
