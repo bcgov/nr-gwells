@@ -85,10 +85,10 @@ objects:
   apiVersion: v1
   metadata:
     creationTimestamp: 
-    name: gwells-global-config${NAME_SUFFIX}
+    name: gwells-global-config-${NAME_SUFFIX}
     labels:
-      appver: gwells${NAME_SUFFIX}
-      app: nr-gwells${NAME_SUFFIX}
+      appver: gwells-${NAME_SUFFIX}
+      app: nr-gwells-${NAME_SUFFIX}
   data:
     DB_REPLICATE: ${DB_REPLICATE}
     DJANGO_DEBUG: ${DJANGO_DEBUG}
@@ -460,25 +460,25 @@ objects:
   metadata:
     creationTimestamp: 
     labels:
-      app: nr-gwells${NAME_SUFFIX}
-      appver: gwells${NAME_SUFFIX}-backend
-    name: gwells${NAME_SUFFIX}-backend
+      app: nr-gwells-${NAME_SUFFIX}
+      appver: gwells-${NAME_SUFFIX}-backend
+    name: gwells-${NAME_SUFFIX}-backend
   spec:
     maxReplicas: 5
     minReplicas: 1
     scaleTargetRef:
       apiVersion: v1
       kind: Deployment
-      name: gwells${NAME_SUFFIX}-backend
+      name: gwells-${NAME_SUFFIX}-backend
     targetCPUUtilizationPercentage: 90
 - kind: Service
   apiVersion: v1
   metadata:
-    name: gwells${NAME_SUFFIX}-backend
+    name: gwells-${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
-      app: nr-gwells${NAME_SUFFIX}
-      appver: gwells${NAME_SUFFIX}-backend
+      app: nr-gwells-${NAME_SUFFIX}
+      appver: gwells-${NAME_SUFFIX}-backend
     annotations:
       description: Exposes and load balances the application pods
   spec:
@@ -488,25 +488,25 @@ objects:
       port: 8000
       targetPort: 8000
     selector:
-      name: gwells${NAME_SUFFIX}-backend
+      name: gwells-${NAME_SUFFIX}-backend
     type: ClusterIP
     sessionAffinity: None
 - kind: Route
   apiVersion: v1
   metadata:
-    name: gwells${NAME_SUFFIX}-backend
+    name: gwells-${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
       frontend: 'true'
-      app: nr-gwells${NAME_SUFFIX}
-      appver: gwells${NAME_SUFFIX}-backend
+      app: nr-gwells-${NAME_SUFFIX}
+      appver: gwells-${NAME_SUFFIX}-backend
     annotations: {}
   spec:
     host: "${HOST}"
     path: "/gwells"
     to:
       kind: Service
-      name: gwells${NAME_SUFFIX}-backend
+      name: gwells-${NAME_SUFFIX}-backend
       weight: 100
     port:
       targetPort: web

@@ -61,7 +61,7 @@ objects:
       - kubernetes.io/pvc-protection
       name: "${NAME}-data-vol"
       labels:
-        app: nr-gwells${NAME_SUFFIX}
+        app: nr-gwells-${NAME_SUFFIX}
     spec:
       accessModes:
       - ${DEST_PVC_ACCESS}
@@ -138,7 +138,7 @@ objects:
     kind: Service
     metadata:
       labels:
-        app: nr-gwells${NAME_SUFFIX}
+        app: nr-gwells-${NAME_SUFFIX}
       name: ${NAME}
     spec:
       ports:

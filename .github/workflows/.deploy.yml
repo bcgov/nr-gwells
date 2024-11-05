@@ -33,7 +33,7 @@ jobs:
           file: common/openshift.init.yml
           overwrite: true
           parameters:
-            -p NAME_SUFFIX=-${{ github.event.number }}
+            -p NAME_SUFFIX=-${{ inputs.target }}
             -p POSTGRESQL_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             -p FDW_DATABASE_PASSWORD=${{ secrets.FDW_DATABASE_PASSWORD }}
             -p DJANGO_ADMIN_PASSWORD=${{ secrets.DJANGO_ADMIN_PASSWORD }}
@@ -67,7 +67,7 @@ jobs:
   #         oc_version: "4.14.37"
   #         file: minio/openshift.deploy.yml
   #         parameters:
-  #           -p NAME_SUFFIX=-${{ github.event.number }}
+  #           -p NAME_SUFFIX=-${{ inputs.target }}
   #           -p IMAGE_TAG=${{ github.event.number }}
   #           -p MINIO_DATA_DIR=/data
           
@@ -91,7 +91,7 @@ jobs:
             -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
             -p IMAGE_STREAM_NAME=crunchy-postgres-gis
             -p IMAGE_TAG=${{ github.event.number }}
-            -p NAME_SUFFIX=-${{ github.event.number }}
+            -p NAME_SUFFIX=-${{ inputs.target }}
             -p STORAGE_CLASS=netapp-file-standard
             -p REQUEST_CPU=200m
             -p LIMIT_CPU=500m
@@ -112,7 +112,7 @@ jobs:
           oc_version: "4.14.37"
           file: backend/openshift.deploy.yml
           parameters:
-              -p NAME_SUFFIX=-${{ github.event.number }}
+              -p NAME_SUFFIX=-${{ inputs.target }}
               -p IMAGE_TAG=${{ github.event.number }}
               -p E_LICENSING_URL=${{ vars.E_LICENSING_URL }}
               -p DB_REPLICATE=${{ vars.DB_REPLICATE }}
@@ -157,5 +157,5 @@ jobs:
           oc_version: "4.14.37"
           file: frontend/openshift.deploy.yml
           parameters:
-            -p NAME_SUFFIX=-${{ github.event.number }}
+            -p NAME_SUFFIX=-${{ inputs.target }}
             -p IMAGE_TAG=${{ github.event.number }}
