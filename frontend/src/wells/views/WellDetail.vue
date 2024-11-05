@@ -79,7 +79,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
           <b-row>
             <b-col cols="12" md="4"><span class="font-weight-bold">Intended Water Use:</span> {{ well.intended_water_use }}</b-col>
             <b-col cols="12" md="4"><span class="font-weight-bold">Aquifer Number: </span>
-              <router-link :to="{ name: 'aquifers-view', params: { id: well.aquifer } }">
+              <router-link v-if="well.aquifer !== undefined" :to="{ name: 'aquifers-view', params: { id: well.aquifer } }">
                 {{ well.aquifer }}
               </router-link>
             </b-col>

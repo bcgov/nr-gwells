@@ -141,7 +141,8 @@ export function popupLink (route, $router, text) {
     anchor.onclick = (e) => {
       if (!e.ctrlKey) {
         e.preventDefault()
-        $router.push(route)
+        // The catch statement prevents duplicate route errors
+        $router.push(route).catch(()=>{})
       }
     }
   }

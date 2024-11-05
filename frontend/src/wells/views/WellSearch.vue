@@ -376,8 +376,8 @@ export default {
     },
     updateQueryParams () {
       const tabHash = (this.tabIndex === 1) ? 'advanced' : null
-
-      this.$router.replace({ query: this.buildQueryParams(), hash: tabHash })
+      // The catch statement prevents duplicate route errors
+      this.$router.replace({ query: this.buildQueryParams(), hash: tabHash }).catch(()=>{})
     },
     buildQueryParams () {
       const query = { ...this.searchParams }

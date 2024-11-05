@@ -293,7 +293,7 @@
                   centered
                   :title="`Confirm register as ${item.desc}`"
                   @shown="$refs[`confirmRegisterConfirmBtn${item.code}`][0].focus()"
-                  :return-focus="$refs[`registerButton${item.code}`]">
+                  :return-focus="$refs[`registerButton${item.code}`] ? $refs[`registerButton${item.code}`][0] : ''">
                 Are you sure you want to register {{ currentDriller.first_name }} {{ currentDriller.surname }} as a {{ item.desc }}?
                 <div slot="modal-footer">
                   <b-btn
