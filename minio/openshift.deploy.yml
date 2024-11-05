@@ -36,8 +36,6 @@ parameters:
     required: true
   - name: "MINIO_DATA_DIR"
     required: true
-  - name: "ENV_NAME"
-    required: true
   - name: "NAME_SUFFIX"
     required: false
 objects:
