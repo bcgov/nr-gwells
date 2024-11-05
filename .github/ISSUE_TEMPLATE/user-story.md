@@ -2,7 +2,7 @@
 name: User Story
 about: This template is to be used when describing a feature from the user's perspective
 title: ''
-labels: User Story
+labels: ''
 assignees: ''
 
 ---
