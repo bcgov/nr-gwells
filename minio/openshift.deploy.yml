@@ -121,6 +121,9 @@ objects:
             image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
             imagePullPolicy: Always
             name: "gwells-${NAME_SUFFIX}-minio"
+            command:
+              - sleep
+              - "300"
             ports:
             - containerPort: 9000
               protocol: TCP
