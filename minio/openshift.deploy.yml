@@ -148,8 +148,7 @@ objects:
           - name: data-vol
             persistentVolumeClaim:
               claimName: "gwells-${NAME_SUFFIX}-minio-data-vol"
-  - apiVersion: v1
-    kind: Service
+  - kind: Service
     metadata:
       labels:
         app: nr-gwells-${NAME_SUFFIX}
