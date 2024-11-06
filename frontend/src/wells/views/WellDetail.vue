@@ -490,14 +490,14 @@ Licensed under the Apache License, Version 2.0 (the "License");
                   { key: 'pumping_test_description', label: 'Description' },
                   { key: 'test_duration', label: 'Test Duration (min)' },
                   { key: 'boundary_effect', label: 'Boundary Effect' },
-                  { key: 'private', label: 'Private' },
                   { key: 'storativity', label: 'Storativity' },
                   { key: 'transmissivity', label: 'Transmissivity (m²/day)' },
                   { key: 'hydraulic_conductivity', label: 'Hydraulic Conductivity (m/day)' },
                   { key: 'specific_yield', label: 'Specific Yield' },
                   { key: 'specific_capacity', label: 'Specific Capacity (L/s/m)' },
                   { key: 'analysis_method', label: 'Analysis Method' },
-                  { key: 'comments', label: 'Comments' }
+                  { key: 'comments', label: 'Comments' },
+                  ( userRoles.wells.edit ? [{ key: 'private', label: 'Private' }] : [])
                 ]"
                 show-empty>
                 <template v-slot:head(pumping_test_description)="data">
