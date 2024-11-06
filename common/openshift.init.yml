@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 kind: Template
 parameters:
   - description: A suffix appended to all objects
@@ -60,7 +60,9 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: gwells${NAME_SUFFIX}-database
+      name: gwells-${NAME_SUFFIX}-database
+      labels:
+        app: nr-gwells-${NAME_SUFFIX}
     stringData:
       database-name: ${POSTGRESQL_DATABASE}
       database-password: ${POSTGRESQL_PASSWORD}
@@ -72,7 +74,9 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: minio${NAME_SUFFIX}
+      name: minio-${NAME_SUFFIX}
+      labels:
+        app: nr-gwells-${NAME_SUFFIX}
       creationTimestamp: 
     stringData:
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
@@ -85,7 +89,9 @@ objects:
     kind: Secret
     metadata:
       creationTimestamp: 
-      name: gwells-django${NAME_SUFFIX}
+      name: gwells-django-${NAME_SUFFIX}
+      labels:
+        app: nr-gwells-${NAME_SUFFIX}
     stringData:
       admin_password: ${DJANGO_ADMIN_PASSWORD}
       admin_url: ${DJANGO_ADMIN_URL}
@@ -95,7 +101,9 @@ objects:
     kind: Secret
     metadata:
       creationTimestamp: 
-      name: gwells-e-licensing${NAME_SUFFIX}
+      name: gwells-e-licensing-${NAME_SUFFIX}
+      labels:
+        app: nr-gwells-${NAME_SUFFIX}
     stringData:
       E_LICENSING_AUTH_PASSWORD: ${E_LICENSING_AUTH_PASSWORD}
       E_LICENSING_AUTH_USERNAME: ${E_LICENSING_AUTH_USERNAME}
@@ -104,6 +112,8 @@ objects:
     metadata:
       creationTimestamp:
       name: crunchy-db-credentials
+      labels:
+        app: nr-gwells-${NAME_SUFFIX}
     stringData:
       PG_MODE: ${PG_MODE}
       PG_PRIMARY_PASSWORD: ${PG_PRIMARY_PASSWORD}
