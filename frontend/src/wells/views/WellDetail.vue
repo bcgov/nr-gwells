@@ -683,9 +683,9 @@ export default {
       return !this.well.is_published
     },
     isAuthenticated() {
-      return this.$keycloak && this.$keycloak.authenticated
+      return this.userRoles.wells && this.userRoles.wells.view
     },
-    ...mapGetters(['userRoles', 'config', 'well', 'wellLicence', 'storedWellId', 'codes', 'keycloak'])
+    ...mapGetters(['userRoles', 'config', 'well', 'wellLicence', 'storedWellId', 'codes'])
   },
   methods: {
     handlePrint () {
