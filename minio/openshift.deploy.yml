@@ -19,14 +19,14 @@ parameters:
     value: "minio"
   - name: "DEST_PVC_SIZE"
     displayName: "PVC size"
-    value: "100Mi"
+    value: "1Gi"
   - name: "DEST_PVC_ACCESS"
     displayName: "PVC access mode"
     value: "ReadWriteOnce"
   - name: "IMAGE_TAG"
     required: true
   - name: "MINIO_DATA_DIR"
-    required: true
+    default: /opt/minio/s3/data
   - name: "NAME_SUFFIX"
     required: false
 objects:
@@ -115,15 +115,12 @@ objects:
                   name: gwells-${NAME_SUFFIX}-minio
                   key: S3_ROOT_BUCKET
             - name: MINIO_DATA_DIR
-              value: /opt/minio/s3/data
+              value: ${MINIO_DATA_DIR}
             - name: MINIO_CONFIG_DIR
               value: /opt/minio/s3/config
             image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
             imagePullPolicy: Always
             name: "gwells-${NAME_SUFFIX}-minio"
-            # command:
-            #   - sleep
-            #   - "300"
             ports:
             - containerPort: 9000
               protocol: TCP

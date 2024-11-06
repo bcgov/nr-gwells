@@ -11,13 +11,10 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-set -x
-
 mkdir -p $MINIO_DATA_DIR/aquifer-docs
 mkdir -p $MINIO_DATA_DIR/driller-docs
 mkdir -p $MINIO_DATA_DIR/gwells
 mkdir -p $MINIO_DATA_DIR/well-docs
 mkdir -p $MINIO_DATA_DIR/gwells-docs
 
-# /usr/bin/docker-entrypoint.sh $@
 /usr/bin/docker-entrypoint.sh server $MINIO_DATA_DIR
