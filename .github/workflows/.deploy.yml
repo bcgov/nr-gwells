@@ -21,6 +21,7 @@ on:
 jobs:
   init:
     name: Initialize
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Initialize
@@ -53,28 +54,29 @@ jobs:
             -p S3_HOST=${{ secrets.S3_HOST }}
             -p S3_ROOT_BUCKET=${{ secrets.S3_ROOT_BUCKET }}
 
-  # minio:
-  #   name: Minio
-  #   needs: [ init ]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Deploy Minio
-  #       uses: bcgov-nr/action-deployer-openshift@v3.0.1
-  #       with:
-  #         oc_namespace: ${{ vars.OC_NAMESPACE }}
-  #         oc_server: ${{ vars.OC_SERVER }}
-  #         oc_token: ${{ secrets.OC_TOKEN }}
-  #         oc_version: "4.14.37"
-  #         file: minio/openshift.deploy.yml
-  #         parameters:
-  #           -p NAME_SUFFIX=${{ inputs.target }}
-  #           -p IMAGE_TAG=${{ inputs.tag }}
-  #           -p MINIO_DATA_DIR=/data
-          
+  minio:
+    name: Minio
+    needs: [ init ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Minio
+        uses: bcgov-nr/action-deployer-openshift@v3.0.1
+        with:
+          oc_namespace: ${{ vars.OC_NAMESPACE }}
+          oc_server: ${{ vars.OC_SERVER }}
+          oc_token: ${{ secrets.OC_TOKEN }}
+          oc_version: "4.14.37"
+          file: minio/openshift.deploy.yml
+          parameters:
+            -p NAME_SUFFIX=${{ inputs.target }}
+            -p IMAGE_TAG=${{ inputs.tag }}
+            ${{ inputs.environment && '' || '-p MINIO_DATA_DIR=/tmp/data' }}
+            ${{ inputs.environment && '' || '-p DEST_PVC_SIZE=1Mi' }}
+
   database:
     name: Database
     needs: init
-    # environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Database
@@ -87,7 +89,6 @@ jobs:
           file: database/openshift.deploy.yml
           overwrite: true
           parameters:
-            -p DATABASE_SERVICE_NAME=gwells-${{ github.event.number }}-database
             -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
             -p IMAGE_STREAM_NAME=crunchy-postgres-gis
             -p IMAGE_TAG=${{ inputs.tag }}
@@ -100,7 +101,7 @@ jobs:
   backend:
     name: Backend
     needs: [ init, database ]
-    # environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Backend
@@ -145,7 +146,7 @@ jobs:
   frontend: 
     name: Frontend
     needs: [ init, database, backend ]
-    # environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Frontend
@@ -159,3 +160,4 @@ jobs:
           parameters:
             -p NAME_SUFFIX=${{ inputs.target }}
             -p IMAGE_TAG=${{ inputs.tag }}
+            
