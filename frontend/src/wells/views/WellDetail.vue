@@ -124,7 +124,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
                 <div><a class="jump_link" href="#well_yield_fieldset">Well Yield</a></div>
                 <div><a class="jump_link" href="#well_decommissioning_fieldset">Well Decommissioning</a></div>
                 <div><a class="jump_link" href="#well_comments_fieldset">Comments</a></div>
-                <div v-if="isAuthenticated"><a class="jump_link" href="#well_internal_comments_fieldset">Internal Comments</a></div>
+                <div v-if="hasViewRole"><a class="jump_link" href="#well_internal_comments_fieldset">Internal Comments</a></div>
                 <div v-if="config && config.enable_documents"><a class="jump_link" href="#documents_fieldset">Documentation</a></div>
                 <div><a class="jump_link" href="#disclaimer_fieldset">Disclaimer</a></div>
               </b-col>
@@ -558,7 +558,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
           </p>
         </fieldset>
 
-        <fieldset id="well_internal_comments_fieldset" class="my-3 detail-section" v-if="isAuthenticated">
+        <fieldset id="well_internal_comments_fieldset" class="my-3 detail-section" v-if="hasViewRole">
           <legend>Internal Comments</legend>
           <p>
             {{ well.internalComments ? well.internalComments : 'No internal comments submitted' }}
@@ -682,7 +682,7 @@ export default {
     isUnpublished () {
       return !this.well.is_published
     },
-    isAuthenticated() {
+    hasViewRole() {
       return this.userRoles.wells && this.userRoles.wells.view
     },
     ...mapGetters(['userRoles', 'config', 'well', 'wellLicence', 'storedWellId', 'codes'])
