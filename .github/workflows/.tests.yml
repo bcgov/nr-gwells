@@ -38,11 +38,17 @@ jobs:
       - name: Install GDAL dependencies
         run: sudo apt update && sudo apt install -y gdal-bin libgdal-dev
 
+      - name: Upgrade pip
+        run: python3 -m pip install --upgrade pip
+
+      - name: Install ptvsd
+        run: python3 -m pip install ptvsd
+
       - name: Install Setuptools
         run: python3 -m pip install 'setuptools<58.0'
 
       - name: Install Dependencies
-        run: python3 -m pip install --upgrade pip && pip install -r requirements.txt
+        run: python3 -m pip install -r requirements.txt
         working-directory: ./backend
 
       - name: Run Django Tests
