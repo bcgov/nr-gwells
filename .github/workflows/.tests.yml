@@ -47,11 +47,14 @@ jobs:
       - name: Install ptvsd
         run: python3 -m pip install ptvsd
 
+      - name: Uninstall setuptool
+        run: python3 -m pip install setuptools
+
       - name: Install Setuptools
         run: python3 -m pip install 'setuptools<58.0'
 
       - name: Install Dependencies
-        run: python3 -m pip install -r requirements.txt
+        run: python3 -m pip install -r requirements.txt --verbose
         working-directory: ./backend
 
       - name: Run Django Tests
