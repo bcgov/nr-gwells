@@ -36,18 +36,18 @@ jobs:
       - name: Run Migrations
         run: |
           docker run --network host --rm \
-          -e DB_HOST=localhost \
-          -e DB_NAME=test_db \
-          -e DB_USER=myuser \
-          -e DB_PASSWORD=mypassword \
+          -e PG_PRIMARY_HOST=gwells-164-database \
+          -e DB_NAME=postgresql \
+          -e PG_USER=${{ vars.PG_USER }} \
+          -e PG_PRIMARY_PASSWORD=${{ secrets.PG_PRIMARY_PASSWORD}} \
           nr-gwells-backend-image python3 manage.py migrate
           
       - name: Run Tests
         run: docker run --network host --rm \
-          -e DB_HOST=localhost \
-          -e DB_NAME=test_db \
-          -e DB_USER=myuser \
-          -e DB_PASSWORD=mypassword \
+          -e PG_PRIMARY_HOST=gwells-164-database \
+          -e DB_NAME=postgresql \
+          -e PG_USER=${{ vars.PG_USER }} \
+          -e PG_PRIMARY_PASSWORD=${{ secrets.PG_PRIMARY_PASSWORD}} \
           nr-gwells-backend-image python3 manage.py test
 
       # - name: Set up Python
