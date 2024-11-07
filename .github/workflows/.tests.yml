@@ -41,6 +41,9 @@ jobs:
       - name: Upgrade pip
         run: python3 -m pip install --upgrade pip
 
+      - name: Install Numpy
+        run: python3 -m pip install numpy
+
       - name: Install ptvsd
         run: python3 -m pip install ptvsd
 
