@@ -34,7 +34,7 @@ jobs:
         run: docker build -t nr-gwells-backend-image --no-cache ./backend
 
       - name: Run Tests
-        run: docker run -rm nr-gwells-backend-image python3 manage.py test
+        run: docker run --rm nr-gwells-backend-image python3 manage.py test
 
       # - name: Set up Python
       #   uses: actions/setup-python@v3
