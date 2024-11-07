@@ -33,7 +33,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.7'
+          python-version: '3.7-slim'
 
       - name: Install GDAL dependencies
         run: sudo apt update && sudo apt install -y gdal-bin libgdal-dev
@@ -41,14 +41,8 @@ jobs:
       - name: Upgrade pip
         run: python3 -m pip install --upgrade pip
 
-      - name: Install Numpy
-        run: python3 -m pip install numpy
-
       - name: Install ptvsd
         run: python3 -m pip install ptvsd
-
-      - name: Uninstall setuptool
-        run: python3 -m pip install setuptools
 
       - name: Install Setuptools
         run: python3 -m pip install 'setuptools<58.0'
