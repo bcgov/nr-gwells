@@ -39,6 +39,7 @@ jobs:
           -e PG_PRIMARY_HOST=gwells-164-database \
           -e DB_NAME=postgresql \
           -e PG_USER=${{ vars.PG_USER }} \
+          -e PG_HOST=5432
           -e PG_PRIMARY_PASSWORD=${{ secrets.PG_PRIMARY_PASSWORD}} \
           nr-gwells-backend-image python3 manage.py migrate
           
@@ -47,6 +48,7 @@ jobs:
           -e PG_PRIMARY_HOST=gwells-164-database \
           -e DB_NAME=postgresql \
           -e PG_USER=${{ vars.PG_USER }} \
+          -e PG_HOST=5432 \
           -e PG_PRIMARY_PASSWORD=${{ secrets.PG_PRIMARY_PASSWORD}} \
           nr-gwells-backend-image python3 manage.py test
 
