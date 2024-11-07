@@ -17,4 +17,4 @@ mkdir -p $MINIO_DATA_DIR/gwells
 mkdir -p $MINIO_DATA_DIR/well-docs
 mkdir -p $MINIO_DATA_DIR/gwells-docs
 
-/usr/bin/docker-entrypoint.sh $@
+/usr/bin/docker-entrypoint.sh server $MINIO_DATA_DIR
