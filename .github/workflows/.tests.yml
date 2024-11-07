@@ -24,7 +24,7 @@ jobs:
     name: Unit Tests
     # if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     continue-on-error: true
-    runs-on: unbuntu-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
       - name: Checkout Code
