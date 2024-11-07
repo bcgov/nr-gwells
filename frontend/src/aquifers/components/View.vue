@@ -623,7 +623,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userRoles', 'keycloak']),
+    ...mapGetters(['userRoles']),
     ...mapGetters('aquiferStore/view', {
       uncorrelatedWells: 'wellsWithoutAquiferCorrelation'
     }),
