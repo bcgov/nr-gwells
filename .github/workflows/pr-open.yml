@@ -10,32 +10,33 @@ concurrency:
 
 jobs:
   # https://github.com/bcgov-nr/action-builder-ghcr
-  # builds:
-  #   name: Builds
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       package: [database, backend, frontend, minio]
-  #   timeout-minutes: 20
-  #   steps:
-  #     - uses: bcgov-nr/action-builder-ghcr@v2.2.0
-  #       with:
-  #         keep_versions: 50
-  #         package: ${{ matrix.package }}
-  #         tag: ${{ github.event.number }}
-  #         tag_fallback: latest
-  #         triggers: ('${{ matrix.package }}/')
+  builds:
+    name: Builds
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # package: [database, backend, frontend, minio]
+        package: [database]
+    timeout-minutes: 20
+    steps:
+      - uses: bcgov-nr/action-builder-ghcr@v2.2.0
+        with:
+          keep_versions: 50
+          package: ${{ matrix.package }}
+          tag: ${{ github.event.number }}
+          tag_fallback: latest
+          triggers: ('${{ matrix.package }}/')
 
   deploys:
     name: Deploys
-    # needs: [builds]
+    needs: [builds]
     secrets: inherit
     uses: ./.github/workflows/.deploy.yml
 
   tests:
     name: Tests
     # if: needs.deploys.outputs.triggered == 'true'
-    # needs: [deploys]
+    needs: [deploys]
     uses: ./.github/workflows/.tests.yml
     with:
       target: ${{ github.event.number }}
