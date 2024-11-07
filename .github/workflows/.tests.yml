@@ -30,28 +30,37 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.7-slim'
+      - name: Build Docker Image
+        run: docker build -t nr-gwells-backend-image --no-cache ./backend
 
-      - name: Install GDAL dependencies
-        run: sudo apt update && sudo apt install -y gdal-bin libgdal-dev
+      - name: Run Tests
+        run: docker run -rm nr-gwells-backend-image python3 manage.py test
 
-      - name: Upgrade pip
-        run: python3 -m pip install --upgrade pip
+      # - name: Set up Python
+      #   uses: actions/setup-python@v3
+      #   with:
+      #     python-version: '3.7'
 
-      - name: Install ptvsd
-        run: python3 -m pip install ptvsd
+      # - name: Install GDAL dependencies
+      #   run: sudo apt update && sudo apt install -y gdal-bin libgdal-dev
 
-      - name: Install Setuptools
-        run: python3 -m pip install 'setuptools<58.0'
+      # - name: Upgrade pip
+      #   run: python3 -m pip install --upgrade pip
 
-      - name: Install Dependencies
-        run: python3 -m pip install -r requirements.txt --verbose
-        working-directory: ./backend
+      # - name: Install Numpy
+      #   run: python3 -m pip install numpy
 
-      - name: Run Django Tests
-        run: python3 manage.py test
-        working-directory: ./backend
+      # - name: Install ptvsd
+      #   run: python3 -m pip install ptvsd
+
+      # - name: Install Setuptools
+      #   run: python3 -m pip install 'setuptools<58.0'
+
+      # - name: Install Dependencies
+      #   run: python3 -m pip install -r requirements.txt --verbose
+      #   working-directory: ./backend
+
+      # - name: Run Django Tests
+      #   run: python3 manage.py test
+      #   working-directory: ./backend
         
