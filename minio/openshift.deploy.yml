@@ -4,9 +4,9 @@ metadata:
   annotations:
     description: "Minio deployment"
   labels:
-    app: "gwells${NAME_SUFFIX}"
-    template: "gwells-minio-template${NAME_SUFFIX}"
-  name: "gwells-minio${NAME_SUFFIX}"
+    app: "gwells-${NAME_SUFFIX}"
+    template: "gwells-minio-template-${NAME_SUFFIX}"
+  name: "gwells-minio-${NAME_SUFFIX}"
 parameters:
   - name: "NAME_SUFFIX"
     required: true
@@ -21,26 +21,25 @@ parameters:
     value: "latest"
   - name: "DEST_PVC_SIZE"
     displayName: "PVC size"
-    value: "1Mi"
+    value: "100Mi"
   - name: "DEST_PVC_CLASS"
     displayName: "PVC class"
     value: "netapp-file-standard"
   - name: "DEST_PVC_ACCESS"
     displayName: "PVC access mode"
     value: "ReadWriteMany"
-  - name: "HOSTNAME"
-    displayName: "Hostname for Minio service"
+  - name: "IMAGE_TAG"
     required: true
 objects:
-  - apiVersion: apps/v1
+  - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
       finalizers:
       - kubernetes.io/pvc-protection
-      name: "gwells-minio${NAME_SUFFIX}"
+      name: "gwells-minio-${NAME_SUFFIX}"
       labels:
         app: "nr-gwells-${NAME_SUFFIX}"
-        name: gwells-minio${NAME_SUFFIX}
+        name: gwells-minio-${NAME_SUFFIX}
     spec:
       accessModes:
       - ${DEST_PVC_ACCESS}
@@ -52,11 +51,14 @@ objects:
     kind: Deployment
     metadata:
       labels:
-        app: "nr-gwells${NAME_SUFFIX}"
+        app: "nr-gwells-${NAME_SUFFIX}"
         name: "gwells-minio-${NAME_SUFFIX}"
       name: "gwells-minio-${NAME_SUFFIX}"
     spec:
       replicas: 1
+      selector:
+        matchLabels:
+          app: "nr-gwells-${NAME_SUFFIX}"
       strategy:
         activeDeadlineSeconds: 3000
         recreateParams:
@@ -65,24 +67,37 @@ objects:
       template:
         metadata:
           labels:
-            app: "nr-gwells${NAME_SUFFIX}"
-            name: gwells-minio${NAME_SUFFIX}
+            app: "nr-gwells-${NAME_SUFFIX}"
+            name: gwells-minio-${NAME_SUFFIX}
         spec:
           containers:
           - env:
-            - name: MINIO_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: gwells-minio-${NAME_SUFFIX}
-                  key: MINIO_ACCESS_KEY
-            - name: MINIO_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: gwells-minio-${NAME_SUFFIX}
-                  key: MINIO_SECRET_KEY
-            - name: MINIO_DATA_DIR
-              value: /opt/minio/s3/data
+            # - name: MINIO_ACCESS_KEY
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: gwells-minio-${NAME_SUFFIX}
+            #       key: MINIO_ACCESS_KEY
+            # - name: MINIO_SECRET_KEY
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: gwells-minio-${NAME_SUFFIX}
+            #       key: MINIO_SECRET_KEY
+            # - name: MINIO_DATA_DIR
+            #   value: /opt/minio/s3/data
             image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
+            securityContext:
+              capabilities:
+                add: ["NET_BIND_SERVICE"]
+            readinessProbe:
+              httpGet:
+                path: /minio/health
+                port: 9000
+                scheme: HTTP
+              initialDelaySeconds: 15
+              timeoutSeconds: 10
+              periodSeconds: 20
+              successThreshold: 1
+              failureThreshold: 30
             imagePullPolicy: Always
             name: "gwells-minio-${NAME_SUFFIX}"
             command:
@@ -109,7 +124,7 @@ objects:
           - name: minio-vol
             persistentVolumeClaim:
               claimName: "gwells-minio-${NAME_SUFFIX}"
-  - apiVersion: apps/v1
+  - apiVersion: v1
     kind: Service
     metadata:
       labels:
@@ -133,7 +148,7 @@ objects:
         name: gwells-minio-${NAME_SUFFIX}
       name: gwells-minio-${NAME_SUFFIX}
     spec:
-      host: ${HOSTNAME}
+      host: gwells-docs-${NAME_SUFFIX}.apps.silver.devops.gov.bc.ca
       port:
         targetPort: 9000-tcp
       to:
