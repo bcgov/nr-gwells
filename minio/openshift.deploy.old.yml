@@ -94,28 +94,8 @@ objects:
                 secretKeyRef:
                   name: gwells-${NAME_SUFFIX}-minio
                   key: MINIO_SECRET_KEY
-            - name: S3_PUBLIC_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: gwells-${NAME_SUFFIX}-minio
-                  key: S3_PUBLIC_ACCESS_KEY
-            - name: S3_PUBLIC_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: gwells-${NAME_SUFFIX}-minio
-                  key: S3_PUBLIC_SECRET_KEY
-            - name: S3_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: gwells-${NAME_SUFFIX}-minio
-                  key: S3_HOST
-            - name: S3_ROOT_BUCKET
-              valueFrom:
-                secretKeyRef:
-                  name: gwells-${NAME_SUFFIX}-minio
-                  key: S3_ROOT_BUCKET
             - name: MINIO_DATA_DIR
-              value: ${MINIO_DATA_DIR}
+              value: /opt/minio/s3/data
             - name: MINIO_CONFIG_DIR
               value: /opt/minio/s3/config
             image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
