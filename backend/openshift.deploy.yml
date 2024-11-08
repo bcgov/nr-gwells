@@ -81,6 +81,22 @@ parameters:
 - name: GEOCODER_ADDRESS_API_BASE
   required: true
 objects:
+<<<<<<< Updated upstream
+=======
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: gwells${NAME_SUFFIX}-backand
+    creationTimestamp: 
+    labels:
+      base-name: gwells
+      appver: gwells${NAME_SUFFIX}-backand
+    annotations:
+      description: Keeps track of changes in the application image
+  spec:
+    lookupPolicy:
+      local: false
+>>>>>>> Stashed changes
 - kind: ConfigMap
   apiVersion: v1
   metadata:
@@ -120,11 +136,18 @@ objects:
 - kind: Deployment
   apiVersion: apps/v1
   metadata:
+<<<<<<< Updated upstream
     name: gwells-${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
       app: nr-gwells-${NAME_SUFFIX}
       appver: gwells-${NAME_SUFFIX}-backend
+=======
+    name: gwells${NAME_SUFFIX}-backand
+    creationTimestamp: 
+    labels:
+      appver: gwells${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
     annotations:
       description: Defines how to deploy the application server
   spec:
@@ -138,30 +161,50 @@ objects:
         #     command:
         #     - "/usr/bin/container-entrypoint"
         #     - "/opt/app-root/src/scripts/pre-deploy.sh"
+<<<<<<< Updated upstream
         #     containerName: gwells-app-${NAME_SUFFIX}-backend
+=======
+        #     containerName: gwells-app${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
         #     env:
         #     - name: PGDATABASE
         #       valueFrom:
         #         secretKeyRef:
+<<<<<<< Updated upstream
         #           name: gwells-pg12-${NAME_SUFFIX}-backend
+=======
+        #           name: gwells-pg12${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
         #           key: database-name
         #     - name: PGUSER
         #       valueFrom:
         #         secretKeyRef:
+<<<<<<< Updated upstream
         #           name: gwells-pg12-${NAME_SUFFIX}-backend
+=======
+        #           name: gwells-pg12${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
         #           key: database-user
         #     - name: PGPASSWORD
         #       valueFrom:
         #         secretKeyRef:
+<<<<<<< Updated upstream
         #           name: gwells-pg12-${NAME_SUFFIX}-backend
         #           key: database-password
         #     - name: PGHOST
         #       value: gwells-pg12-${NAME_SUFFIX}-backend
+=======
+        #           name: gwells-pg12${NAME_SUFFIX}-backand
+        #           key: database-password
+        #     - name: PGHOST
+        #       value: gwells-pg12${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
       resources: {}
       activeDeadlineSeconds: 21600
     replicas: 1
     test: false
     selector:
+<<<<<<< Updated upstream
       name: gwells-${NAME_SUFFIX}-backend
       matchLabels:
         deployment: gwells-${NAME_SUFFIX}-backend
@@ -173,13 +216,30 @@ objects:
           name: gwells-${NAME_SUFFIX}-backend
           appver: gwells-${NAME_SUFFIX}-backend
           deployment: gwells-${NAME_SUFFIX}-backend
+=======
+      name: gwells${NAME_SUFFIX}-backand
+      matchLabels:
+        deployment: gwells${NAME_SUFFIX}-backand
+    template:
+      metadata:
+        name: gwells${NAME_SUFFIX}-backand
+        creationTimestamp: 
+        labels:
+          name: gwells${NAME_SUFFIX}-backand
+          appver: gwells${NAME_SUFFIX}-backand
+          deployment: gwells${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
       spec:
         volumes:
           - name: staticfiles
             emptyDir:
               sizeLimit: 250Mi
         containers:
+<<<<<<< Updated upstream
         - name: gwells-app-${NAME_SUFFIX}-backend
+=======
+        - name: gwells-app${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
           image: 'ghcr.io/bcgov/nr-gwells/backend:${IMAGE_TAG}'
           volumeMounts:
             - name: staticfiles
@@ -427,26 +487,26 @@ objects:
             requests:
               cpu: "${CPU_REQUEST}"
               memory: "${MEMORY_REQUEST}"
-          # readinessProbe:
-          #   httpGet:
-          #     path: /gwells/health
-          #     port: 8080
-          #     scheme: HTTP
-          #   initialDelaySeconds: 20
-          #   timeoutSeconds: 3
-          #   periodSeconds: 5
-          #   successThreshold: 1
-          #   failureThreshold: 5
-          # livenessProbe:
-          #   httpGet:
-          #     path: /gwells/health
-          #     port: 8080
-          #     scheme: HTTP
-          #   initialDelaySeconds: 20
-          #   timeoutSeconds: 3
-          #   periodSeconds: 30
-          #   successThreshold: 1
-          #   failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /gwells/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            timeoutSeconds: 3
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /gwells/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            timeoutSeconds: 3
+            periodSeconds: 30
+            successThreshold: 1
+            failureThreshold: 5
           terminationMessagePath: "/dev/termination-log"
           terminationMessagePolicy: File
           imagePullPolicy: Always
@@ -460,25 +520,41 @@ objects:
   metadata:
     creationTimestamp: 
     labels:
+<<<<<<< Updated upstream
       app: nr-gwells-${NAME_SUFFIX}
       appver: gwells-${NAME_SUFFIX}-backend
     name: gwells-${NAME_SUFFIX}-backend
+=======
+      appver: gwells${NAME_SUFFIX}-backand
+    name: gwells${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
   spec:
     maxReplicas: 5
     minReplicas: 1
     scaleTargetRef:
       apiVersion: v1
       kind: Deployment
+<<<<<<< Updated upstream
       name: gwells-${NAME_SUFFIX}-backend
+=======
+      name: gwells${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
     targetCPUUtilizationPercentage: 90
 - kind: Service
   apiVersion: v1
   metadata:
+<<<<<<< Updated upstream
     name: gwells-${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
       app: nr-gwells-${NAME_SUFFIX}
       appver: gwells-${NAME_SUFFIX}-backend
+=======
+    name: gwells${NAME_SUFFIX}-backand
+    creationTimestamp: 
+    labels:
+      appver: gwells${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
     annotations:
       description: Exposes and load balances the application pods
   spec:
@@ -488,25 +564,41 @@ objects:
       port: 8000
       targetPort: 8000
     selector:
+<<<<<<< Updated upstream
       name: gwells-${NAME_SUFFIX}-backend
+=======
+      name: gwells${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
     type: ClusterIP
     sessionAffinity: None
 - kind: Route
   apiVersion: v1
   metadata:
+<<<<<<< Updated upstream
     name: gwells-${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
       frontend: 'true'
       app: nr-gwells-${NAME_SUFFIX}
       appver: gwells-${NAME_SUFFIX}-backend
+=======
+    name: gwells${NAME_SUFFIX}-backand
+    creationTimestamp: 
+    labels:
+      frontend: 'true'
+      appver: gwells${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
     annotations: {}
   spec:
     host: "${HOST}"
     path: "/gwells"
     to:
       kind: Service
+<<<<<<< Updated upstream
       name: gwells-${NAME_SUFFIX}-backend
+=======
+      name: gwells${NAME_SUFFIX}-backand
+>>>>>>> Stashed changes
       weight: 100
     port:
       targetPort: web
