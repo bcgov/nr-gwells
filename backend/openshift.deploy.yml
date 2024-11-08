@@ -427,26 +427,26 @@ objects:
             requests:
               cpu: "${CPU_REQUEST}"
               memory: "${MEMORY_REQUEST}"
-          # readinessProbe:
-          #   httpGet:
-          #     path: /gwells/health
-          #     port: 8080
-          #     scheme: HTTP
-          #   initialDelaySeconds: 20
-          #   timeoutSeconds: 3
-          #   periodSeconds: 5
-          #   successThreshold: 1
-          #   failureThreshold: 5
-          # livenessProbe:
-          #   httpGet:
-          #     path: /gwells/health
-          #     port: 8080
-          #     scheme: HTTP
-          #   initialDelaySeconds: 20
-          #   timeoutSeconds: 3
-          #   periodSeconds: 30
-          #   successThreshold: 1
-          #   failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /gwells/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            timeoutSeconds: 3
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /gwells/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            timeoutSeconds: 3
+            periodSeconds: 30
+            successThreshold: 1
+            failureThreshold: 5
           terminationMessagePath: "/dev/termination-log"
           terminationMessagePolicy: File
           imagePullPolicy: Always
