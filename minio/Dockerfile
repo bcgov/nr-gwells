@@ -5,7 +5,7 @@ COPY ./minio-entrypoint.sh /
 USER 1001
 
 RUN ["chmod", "+x", "/minio-entrypoint.sh"]
-ENTRYPOINT /minio-entrypoint.sh
+ENTRYPOINT ["/minio-entrypoint.sh"]
 
 # RUN mkdir -p $MINIO_DATA_DIR/aquifer-docs
 # RUN mkdir -p $MINIO_DATA_DIR/driller-docs
