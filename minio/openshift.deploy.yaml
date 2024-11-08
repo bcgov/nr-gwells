@@ -21,7 +21,7 @@ parameters:
     value: "latest"
   - name: "DEST_PVC_SIZE"
     displayName: "PVC size"
-    value: "1Gi"
+    value: "1Mi"
   - name: "DEST_PVC_CLASS"
     displayName: "PVC class"
     value: "netapp-file-standard"
@@ -32,7 +32,7 @@ parameters:
     displayName: "Hostname for Minio service"
     required: true
 objects:
-  - apiVersion: v1
+  - apiVersion: apps/v1
     kind: PersistentVolumeClaim
     metadata:
       finalizers:
@@ -48,7 +48,7 @@ objects:
         requests:
           storage: ${DEST_PVC_SIZE}
       storageClassName: ${DEST_PVC_CLASS}
-  - apiVersion: apps.openshift.io/v1
+  - apiVersion: apps/v1
     kind: Deployment
     metadata:
       labels:
@@ -109,9 +109,7 @@ objects:
           - name: minio-vol
             persistentVolumeClaim:
               claimName: "gwells-minio-${NAME_SUFFIX}"
-      triggers:
-      - type: ConfigChange
-  - apiVersion: v1
+  - apiVersion: apps/v1
     kind: Service
     metadata:
       labels:
