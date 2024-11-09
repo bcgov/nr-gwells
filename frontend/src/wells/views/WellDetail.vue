@@ -484,7 +484,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
                 striped
                 small
                 bordered
-                :items="filterAquiferParameters()"
+                :items="this.userRoles.wells.edit ? well.aquifer_parameters_set : this.well.aquifer_parameters_set.filter(param => !param.private)"
                 :fields="[
                   { key: 'start_date_pumping_test', label: 'Start Date' },
                   { key: 'pumping_test_description', label: 'Description' },
@@ -680,15 +680,7 @@ export default {
     isUnpublished () {
       return !this.well.is_published
     },
-    ...mapGetters(['userRoles', 'config', 'well', 'wellLicence', 'storedWellId', 'codes']),
-    filterAquiferParameters () {
-      if (this.userRoles.wells.edit) {
-        return well.aquifer_parameters_set
-        // :items="well.aquifer_parameters_set"
-      } else {
-        return this.well.aquifer_parameters_set.filter(param => !param.private);
-      }
-    }
+    ...mapGetters(['userRoles', 'config', 'well', 'wellLicence', 'storedWellId', 'codes'])
   },
   methods: {
     handlePrint () {
