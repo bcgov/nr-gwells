@@ -79,7 +79,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
           <b-row>
             <b-col cols="12" md="4"><span class="font-weight-bold">Intended Water Use:</span> {{ well.intended_water_use }}</b-col>
             <b-col cols="12" md="4"><span class="font-weight-bold">Aquifer Number: </span>
-              <router-link :to="{ name: 'aquifers-view', params: { id: well.aquifer } }">
+              <router-link v-if="well.aquifer !== undefined" :to="{ name: 'aquifers-view', params: { id: well.aquifer } }">
                 {{ well.aquifer }}
               </router-link>
             </b-col>
@@ -124,6 +124,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
                 <div><a class="jump_link" href="#well_yield_fieldset">Well Yield</a></div>
                 <div><a class="jump_link" href="#well_decommissioning_fieldset">Well Decommissioning</a></div>
                 <div><a class="jump_link" href="#well_comments_fieldset">Comments</a></div>
+                <div v-if="hasViewRole"><a class="jump_link" href="#well_internal_comments_fieldset">Internal Comments</a></div>
                 <div v-if="config && config.enable_documents"><a class="jump_link" href="#documents_fieldset">Documentation</a></div>
                 <div><a class="jump_link" href="#disclaimer_fieldset">Disclaimer</a></div>
               </b-col>
@@ -497,6 +498,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
                   { key: 'specific_capacity', label: 'Specific Capacity (L/s/m)' },
                   { key: 'analysis_method', label: 'Analysis Method' },
                   { key: 'comments', label: 'Comments' },
+                  { key: 'internal_comments', label: 'Internal Comments' },
                   ( userRoles.wells.edit ? [{ key: 'private', label: 'Private' }] : [])
                 ]"
                 show-empty>
@@ -560,6 +562,13 @@ Licensed under the Apache License, Version 2.0 (the "License");
           <legend>Comments</legend>
           <p>
             {{ well.comments ? well.comments : 'No comments submitted' }}
+          </p>
+        </fieldset>
+
+        <fieldset id="well_internal_comments_fieldset" class="my-3 detail-section" v-if="hasViewRole">
+          <legend>Internal Comments</legend>
+          <p>
+            {{ well.internalComments ? well.internalComments : 'No internal comments submitted' }}
           </p>
         </fieldset>
 
@@ -679,6 +688,9 @@ export default {
     },
     isUnpublished () {
       return !this.well.is_published
+    },
+    hasViewRole() {
+      return this.userRoles.wells && this.userRoles.wells.view
     },
     ...mapGetters(['userRoles', 'config', 'well', 'wellLicence', 'storedWellId', 'codes'])
   },

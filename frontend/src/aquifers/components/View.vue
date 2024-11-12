@@ -262,6 +262,13 @@
                 :loading="loadingFiles"
                 v-on:fetchFiles="fetchFiles">
               </aquifer-documents>
+              <div v-if="userRoles.aquifers.view">
+                <h5 class="mt-5 border-bottom pb-4 main-title" id="internal-comments-title">Internal Comments</h5>
+                <b-col cols="6" md="3" lg="6" id="aquifer-notes">{{record.notes}}</b-col>
+                <p v-if="!record.notes">
+                  No internal comments available for this aquifer.
+                </p>
+              </div>
             </b-col>
             <b-col cols="12" xl="4" lg="6">
               <h5 class="mt-3 border-bottom pb-4 main-title">Licensing Information</h5>

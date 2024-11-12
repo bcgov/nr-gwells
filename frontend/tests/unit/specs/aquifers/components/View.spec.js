@@ -31,6 +31,10 @@ jest.mock('axios')
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
+const mockKeycloak = {
+  authenticated: false,
+};
+
 const aquiferFixture = {
   aquifer_id: '4',
   aquifer_name: 'Aggasiz',
@@ -124,7 +128,8 @@ describe('View Component', () => {
           params: {
             id: aquiferFixture.aquifer_id
           }
-        }
+        },
+        $keycloak: mockKeycloak
       },
       stubs: ['router-link', 'aquifer-documents', 'aquifer-form', 'b-popover', 'pie-chart', 'single-aquifer-map'],
       methods: {
@@ -149,6 +154,44 @@ describe('View Component', () => {
     await Vue.nextTick()
 
     expect(fetch).toHaveBeenCalled()
+  })
+
+  describe('View comments', () => {
+    it('auth users can view comments', () => {
+      mockKeycloak.authenticated = true;
+
+      const wrapper = component({
+        propsData: { edit: false }
+      }, {
+        aquiferStore: {
+          view: {
+            record: aquiferFixture
+          }
+        }
+      })
+
+      const internalCommentsTitle = wrapper.find('#internal-comments-title');
+      expect(internalCommentsTitle.exists()).toBe(true);
+      expect(internalCommentsTitle.text()).toBe('Internal Comments');
+    })
+
+    it('unauth users can\'t view comments', () => {
+      mockKeycloak.authenticated = false;
+
+      const wrapper = component({
+        propsData: { edit: false }
+      }, {
+        aquiferStore: {
+          view: {
+            record: aquiferFixture
+          }
+        }
+      })
+
+      const titles = wrapper.findAll('h5.main-title');
+      const internalCommentsTitle = titles.filter(title => title.text() === 'Internal Comments');
+      expect(internalCommentsTitle.exists()).toBe(false);
+    })
   })
 
   describe('View mode', () => {
