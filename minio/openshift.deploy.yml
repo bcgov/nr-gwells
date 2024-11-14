@@ -72,18 +72,18 @@ objects:
         spec:
           containers:
           - env:
-            # - name: MINIO_ROOT_USER
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: gwells-minio-${NAME_SUFFIX}
-            #       key: MINIO_ROOT_USER
-            # - name: MINIO_ROOT_PASSWORD
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: gwells-minio-${NAME_SUFFIX}
-            #       key: MINIO_ROOT_PASSWORD
-            # - name: MINIO_DATA_DIR
-            #   value: /opt/minio/s3/data
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: gwells-minio-${NAME_SUFFIX}
+                  key: MINIO_ACCESS_KEY
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: gwells-minio-${NAME_SUFFIX}
+                  key: MINIO_SECRET_KEY
+            - name: MINIO_DATA_DIR
+              value: /opt/minio/s3/data
             image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
             securityContext:
               capabilities:
