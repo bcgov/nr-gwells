@@ -125,7 +125,7 @@ objects:
             persistentVolumeClaim:
               claimName: "gwells-minio-${NAME_SUFFIX}"
   - apiVersion: v1
-    kind: Service}
+    kind: Service
     metadata:
       labels:
         app: nr-gwells-${NAME_SUFFIX}
@@ -140,8 +140,6 @@ objects:
         port: 9000
         protocol: TCP
         targetPort: 9000
-      type: ClusterIP
-      sessionAffinity: None
   - apiVersion: route.openshift.io/v1
     kind: Route
     metadata:
