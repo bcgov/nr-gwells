@@ -21,7 +21,7 @@ parameters:
     value: "latest"
   - name: "DEST_PVC_SIZE"
     displayName: "PVC size"
-    value: "100Mi"
+    value: "1Gi"
   - name: "DEST_PVC_CLASS"
     displayName: "PVC class"
     value: "netapp-file-standard"
@@ -72,33 +72,33 @@ objects:
         spec:
           containers:
           - env:
-            # - name: MINIO_ACCESS_KEY
+            # - name: MINIO_ROOT_USER
             #   valueFrom:
             #     secretKeyRef:
             #       name: gwells-minio-${NAME_SUFFIX}
-            #       key: MINIO_ACCESS_KEY
-            # - name: MINIO_SECRET_KEY
+            #       key: MINIO_ROOT_USER
+            # - name: MINIO_ROOT_PASSWORD
             #   valueFrom:
             #     secretKeyRef:
             #       name: gwells-minio-${NAME_SUFFIX}
-            #       key: MINIO_SECRET_KEY
+            #       key: MINIO_ROOT_PASSWORD
             # - name: MINIO_DATA_DIR
             #   value: /opt/minio/s3/data
             image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
             securityContext:
               capabilities:
                 add: ["NET_BIND_SERVICE"]
-            readinessProbe:
-              httpGet:
-                path: /minio/health
-                port: 9000
-                scheme: HTTP
-              initialDelaySeconds: 15
-              timeoutSeconds: 10
-              periodSeconds: 20
-              successThreshold: 1
-              failureThreshold: 30
-            imagePullPolicy: Always
+            # readinessProbe:
+            #   httpGet:
+            #     path: /minio/health
+            #     port: 9000
+            #     scheme: HTTP
+            #   initialDelaySeconds: 15
+            #   timeoutSeconds: 10
+            #   periodSeconds: 20
+            #   successThreshold: 1
+            #   failureThreshold: 30
+            # imagePullPolicy: Always
             name: "gwells-minio-${NAME_SUFFIX}"
             command:
               - '/bin/sh'
