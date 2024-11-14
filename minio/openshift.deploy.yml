@@ -69,6 +69,7 @@ objects:
           labels:
             app: "nr-gwells-${NAME_SUFFIX}"
             name: gwells-minio-${NAME_SUFFIX}
+            service: gwells-minio-${NAME_SUFFIX}
         spec:
           containers:
           - env:
