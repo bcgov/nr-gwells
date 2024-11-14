@@ -125,7 +125,7 @@ objects:
             persistentVolumeClaim:
               claimName: "gwells-minio-${NAME_SUFFIX}"
   - apiVersion: v1
-    kind: Service
+    kind: Service}
     metadata:
       labels:
         app: nr-gwells-${NAME_SUFFIX}
@@ -140,6 +140,8 @@ objects:
         port: 9000
         protocol: TCP
         targetPort: 9000
+      type: ClusterIP
+      sessionAffinity: None
   - apiVersion: route.openshift.io/v1
     kind: Route
     metadata:
@@ -149,6 +151,7 @@ objects:
       name: gwells-minio-${NAME_SUFFIX}
     spec:
       host: gwells-docs-${NAME_SUFFIX}.apps.silver.devops.gov.bc.ca
+      path: "/minio"
       port:
         targetPort: 9000-tcp
       to:
@@ -157,5 +160,5 @@ objects:
         weight: 100
       wildcardPolicy: None
       tls:
-        insecureEdgeTerminationPolicy: Redirect
+        insecureEdgeTerminationPolicy: None
         termination: edge
