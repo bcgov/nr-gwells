@@ -143,21 +143,4 @@ objects:
         protocol: TCP
         targetPort: 9000
       type: ClusterIP
-  - apiVersion: route.openshift.io/v1
-    kind: Route
-    metadata:
-      labels:
-        app: nr-gwells-${NAME_SUFFIX}
-        name: gwells-minio-${NAME_SUFFIX}
-      name: gwells-minio-${NAME_SUFFIX}
-    spec:
-      host: gwells-docs-${NAME_SUFFIX}.apps.silver.devops.gov.bc.ca
-      port:
-        targetPort: 9000-tcp
-      to:
-        kind: Service
-        name: gwells-minio-${NAME_SUFFIX}
-        weight: 100
-      tls:
-        insecureEdgeTerminationPolicy: Redirect
-        termination: edge
+      
