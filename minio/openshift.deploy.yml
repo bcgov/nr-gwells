@@ -135,13 +135,13 @@ objects:
       selector:
         app: nr-gwells-${NAME_SUFFIX}
         name: gwells-minio-${NAME_SUFFIX}
+        service: gwells-minio-${NAME_SUFF}
       ports:
       - name: 9000-tcp
         port: 9000
         protocol: TCP
         targetPort: 9000
       type: ClusterIP
-      sessionAffinity: None
   - apiVersion: route.openshift.io/v1
     kind: Route
     metadata:
@@ -157,7 +157,6 @@ objects:
         kind: Service
         name: gwells-minio-${NAME_SUFFIX}
         weight: 100
-      wildcardPolicy: None
       tls:
         insecureEdgeTerminationPolicy: Redirect
         termination: edge
