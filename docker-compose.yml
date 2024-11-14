@@ -159,7 +159,7 @@ services:
 #############################################################################################
   backend:
     platform: linux/x86_64
-    working_dir: /app
+    working_dir: /backend
     build:
       context: ./backend
       dockerfile: Dockerfile
