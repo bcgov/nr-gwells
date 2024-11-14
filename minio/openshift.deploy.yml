@@ -149,6 +149,7 @@ objects:
       name: gwells-minio-${NAME_SUFFIX}
     spec:
       host: gwells-docs-${NAME_SUFFIX}.apps.silver.devops.gov.bc.ca
+      path: /minio/login
       port:
         targetPort: 9000-tcp
       to:
@@ -157,5 +158,5 @@ objects:
         weight: 100
       wildcardPolicy: None
       tls:
-        insecureEdgeTerminationPolicy: Allow
+        insecureEdgeTerminationPolicy: Redirect
         termination: edge
