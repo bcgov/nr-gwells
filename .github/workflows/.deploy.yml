@@ -57,6 +57,7 @@ jobs:
   minio:
     name: Minio
     needs: [ init ]
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Minio
