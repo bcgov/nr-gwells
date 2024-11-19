@@ -74,7 +74,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: gwells-${NAME_SUFFIX}-minio
+      name: gwells-minio-${NAME_SUFFIX}
       labels:
         app: nr-gwells-${NAME_SUFFIX}
       creationTimestamp: 
