@@ -146,7 +146,7 @@ jobs:
 
   frontend: 
     name: Frontend
-    needs: [ init ]
+    needs: [ init, database, backend ]
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
