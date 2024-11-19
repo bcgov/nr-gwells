@@ -485,7 +485,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
                 striped
                 small
                 bordered
-                :items="this.userRoles.wells.edit ? well.aquifer_parameters_set : this.well.aquifer_parameters_set.filter(param => !param.private)"
+                :items="well.aquifer_parameters_set"
                 :fields="[
                   { key: 'start_date_pumping_test', label: 'Start Date' },
                   { key: 'pumping_test_description', label: 'Description' },
