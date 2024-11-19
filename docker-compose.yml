@@ -19,13 +19,14 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - /data
+      - type: tmpfs
+        target: /tmp/data:/tmp/data
     environment:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio1234
-      MINIO_DATA_DIR: /data
+      MINIO_DATA_DIR: /tmp/data
     entrypoint: /minio-entrypoint.sh
-    command: server /data
+    command: server /tmp/data
 
 #############################################################################################
 ###                                       Minio-Priv                                      ###
@@ -37,13 +38,14 @@ services:
     ports:
       - "9001:9001"
     volumes:
-      - /data
+      - type: tmpfs
+        target: /tmp/data:/tmp/data
     environment:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio1234
-      MINIO_DATA_DIR: /data
+      MINIO_DATA_DIR: /tmp/data
     entrypoint: /minio-entrypoint.sh
-    command: server --address :9001 /data
+    command: server --address :9001 /tmp/data
 
 #############################################################################################
 ###                                       CrunchyDB                                       ###
