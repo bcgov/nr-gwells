@@ -57,6 +57,7 @@ jobs:
   minio:
     name: Minio
     needs: [ init ]
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Minio
@@ -70,8 +71,8 @@ jobs:
           parameters:
             -p NAME_SUFFIX=${{ inputs.target }}
             -p IMAGE_TAG=${{ inputs.tag }}
-            ${{ inputs.environment && '' || '-p MINIO_DATA_DIR=/tmp/data' }}
-            ${{ inputs.environment && '' || '-p DEST_PVC_SIZE=1Mi' }}
+            # ${{ inputs.environment && '' || '-p MINIO_DATA_DIR=/tmp/data' }}
+            # ${{ inputs.environment && '' || '-p DEST_PVC_SIZE=1Mi' }}
 
   database:
     name: Database
