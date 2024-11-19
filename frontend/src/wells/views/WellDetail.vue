@@ -568,7 +568,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
         <fieldset id="well_internal_comments_fieldset" class="my-3 detail-section" v-if="hasViewRole">
           <legend>Internal Comments</legend>
           <p>
-            {{ well.internalComments ? well.internalComments : 'No internal comments submitted' }}
+            {{ well.internal_comments ? well.internal_comments : 'No internal comments submitted' }}
           </p>
         </fieldset>
 

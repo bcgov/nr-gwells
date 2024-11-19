@@ -55,6 +55,7 @@
               "utm_easting": null,
               "well_location_description": "",
               "comments": null,
+              "internal_comments": null,
               "well_identification_plate_attached": null,
               "well_yield_unit": null,
               "finished_well_depth": null,

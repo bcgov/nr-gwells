@@ -709,6 +709,7 @@ class WellDetailSerializer(AuditModelSerializer):
             "well_cap_type",
             "well_disinfected_status",
             "comments",
+            "internal_comments",
             "alternative_specs_submitted",
             "technical_report",
             "drinking_water_protection_area_ind",

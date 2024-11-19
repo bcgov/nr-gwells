@@ -119,8 +119,14 @@ class WellDetail(RetrieveAPIView):
             qs = Well.objects.all()
         else:
             qs = Well.objects.all().exclude(well_publication_status='Unpublished')
-
         return qs
+
+    def get(self, request, *args, **kwargs):
+        """ Removes internal-only fields for public user """
+        response = super().get(self, request, *args, **kwargs)
+        if not(request.user.groups.filter(name=WELLS_VIEWER_ROLE).exists()):
+            response.data.pop('internal_comments')
+        return response
 
 
 class WellStaffEditDetail(RetrieveAPIView):
