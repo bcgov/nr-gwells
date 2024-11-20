@@ -498,7 +498,6 @@ Licensed under the Apache License, Version 2.0 (the "License");
                   { key: 'specific_capacity', label: 'Specific Capacity (L/s/m)' },
                   { key: 'analysis_method', label: 'Analysis Method' },
                   { key: 'comments', label: 'Comments' },
-                  { key: 'internal_comments', label: 'Internal Comments' },
                   ( userRoles.wells.edit ? [{ key: 'private', label: 'Private' }] : [])
                 ]"
                 show-empty>
