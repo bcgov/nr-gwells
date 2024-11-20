@@ -107,7 +107,7 @@ const aquiferFixture = {
 }
 
 describe('View Component', () => {
-  let fetch = null
+  let fetch
 
   const component = (options, storeState = {}) => {
     const store = new Vuex.Store({
@@ -156,43 +156,50 @@ describe('View Component', () => {
     expect(fetch).toHaveBeenCalled()
   })
 
-  describe('View comments', () => {
-    it('auth users can view comments', () => {
-      mockKeycloak.authenticated = true;
+  const localVue = createLocalVue()
+  localVue.use(Vuex)
 
-      const wrapper = component({
-        propsData: { edit: false }
-      }, {
-        aquiferStore: {
-          view: {
-            record: aquiferFixture
-          }
-        }
+  describe('Comments', () => {
+    let getters
+    let store
+
+    it('auth users can view comments', async () => {
+      getters = {
+        config: () => ({ enable_aquifers_search: false }),
+        userRoles: () => ({ aquifers: { view: true }})
+      }
+
+      store = new Vuex.Store({
+        modules: { auth, aquiferStore, documentState },
+        getters
       })
 
-      const internalCommentsTitle = wrapper.find('#internal-comments-title');
-      expect(internalCommentsTitle.exists()).toBe(true);
-      expect(internalCommentsTitle.text()).toBe('Internal Comments');
+      const wrapper = component({ store, localVue })
+
+      await Vue.nextTick()
+
+      const internalCommentsTitle = wrapper.find('#internal-comments-title')
+      expect(internalCommentsTitle.exists()).toBe(true)
+      expect(internalCommentsTitle.text()).toBe('Internal Comments')
     })
 
     it('unauth users can\'t view comments', () => {
-      mockKeycloak.authenticated = false;
-
-      const wrapper = component({
-        propsData: { edit: false }
-      }, {
-        aquiferStore: {
-          view: {
-            record: aquiferFixture
-          }
-        }
+      getters = {
+        config: () => ({ enable_aquifers_search: false }),
+        userRoles: () => ({ aquifers: { view: false }})
+      }
+      store = new Vuex.Store({
+        modules: { auth, aquiferStore, documentState },
+        getters
       })
 
-      const titles = wrapper.findAll('h5.main-title');
-      const internalCommentsTitle = titles.filter(title => title.text() === 'Internal Comments');
-      expect(internalCommentsTitle.exists()).toBe(false);
+      const wrapper = component({ store, localVue })
+
+      const internalCommentsTitleExists = wrapper.find('#internal-comments-title');
+      expect(internalCommentsTitleExists.exists()).toBe(false);
     })
   })
+
 
   describe('View mode', () => {
     it('matches the snapshot', () => {
