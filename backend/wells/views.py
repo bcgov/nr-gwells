@@ -127,7 +127,7 @@ class WellDetail(RetrieveAPIView):
         if not(request.user.groups.filter(name=WELLS_VIEWER_ROLE).exists()):
             response.data.pop('internal_comments')
 
-        """ Removes auqifer paramaters marked private for users without the edit role """
+        """ Removes aquifer paramaters marked private for users without the edit role """
         if not request.user.groups.filter(name=WELLS_EDIT_ROLE).exists():
           aquifer_params = response.data.get('aquifer_parameters_set', [])
           response.data['aquifer_parameters_set'] = [
