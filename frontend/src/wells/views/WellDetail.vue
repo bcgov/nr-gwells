@@ -498,7 +498,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
                   { key: 'specific_capacity', label: 'Specific Capacity (L/s/m)' },
                   { key: 'analysis_method', label: 'Analysis Method' },
                   { key: 'comments', label: 'Comments' },
-                  { key: 'internal_comments', label: 'Internal Comments' }
+                  ( userRoles.wells.edit ? [{ key: 'private', label: 'Private' }] : [])
                 ]"
                 show-empty>
                 <template v-slot:head(pumping_test_description)="data">
@@ -510,6 +510,11 @@ Licensed under the Apache License, Version 2.0 (the "License");
                   <span>{{ data.label }}</span>&nbsp;
                   <i id="boundary_effect" class="fa fa-question-circle color-info fa-xs pt-0 mt-0 d-print-none" ></i>
                   <b-popover no-arrow target="boundary_effect" placement="top" triggers="hover focus" :content="TOOLTIP_TEXT.pumping_test_information.boundary_effect" ></b-popover>
+                </template>
+                <template v-slot:head(private)="data">
+                  <span>{{ data.label }}</span>&nbsp;
+                  <i id="private" class="fa fa-question-circle color-info fa-xs pt-0 mt-0 d-print-none" ></i>
+                  <b-popover no-arrow target="private" placement="top" triggers="hover focus" :content="TOOLTIP_TEXT.pumping_test_information.private" ></b-popover>
                 </template>
                 <template v-slot:head(storativity)="data">
                   <span>{{ data.label }}</span>&nbsp;
@@ -543,6 +548,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
                 </template>
                 <template v-slot:cell(pumping_test_description)="data">{{codeToDescription('pumping_test_description_codes', data.item.pumping_test_description)}}</template>
                 <template v-slot:cell(boundary_effect)="data">{{codeToDescription('boundary_effect_codes', data.item.boundary_effect)}}</template>
+                <template v-slot:cell(private)="data">{{data.item.private ? 'Yes' : 'No'}}</template>
                 <template v-slot:cell(analysis_method)="data">{{codeToDescription('analysis_method_codes', data.item.analysis_method)}}</template>
                 <template v-slot:cell(storativity)="data">{{data.item.storativity && parseFloat(data.item.storativity).toString()}}</template>
                 <template v-slot:cell(transmissivity)="data">{{data.item.transmissivity && parseFloat(data.item.transmissivity).toString()}}</template>
