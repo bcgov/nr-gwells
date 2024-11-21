@@ -208,7 +208,10 @@ Licensed under the Apache License, Version 2.0 (the "License");
               </b-row>
             </b-col>
             <b-col cols="12" md="6" xl="6" offset-xl="1">
-              <single-well-map :latitude="well.latitude" :longitude="well.longitude"/>
+              <SearchMap
+              :initialCentre="searchMapCentre"
+              :initialZoom="searchMapZoom"
+              :focusedWells="focusedWells"/>
               <div class="font-weight-bold mt-5">
                 Geographic Coordinates - North American Datum of 1983 (NAD 83)
               </div>
@@ -591,7 +594,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 
-import SingleWellMap from '@/wells/components/SingleWellMap.vue'
+import SearchMap from '@/wells/components/SearchMap.vue'
 import Documents from '@/wells/components/Documents.vue'
 import convertCoordinatesMixin from '@/common/convertCoordinatesMixin.js'
 import ApiService from '@/common/services/ApiService.js'
@@ -604,7 +607,7 @@ import { TOOLTIP_TEXT } from '@/common/constants.js';
 export default {
   name: 'WellDetail',
   components: {
-    SingleWellMap,
+    SearchMap,
     Documents
   },
   mixins: [
