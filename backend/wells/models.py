@@ -2612,7 +2612,6 @@ class AquiferParameters(AuditModel):
         }
 
 class WellAttachment(models.Model):
-    id = models.AutoField(primary_key=True)
     well_tag_number = models.ForeignKey(Well, on_delete=models.PROTECT, blank=True, null = False)
     # Public Tags
     well_construction = models.PositiveSmallIntegerField(default=0)
