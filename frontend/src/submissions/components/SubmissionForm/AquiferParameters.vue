@@ -36,6 +36,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
                 <th class="font-weight-normal top-row-no-border" scope="col">Test Description</th>
                 <th class="font-weight-normal top-row-no-border" scope="col">Test Duration (min)</th>
                 <th class="font-weight-normal top-row-no-border" scope="col">Boundary Effect</th>
+                <th class="font-weight-normal top-row-no-border" scope="col">This Information is Private</th>
               </tr>
               <tr>
                 <td>
@@ -83,6 +84,9 @@ Licensed under the Apache License, Version 2.0 (the "License");
                     value-field="boundary_effect_code"
                     :errors="errors['boundary_effect']"
                     :loaded="fieldsLoaded['boundary_effect']"/>
+                </td>
+                <td>
+                  <b-form-checkbox v-model="aquiferParameter.private" name="private" :value="true" :unchecked-value="false"/>
                 </td>
               </tr>
               <tr>

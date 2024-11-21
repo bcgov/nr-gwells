@@ -51,6 +51,7 @@ export const TOOLTIP_TEXT = {
   pumping_test_information: {
     pumping_test: 'Describes the type of test (step, recovery, constant rate pumping test) and type of well (pumping well, observation well).',
     boundary_effect: 'Describe the specific conditions that are to be imposed at the boundaries of a groundwater flow region such as a recharge (river, lake) boundary or a barrier (impermeable rock) boundary where the assumption that the aquifer is of infinite extent is no longer valid.',
+    private: 'Information is private if a hydrogeological consultant has not provided permission (a signed data sharing agreement) to share their interpretations publicly.',
     storativity: 'Storativity (S) is a dimensionless measure of the volume of water that will be discharged from an aquifer per unit area of the aquifer and per unit reduction in hydraulic head.',
     transmissivity: 'Describes the ability of the aquifer to transmit groundwater throughout its entire saturated thickness, is measured as the rate at which groundwater can flow through an aquifer section of unit width under a unit hydraulic gradient.',
     hydraulic_conductivity: 'A measure of how easily water can pass through soil or rock.',

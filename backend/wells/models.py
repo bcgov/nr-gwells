@@ -2533,6 +2533,10 @@ class AquiferParameters(AuditModel):
                                 db_comment='Valid codes for the boundaries observed in '
                                             'pumping test analysis. i.e. CH, NF.')
 
+    private = models.BooleanField(
+      default=False, choices=((False, 'No'), (True, 'Yes'))
+    )
+    
     storativity = models.DecimalField(
         max_digits=8, decimal_places=7, blank=True, null=True, verbose_name='Storativity')
     
@@ -2574,6 +2578,7 @@ class AquiferParameters(AuditModel):
         "pumping_test_description_code":"Identification of the testing method (e.g.basic pumping test, pumping test with monitoring wells, single-well-response/slug test, constant head).",
         "test_duration":"The duration of the hydraulic testing period.  For consistency, do not include the recovery period.",
         "boundary_effect_code":"Valid codes for the boundaries observed in pumping test analysis. i.e. CH, NF.",
+        "private":"If a hydrogeological consultant has not provided permission with a signed data sharing agreement to share their interpretations publicly.",
         "storativity":"Storativity estimated from hydraulic testing (dimensionless).",
         "transmissivity":"Transmissivity estimated from hydraulic testing.",
         "hydraulic_conductivity":"Hydraulic conductivity estimated from hydraulic testing in metres per second.",
