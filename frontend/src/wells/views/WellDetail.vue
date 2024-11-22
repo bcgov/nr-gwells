@@ -601,7 +601,7 @@ import ApiService from '@/common/services/ApiService.js'
 import codeToDescription from '@/common/codeToDescription.js'
 import { FETCH_CODES } from '@/submissions/store/actions.types.js'
 import { RESET_WELL_DATA } from '@/wells/store/actions.types.js'
-import { SET_WELL_RECORD, SET_WELL_LICENCE } from '@/wells/store/mutations.types.js'
+import { SET_WELL_RECORD, SET_WELL_LICENCE, SET_SEARCH_MAP_CENTRE } from '@/wells/store/mutations.types.js'
 import { TOOLTIP_TEXT } from '@/common/constants.js';
 
 export default {
@@ -694,7 +694,7 @@ export default {
     hasViewRole() {
       return this.userRoles.wells && this.userRoles.wells.view
     },
-    ...mapGetters(['userRoles', 'config', 'well', 'wellLicence', 'storedWellId', 'codes'])
+    ...mapGetters(['userRoles', 'config', 'well', 'wellLicence', 'storedWellId', 'codes', 'searchMapCentre'])
   },
   methods: {
     handlePrint () {
@@ -719,6 +719,7 @@ export default {
       ]).then(([wellData, licenceData]) => {
         this[SET_WELL_RECORD](wellData)
         this[SET_WELL_LICENCE](licenceData)
+        this[SET_SEARCH_MAP_CENTRE](new mapboxgl.LngLat(wellData.longitude, wellData.latitude))
       }).finally(() => {
         this.loading = false
       })
@@ -734,7 +735,7 @@ export default {
         }
       })
     },
-    ...mapMutations([ SET_WELL_RECORD, SET_WELL_LICENCE ]),
+    ...mapMutations([ SET_WELL_RECORD, SET_WELL_LICENCE, SET_SEARCH_MAP_CENTRE ]),
     ...mapActions([ RESET_WELL_DATA ])
   },
   watch: {
