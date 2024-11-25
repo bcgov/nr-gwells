@@ -27,6 +27,7 @@ const auth = {
         // even if the user does have that role.
         // Instead, we have to look at the "raw" list of roles contained inside the keycloak instance.
         const clientRoles = state.keycloak.idTokenParsed['client_roles']
+        const identityProvider = state.keycloak.tokenParsed['identity_provider']
         return {
           registry: {
             view: clientRoles.includes('registries_viewer'),
@@ -56,7 +57,8 @@ const auth = {
             wellDocuments: clientRoles.includes('bulk_well_documents_upload'),
             aquiferDocuments: clientRoles.includes('bulk_aquifer_documents_upload'),
             verticalAquiferExtents: clientRoles.includes('bulk_vertical_aquifer_extents_upload')
-          }
+          },
+          idir: identityProvider === 'idir',
         }
       } else {
         return {
@@ -65,13 +67,14 @@ const auth = {
           submissions: {},
           aquifers: {},
           surveys: {},
-          bulk: {}
+          bulk: {},
+          idir: false,
         }
       }
     },
     authenticated (state) {
       return Boolean(state.keycloak && state.keycloak.authenticated)
-    }
+    },
   }
 }
 
