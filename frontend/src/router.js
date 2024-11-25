@@ -21,6 +21,9 @@ import WellDetail from '@/wells/views/WellDetail.vue'
 import EditWellAquifers from '@/wells/views/EditWellAquifers.vue'
 import GroundwaterInformation from '@/wells/views/GroundwaterInformation.vue'
 
+// Crossection components
+import CrossHome from './crosssection/views/CrossHome.vue'
+
 // Registries components
 import SearchHome from '@/registry/components/search/SearchHome.vue'
 import PersonDetail from '@/registry/components/people/PersonDetail.vue'
@@ -132,6 +135,19 @@ const router = new Router({
       meta: {
         edit: true,
         app: 'submissions'
+      }
+    },
+
+    // Cross section tool routes
+    {
+      path: '/crosssection',
+      name: 'CrossHome',
+      component: CrossHome,
+      beforeEnter: AuthGuard,
+      meta: {
+        // list of required permissions (e.g. "edit: true" means user needs edit permission)
+        edit: true,
+        app: 'registry'
       }
     },
 
