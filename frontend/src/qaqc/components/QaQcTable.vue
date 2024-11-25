@@ -18,7 +18,7 @@
       <b-col sm="4">
         <!-- Date Range Filter specifically for createDate -->
         <div><b>Created Date Range</b></div>
-        <div :class="`qaqc-filters-${dateColumn.type}`">
+        <div :class="dateColumn ? `qaqc-filters-${dateColumn.type}` : ''">
           <qaqc-filters
             v-if="dateColumn"
             :type="dateColumn.type"
