@@ -632,3 +632,11 @@ class RecordComplianceSerializer(ActivitySubmissionMixin, serializers.ModelSeria
           'natural_resource_region',
           'internal_comments'
         ]
+
+class CrossSectionSerializer(serializers.Serializer):
+    well_id = serializers.IntegerField()
+    latitude = serializers.FloatField()
+    longitude = serializers.FloatField()
+    elevation = serializers.FloatField()
+    lithology = serializers.CharField()
+    depth = serializers.FloatField()

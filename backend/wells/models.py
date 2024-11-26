@@ -2664,3 +2664,8 @@ class WellLicence(models.Model):
         managed = False
     def __str__(self):
         return "Well Number: " + str(self.well_id) + ", License #: " + str(self.waterrightslicence_id)
+
+class Elevation(models.Model):
+    # elevation data at a point
+    distance_from_origin: models.FloatField()
+    elevation: models.FloatField()

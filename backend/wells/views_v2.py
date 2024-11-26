@@ -688,3 +688,157 @@ class CrossReferencingDownloadView(WellExportListAPIViewV2):
 
     def get_serializer_class(self):
         return CrossReferencingSerializer
+
+async def parse_result(res: ClientResponse) -> LineString:
+    body = await res.read()
+    line = {}
+
+    try:
+        line = json.loads(body)
+    except TypeError as e:
+        logger.error(e)
+    except json.JSONDecodeError as e:
+        logger.error(e)
+
+    # check if fc looks like a geojson FeatureCollection, and if so,
+    # make proper Features out of all the objects
+    # if res.status == 200 and line.get("altitude") != None
+
+    return LineString(
+        [
+            (
+                point.get("geometry").get("coordinates")[0],
+                point.get("geometry").get("coordinates")[1],
+                point.get("altitude")
+            ) for point in line
+        ]
+    )
+
+
+async def fetch(line: str, session: ClientSession) -> asyncio.Future:
+    # asynchronously fetch one URL, expecting a geojson response
+    steps = 20
+    if not line:
+        return []
+    url = f"http://geogratis.gc.ca/services/elevation/cdem/profile.json?path={line}&steps={steps}"
+    logger.info("external request: %s", url)
+    async with session.get(url, raise_for_status=True) as response:
+        return await asyncio.ensure_future(parse_result(response))
+
+
+async def batch_fetch(
+        semaphore: asyncio.Semaphore,
+        req: str,
+        session: ClientSession) -> asyncio.Future:
+    # batch_fetch uses a semaphore to make batched requests in parallel
+    # (up a limit equal to the size of the semaphore).
+
+    async with semaphore:
+        return await fetch(req, session)
+
+
+async def fetch_all(requests: List[str]) -> asyncio.Future:
+    tasks = []
+    semaphore = asyncio.Semaphore(10)
+    headers = {'accept': 'application/json'}
+
+    async with ClientSession(headers=headers) as session:
+        for req in requests:
+            task = asyncio.ensure_future(
+                batch_fetch(semaphore, req, session))
+            tasks.append(task)
+
+        # return the gathered tasks,
+        # which will be a list of JSON responses when all requests return.
+        return await asyncio.gather(*tasks)
+
+
+@retry(wait=wait_fixed(2), stop=stop_after_attempt(2))
+def fetch_surface_lines(requests: List[str]) -> List[Feature]:
+    return asyncio.run(fetch_all(requests))
+
+class ElevationView(View):
+    def get(self, request):
+        # Fetch request data (e.g., a list of lines from request params)
+        requests = request.GET.getlist("lines")  # Assume lines come as a query parameter
+
+        try:
+            # Call the async function that fetches elevation data
+            result = fetch_surface_lines(requests)
+            return JsonResponse({"status": "success", "data": result})
+
+        except Exception as e:
+            logger.error(f"Error fetching surface lines: {str(e)}")
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+def get_profile_geojson(line: LineString) -> list:
+    # get geojson elevations along a line (GeoGratis - Government of Canada)
+    steps = 10
+    line = line.wkt
+    if not line:
+        return []
+
+    resp = requests.get(
+        f"http://geogratis.gc.ca/services/elevation/cdem/profile.json?path={line}&steps={steps}"
+    )
+
+    return resp.json()
+
+
+def geojson_to_profile_line(elevations: list) -> LineString:
+    # uses GeoGratis (Government of Canada) API to retrieve elevation along a profile
+    # line (as a LineString shape object
+
+    profile_line = LineString(
+        [
+            (
+                f.get("geometry").get("coordinates")[0],
+                f.get("geometry").get("coordinates")[1],
+                f.get("altitude")
+            ) for f in elevations
+        ]
+    )
+
+    return profile_line
+
+
+def get_profile_line_by_length(db: Session, line: LineString):
+    # convert a LineStringZ (3d line) to elevations along the length of the line
+
+    q = """
+    SELECT
+            ST_Distance(ST_Force2D(geom),
+                ST_StartPoint(
+                    ST_Transform(
+                        ST_SetSRID(
+                            ST_GeomFromText(:line),
+                            4326
+                        ),
+                        3005
+                    )
+                )
+            ) as distance_from_origin,
+            ST_Z(geom) as elevation
+    FROM
+        (select
+            (
+                ST_DumpPoints(
+                    ST_Transform(
+                        ST_SetSRID(
+                            ST_GeomFromText(:line),
+                            4326
+                        ),
+                        3005
+                    )
+                )
+            ).geom
+        ) as pts;
+    """
+
+    elevation_profile = []
+
+    rows = db.execute(q, {"line": line.wkt})
+    for row in rows:
+        elevation_profile.append(Elevation(distance_from_origin=row[0], elevation=row[1]))
+
+    return elevation_profile

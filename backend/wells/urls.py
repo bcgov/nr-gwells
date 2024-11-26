@@ -143,4 +143,8 @@ urlpatterns = [
 
     url(api_path_prefix() + r'/qaqc/recordcompliance/download$',
         never_cache(views_v2.RecordComplianceDownloadView.as_view()), name='qaqc-record-compliance-download'),
+
+    url(api_path_prefix() + r'/section/',
+        never_cache(views_v2.SectionView.as_view()), name='section'),
+        
 ]
