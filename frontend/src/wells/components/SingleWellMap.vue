@@ -20,6 +20,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 <script>
 import mapboxgl from 'mapbox-gl'
 import GestureHandling from '@geolonia/mbgl-gesture-handling'
+import { mapGetters } from 'vuex'
 
 import {
   DATABC_ROADS_SOURCE,
@@ -33,7 +34,8 @@ import {
   WELLS_SOURCE,
   wellsBaseLayer,
   highlightedWellsLayer,
-  wellFilterId
+  wellLayerFilter,
+  wellFilterOutId
 } from '../../common/mapbox/layers'
 import { setupFeatureTooltips } from '../../common/mapbox/popup'
 import { createWellPopupElement } from '../popup'
@@ -66,6 +68,9 @@ export default {
     this.map.remove()
     this.map = null
   },
+  computed: {
+    ...mapGetters(['userRoles']),
+  },
   methods: {
     initMapBox () {
       if (!mapboxgl.supported()) {
@@ -90,8 +95,8 @@ export default {
           layers: [
             DATABC_ROADS_LAYER,
             DATABC_CADASTREL_LAYER,
-            wellsBaseLayer({ filter: wellFilterId(this.id) }),
-            highlightedWellsLayer({ filter: ['!', wellFilterId(this.id)] })
+            wellsBaseLayer({ filter: ['all', wellFilterOutId(this.id),  wellLayerFilter(Boolean(this.userRoles.wells.edit))] }),
+            highlightedWellsLayer({ filter: ['!', wellFilterOutId(this.id)] })
           ]
         }
       }
@@ -114,36 +119,8 @@ export default {
         customAttribution: 'MapBox | Government of British Columbia, DataBC, GeoBC '
       }))
 
-      /*
-      const layers = [{
-        show: true,
-        id: WELLS_BASE_AND_ARTESIAN_LAYER_ID,
-        label: 'Wells',
-        legend: [
-          {
-            imageSrc: wellsAllLegendSrc,
-            label: 'all'
-          },
-          {
-            imageSrc: wellsArtesianLegendSrc,
-            label: 'artesian'
-          },
-          {
-            imageSrc: wellsClosedLegendSrc,
-            label: 'closed/abandoned'
-          }
-        ],
-      }]
-      this.legendControl = new LegendControl({
-        layers: layers
-      })
-      this.map.addControl(this.legendControl, 'bottom-right')
-      */
-
       this.map.on('load', () => {
         if (this.longitude && this.latitude) {
-          // buildLeafletStyleMarker(this.longitude, this.latitude).addTo(this.map)
-
           this.map.setZoom(12)
         }
 

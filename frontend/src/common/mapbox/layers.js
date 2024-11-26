@@ -298,7 +298,7 @@ export function wellsBaseAndArtesianLayer (options = {}) {
 
   return vectorLayerConfig(layerId, options.source || WELLS_SOURCE_ID, options.layerType || 'circle', styles, options.layout, filter)
 }
-// Same function as above, but using one color for all wells
+// Builds Mapbox layer config object for wells using a single color
 export function wellsBaseLayer (options = {}) {
   const layerId = options.id || WELLS_BASE_AND_ARTESIAN_LAYER_ID
   const styles = defaultsDeep(options.styles, {
@@ -310,12 +310,14 @@ export function wellsBaseLayer (options = {}) {
 
   return vectorLayerConfig(layerId, options.source || WELLS_SOURCE_ID, options.layerType || 'circle', styles, options.layout, filter)
 }
-// Same as above, with different id, color, and dot size
+// Builds Mapbox layer config object, meant to go with above layer, to highlight a well(s)
 export function highlightedWellsLayer (options = {}) {
   const layerId = options.id || HIGHLIGHTED_WELL_LAYER_ID
   const styles = defaultsDeep(options.styles, {
-    'circle-color': '#EE14CA',
-    'circle-radius': 5.5,
+    'circle-color': '#0162FE',
+    'circle-radius': 3,
+    'circle-stroke-color': '#FF5C00', // a shade of "neon orange"
+    'circle-stroke-width': 3
   })
 
   const filter = options.filter || wellLayerFilter(false)
@@ -486,7 +488,7 @@ export function wellLayerFilter (showUnpublishedWells) {
   ]
 }
 
-export function wellFilterId (id) {
+export function wellFilterOutId (id) {
   return ['!', ['==', ['get', 'well_tag_number'], id]]
 }
 
