@@ -9,6 +9,8 @@ export const WELLS_UNCORRELATED_LAYER_ID = 'wells-uncorrelated'
 export const WELLS_EMS_LAYER_ID = 'wells-ems'
 export const WELLS_OBSERVATION_LAYER_ID = 'wells-observation'
 
+export const HIGHLIGHTED_WELL_LAYER_ID = 'highlighted-wells'
+
 export const SEARCHED_WELLS_SOURCE_ID = 'searched-wells'
 export const SEARCHED_WELLS_LAYER_ID = 'highlight-wells-with-artesian'
 
@@ -296,6 +298,30 @@ export function wellsBaseAndArtesianLayer (options = {}) {
 
   return vectorLayerConfig(layerId, options.source || WELLS_SOURCE_ID, options.layerType || 'circle', styles, options.layout, filter)
 }
+// Same function as above, but using one color for all wells
+export function wellsBaseLayer (options = {}) {
+  const layerId = options.id || WELLS_BASE_AND_ARTESIAN_LAYER_ID
+  const styles = defaultsDeep(options.styles, {
+    'circle-color': '#0162FE',
+    'circle-radius': 3,
+  })
+
+  const filter = options.filter || wellLayerFilter(false)
+
+  return vectorLayerConfig(layerId, options.source || WELLS_SOURCE_ID, options.layerType || 'circle', styles, options.layout, filter)
+}
+// Same as above, with different id, color, and dot size
+export function highlightedWellsLayer (options = {}) {
+  const layerId = options.id || HIGHLIGHTED_WELL_LAYER_ID
+  const styles = defaultsDeep(options.styles, {
+    'circle-color': '#EE14CA',
+    'circle-radius': 5.5,
+  })
+
+  const filter = options.filter || wellLayerFilter(false)
+
+  return vectorLayerConfig(layerId, options.source || WELLS_SOURCE_ID, options.layerType || 'circle', styles, options.layout, filter)
+}
 // Builds MapBox layer config object for wells with aquifer parameters with a green outline
 export function wellsAquiferParameters (options = {}) {
   const layerId = options.id || WELLS_AQUIFER_PARAMETER_LAYER_ID
@@ -458,6 +484,10 @@ export function wellLayerFilter (showUnpublishedWells) {
     ['!', ['get', 'is_published']], showUnpublishedWells,
     true
   ]
+}
+
+export function wellFilterId (id) {
+  return ['!', ['==', ['get', 'well_tag_number'], id]]
 }
 
 export function aquiferLayerFilter (showUnpublishedAquifers, showRetiredAquifers) {

@@ -27,9 +27,16 @@ import {
   DATABC_ROADS_SOURCE_ID,
   DATABC_CADASTREL_SOURCE_ID,
   DATABC_ROADS_LAYER,
-  DATABC_CADASTREL_LAYER
+  DATABC_CADASTREL_LAYER,
+  WELLS_BASE_AND_ARTESIAN_LAYER_ID,
+  WELLS_SOURCE_ID,
+  WELLS_SOURCE,
+  wellsBaseLayer,
+  highlightedWellsLayer,
+  wellFilterId
 } from '../../common/mapbox/layers'
-import { buildLeafletStyleMarker } from '../../common/mapbox/images'
+import { setupFeatureTooltips } from '../../common/mapbox/popup'
+import { createWellPopupElement } from '../popup'
 
 export default {
   name: 'SingleWellMap',
@@ -39,6 +46,9 @@ export default {
     },
     longitude: {
       type: Number
+    },
+    id: {
+      type: String
     }
   },
   data () {
@@ -74,11 +84,14 @@ export default {
           version: 8,
           sources: {
             [DATABC_ROADS_SOURCE_ID]: DATABC_ROADS_SOURCE,
-            [DATABC_CADASTREL_SOURCE_ID]: DATABC_CADASTREL_SOURCE
+            [DATABC_CADASTREL_SOURCE_ID]: DATABC_CADASTREL_SOURCE,
+            [WELLS_SOURCE_ID]: WELLS_SOURCE,
           },
           layers: [
             DATABC_ROADS_LAYER,
-            DATABC_CADASTREL_LAYER
+            DATABC_CADASTREL_LAYER,
+            wellsBaseLayer({ filter: wellFilterId(this.id) }),
+            highlightedWellsLayer({ filter: ['!', wellFilterId(this.id)] })
           ]
         }
       }
@@ -101,12 +114,51 @@ export default {
         customAttribution: 'MapBox | Government of British Columbia, DataBC, GeoBC '
       }))
 
+      /*
+      const layers = [{
+        show: true,
+        id: WELLS_BASE_AND_ARTESIAN_LAYER_ID,
+        label: 'Wells',
+        legend: [
+          {
+            imageSrc: wellsAllLegendSrc,
+            label: 'all'
+          },
+          {
+            imageSrc: wellsArtesianLegendSrc,
+            label: 'artesian'
+          },
+          {
+            imageSrc: wellsClosedLegendSrc,
+            label: 'closed/abandoned'
+          }
+        ],
+      }]
+      this.legendControl = new LegendControl({
+        layers: layers
+      })
+      this.map.addControl(this.legendControl, 'bottom-right')
+      */
+
       this.map.on('load', () => {
         if (this.longitude && this.latitude) {
-          buildLeafletStyleMarker(this.longitude, this.latitude).addTo(this.map)
+          // buildLeafletStyleMarker(this.longitude, this.latitude).addTo(this.map)
 
           this.map.setZoom(12)
         }
+
+        const tooltipLayers = {
+          [WELLS_BASE_AND_ARTESIAN_LAYER_ID]: {
+            snapToCenter: true,
+            createTooltipContent: (features) => createWellPopupElement(
+              features,
+              this.map,
+              this.$router,
+              { canInteract: true, openInNewTab: true }
+            )
+          }
+        }
+        setupFeatureTooltips(this.map, tooltipLayers)
 
         this.$emit('mapLoaded')
       })

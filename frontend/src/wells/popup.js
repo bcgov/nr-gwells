@@ -3,6 +3,7 @@ import { popupItems } from '../common/mapbox/popup'
 
 export function createWellPopupElement (features, map, $router, options = {}) {
   const canInteract = Boolean(options.canInteract)
+  const openInNewTab = Boolean(options.openInNewTab)
   const wellLayerIds = options.wellLayerIds || [ WELLS_BASE_AND_ARTESIAN_LAYER_ID ]
 
   // Filter the features to only the well layers we care about
@@ -35,5 +36,5 @@ export function createWellPopupElement (features, map, $router, options = {}) {
     }
   ]
 
-  return popupItems(items, $router, { className: 'mapbox-popup-well', canInteract })
+  return popupItems(items, $router, { className: 'mapbox-popup-well', canInteract, openInNewTab })
 }
