@@ -35,7 +35,8 @@ jobs:
           overwrite: true
           parameters:
             -p NAME_SUFFIX=${{ inputs.target }}
-            -p POSTGRESQL_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            -p POSTGRESQL_PASSWORD=${{ secrets.POSTGREQL_PASSWORD }}
+            -p POSTGRESQL_USER=${{ secrets.POSTGRESQL_USER }}
             -p FDW_DATABASE_PASSWORD=${{ secrets.FDW_DATABASE_PASSWORD }}
             -p DJANGO_ADMIN_PASSWORD=${{ secrets.DJANGO_ADMIN_PASSWORD }}
             -p DJANGO_ADMIN_URL=${{ secrets.DJANGO_ADMIN_URL }}
