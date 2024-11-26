@@ -33,7 +33,7 @@ jobs:
         id: pr
         uses: bcgov-nr/action-get-pr@v0.0.1
 
-  deploy-test:
+  deploys-test:
     name: TEST Deploys (${{ needs.init.outputs.pr }})
     needs: [init]
     secrets: inherit
@@ -43,9 +43,9 @@ jobs:
       tag: ${{ needs.init.outputs.pr }}
       target: test
 
-  deploy-prod:
+  deploys-prod:
     name: Deploy (prod)
-    needs: [init, deploy-test]
+    needs: [init, deploys-test]
     secrets: inherit
     uses: ./.github/workflows/.deploy.yml
     with:
@@ -55,7 +55,7 @@ jobs:
 
   promote:
     name: Promote Images
-    needs: [init, deploy-prod]
+    needs: [init, deploys-prod]
     runs-on: ubuntu-latest
     strategy:
       matrix:
