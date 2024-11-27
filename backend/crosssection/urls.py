@@ -37,9 +37,9 @@ urlpatterns = [
         never_cache(views_v2.WellAquiferListV2APIView.as_view()), name='well-aquifers'),
 
     # Well
-    url(api_path_prefix() + r'/wells/(?P<well_tag_number>[0-9]+)$',
+    url(r'api/v1/wells/(?P<well_tag_number>[0-9]+)$',
         never_cache(views.WellDetail.as_view()), name='well-detail'),
-    url(api_path_prefix() + r'/wells/(?P<well_tag_number>[0-9]+)$',
+    url(r'api/v2/wells/(?P<well_tag_number>[0-9]+)$',
         never_cache(views_v2.WellDetail.as_view()), name='well-detail'),
 
     # Well tag search
@@ -143,4 +143,8 @@ urlpatterns = [
 
     url(api_path_prefix() + r'/qaqc/recordcompliance/download$',
         never_cache(views_v2.RecordComplianceDownloadView.as_view()), name='qaqc-record-compliance-download'),
+
+    url(api_path_prefix() + r'/section/',
+        never_cache(views_v2.SectionView.as_view()), name='section'),
+        
 ]

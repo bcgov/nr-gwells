@@ -2664,3 +2664,22 @@ class WellLicence(models.Model):
         managed = False
     def __str__(self):
         return "Well Number: " + str(self.well_id) + ", License #: " + str(self.waterrightslicence_id)
+
+class Elevation(models.Model):
+    # elevation data at a point
+    distance_from_origin: models.FloatField()
+    elevation: models.FloatField()
+
+class GroundWaterWells(models.Model):
+    well_tag_no = models.CharField(max_length=100)
+    geometry = models.PointField()  # Use GeoDjango's PointField for spatial data
+
+class WellDrawdown(models.Model):
+    well = models.ForeignKey(GroundWaterWells, on_delete=models.CASCADE)
+    static_water_level = models.FloatField(null=True, blank=True)
+    finished_well_depth = models.FloatField(null=True, blank=True)
+    # Other fields ...
+
+    def calculate_available_drawdown(self):
+        # Perform drawdown calculations
+        pass
