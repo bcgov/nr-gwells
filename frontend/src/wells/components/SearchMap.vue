@@ -379,6 +379,7 @@ export default {
     createWellPopupElement (features, { canInteract }) {
       return createWellPopupElement(features, this.map, this.$router, {
         canInteract,
+        openInNewTab: true,
         wellLayerIds: [
           WELLS_BASE_AND_ARTESIAN_LAYER_ID,
           SEARCHED_WELLS_LAYER_ID
