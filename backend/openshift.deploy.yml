@@ -488,13 +488,13 @@ objects:
       port: 8000
       targetPort: 8000
     selector:
-      name: gwells-${NAME_SUFFIX}-backend
+      name: nr-gwells-${NAME_SUFFIX}-backend
     type: ClusterIP
     sessionAffinity: None
 - kind: Route
   apiVersion: v1
   metadata:
-    name: gwells-${NAME_SUFFIX}-backend
+    name: nr-gwells-${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
       frontend: 'true'
