@@ -111,7 +111,7 @@ objects:
     kind: Secret
     metadata:
       creationTimestamp:
-      name: crunchy-db-credentials
+      name: crunchy-db-credentials-${NAME_SUFFIX}
       labels:
         app: nr-gwells-${NAME_SUFFIX}
     stringData:

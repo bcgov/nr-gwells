@@ -211,22 +211,22 @@ objects:
                   valueFrom:
                     secretKeyRef:
                         key: PG_MODE
-                        name: crunchy-db-credentials
+                        name: crunchy-db-credentials-${NAME_SUFFIX}
                 - name: PG_PRIMARY_PASSWORD
                   valueFrom:
                     secretKeyRef:
                         key: PG_PRIMARY_PASSWORD
-                        name: crunchy-db-credentials
+                        name: crunchy-db-credentials-${NAME_SUFFIX}
                 - name: PG_PRIMARY_USER
                   valueFrom:
                     secretKeyRef:
                         key: PG_PRIMARY_USER
-                        name: crunchy-db-credentials
+                        name: crunchy-db-credentials-${NAME_SUFFIX}
                 - name: PG_ROOT_PASSWORD
                   valueFrom:
                     secretKeyRef:
                         key: PG_ROOT_PASSWORD
-                        name: crunchy-db-credentials
+                        name: crunchy-db-credentials-${NAME_SUFFIX}
               image: "ghcr.io/bcgov/nr-gwells/database:${IMAGE_TAG}"
               imagePullPolicy: IfNotPresent
               livenessProbe:
