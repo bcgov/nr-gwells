@@ -491,26 +491,26 @@ objects:
       name: nr-gwells-${NAME_SUFFIX}-backend
     type: ClusterIP
     sessionAffinity: None
-# - kind: Route
-#   apiVersion: v1
-#   metadata:
-#     name: nr-gwells-${NAME_SUFFIX}-backend
-#     creationTimestamp: 
-#     labels:
-#       frontend: 'true'
-#       app: nr-gwells-${NAME_SUFFIX}
-#       appver: gwells-${NAME_SUFFIX}-backend
-#     annotations: {}
-#   spec:
-#     host: nr-gwells-${NAME_SUFFIX}-backend.apps.silver.devops.gov.bc.ca
-#     path: "/gwells"
-#     to:
-#       kind: Service
-#       name: nr-gwells-${NAME_SUFFIX}-backend
-#       weight: 100
-#     port:
-#       targetPort: web
-#     tls:
-#       insecureEdgeTerminationPolicy: Redirect
-#       termination: edge
-#     wildcardPolicy: None
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: nr-gwells-${NAME_SUFFIX}-backend
+    creationTimestamp: 
+    labels:
+      frontend: 'true'
+      app: nr-gwells-${NAME_SUFFIX}
+      appver: gwells-${NAME_SUFFIX}-backend
+    annotations: {}
+  spec:
+    host: nr-gwells-${NAME_SUFFIX}-backend.apps.silver.devops.gov.bc.ca
+    path: "/gwells"
+    to:
+      kind: Service
+      name: nr-gwells-${NAME_SUFFIX}-backend
+      weight: 100
+    port:
+      targetPort: web
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    wildcardPolicy: None
