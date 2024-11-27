@@ -13,7 +13,7 @@ objects:
     metadata:
       labels:
         app: nr-gwells-${NAME_SUFFIX}
-      name: gwells-${NAME_SUFFIX}-frontend
+      name: nr-gwells-${NAME_SUFFIX}-frontend
     spec:
       type: ClusterIP
       ports:
@@ -96,12 +96,12 @@ objects:
         app: nr-gwells-${NAME_SUFFIX}
       name: gwells-${NAME_SUFFIX}-frontend
     spec:
-      host: gwells-${NAME_SUFFIX}-frontend.apps.silver.devops.gov.bc.ca
+      host: nr-gwells-${NAME_SUFFIX}-frontend.apps.silver.devops.gov.bc.ca
       port:
         targetPort: 3000-tcp
       to:
         kind: Service
-        name: gwells-${NAME_SUFFIX}-frontend
+        name: nr-gwells-${NAME_SUFFIX}-frontend
         weight: 100
       tls:
         termination: edge

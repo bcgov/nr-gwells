@@ -474,7 +474,7 @@ objects:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: gwells-${NAME_SUFFIX}-backend
+    name: nr-gwells-${NAME_SUFFIX}-backend
     creationTimestamp: 
     labels:
       app: nr-gwells-${NAME_SUFFIX}
@@ -502,11 +502,11 @@ objects:
       appver: gwells-${NAME_SUFFIX}-backend
     annotations: {}
   spec:
-    host: "${HOST}"
+    host: nr-gwells-${NAME_SUFFIX}-backend.apps.silver.devops.gov.bc.ca
     path: "/gwells"
     to:
       kind: Service
-      name: gwells-${NAME_SUFFIX}-backend
+      name: nr-gwells-${NAME_SUFFIX}-backend
       weight: 100
     port:
       targetPort: web
