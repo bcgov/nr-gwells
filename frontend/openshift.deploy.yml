@@ -22,7 +22,7 @@ objects:
           protocol: TCP
           name: 3000-tcp
       selector:
-        service: gwells-${NAME_SUFFIX}-frontend
+        service: nr-gwells-${NAME_SUFFIX}-frontend
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
@@ -41,7 +41,7 @@ objects:
           labels:
             app: nr-gwells-${NAME_SUFFIX}
             deployment: gwells-${NAME_SUFFIX}-frontend
-            service: gwells-${NAME_SUFFIX}-frontend
+            service: nr-gwells-${NAME_SUFFIX}-frontend
         spec:
           containers:
             - name: gwells-${NAME_SUFFIX}-frontend
@@ -94,7 +94,7 @@ objects:
     metadata:
       labels:
         app: nr-gwells-${NAME_SUFFIX}
-      name: gwells-${NAME_SUFFIX}-frontend
+      name: nr-gwells-${NAME_SUFFIX}-frontend
     spec:
       host: nr-gwells-${NAME_SUFFIX}-frontend.apps.silver.devops.gov.bc.ca
       port:
