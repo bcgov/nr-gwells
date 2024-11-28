@@ -50,62 +50,63 @@ services:
 #############################################################################################
 ###                                       CrunchyDB                                       ###
 #############################################################################################
-  # db:
-  #   platform: linux/x86_64
-  #   image: crunchydata/crunchy-postgres-gis:centos7-12.2-4.2.2
-  #   hostname: db
-  #   environment:
-  #     PG_USER: gwells
-  #     PG_PASSWORD: test1
-  #     PG_DATABASE: gwells
-  #     PG_MODE: primary
-  #     PG_PRIMARY_USER: primaryuser
-  #     PG_PRIMARY_PASSWORD: test_primary_password
-  #     PG_ROOT_PASSWORD: test_root_password
-  #     PG_PRIMARY_PORT: 5432
-  #     TEMP_BUFFERS: 9MB
-  #     MAX_CONNECTIONS: 101
-  #     SHARED_BUFFERS: 128MB
-  #     MAX_WAL_SENDERS: 7
-  #     WORK_MEM: 5MB
-  #     PG_PRIMARY_HOST: db
-  #     PGHOST: /tmp
-  #     TILESERVER_USER: ftw_reader
-  #     TILESERVER_PASSWORD: test1
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - /pgdata
-  #     - ./database/scripts/local_dev/setup.sql:/pgconf/setup.sql
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "/usr/pgsql-12/bin/pg_isready", "-d", "gwells"]
-  #     interval: 20s
-  #     timeout: 30s
-  #     retries: 5
-  #     start_period: 120s
-
   db:
-    container_name: db
-    image: postgis/postgis:12-master
+    platform: linux/x86_64
+    image: crunchydata/crunchy-postgres-gis:centos7-12.2-4.2.2
+    hostname: db
     environment:
-      POSTGRES_USER: gwells
-      POSTGRES_PASSWORD: test1
-      POSTGRES_DATABASE: gwells
+      PG_USER: gwells
+      PG_PASSWORD: test1
+      PG_DATABASE: gwells
+      PG_MODE: primary
+      PG_PRIMARY_USER: primaryuser
+      PG_PRIMARY_PASSWORD: test_primary_password
+      PG_ROOT_PASSWORD: test_root_password
+      PG_PRIMARY_PORT: 5432
+      TEMP_BUFFERS: 9MB
+      MAX_CONNECTIONS: 101
+      SHARED_BUFFERS: 128MB
+      MAX_WAL_SENDERS: 7
+      WORK_MEM: 5MB
+      PG_PRIMARY_HOST: db
+      PGHOST: /tmp
       TILESERVER_USER: ftw_reader
       TILESERVER_PASSWORD: test1
+    ports:
+      - "5432:5432"
     volumes:
-      # - /pgdata
-      - ./database/scripts/local_dev/setup.sql:/docker-entrypoint-initdb.d/init.sql
-    ports: ["5432:5432"]
+      - /pgdata
+      - ./database/scripts/local_dev/setup.sql:/pgconf/setup.sql
     healthcheck:
-      test: pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DATABASE}
-      interval: 1s
-      timeout: 3s
-      retries: 10
-      start_period: 5s
+      test: ["CMD-SHELL", "/usr/pgsql-12/bin/pg_isready", "-d", "gwells"]
+      interval: 20s
+      timeout: 30s
+      retries: 5
+      start_period: 120s
+
+  # db:
+  #   container_name: db
+  #   image: postgis/postgis:12-master
+  #   environment:
+  #     POSTGRES_USER: gwells
+  #     POSTGRES_PASSWORD: test1
+  #     POSTGRES_DATABASE: gwells
+  #     TILESERVER_USER: ftw_reader
+  #     TILESERVER_PASSWORD: test1
+  #   volumes:
+  #     # - /pgdata
+  #     - ./database/scripts/local_dev/setup.sql:/docker-entrypoint-initdb.d/init.sql
+  #   ports: ["5432:5432"]
+  #   healthcheck:
+  #     test: pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DATABASE}
+  #     interval: 1s
+  #     timeout: 3s
+  #     retries: 10
+  #     start_period: 5s
       # test: psql -q -U $${POSTGRES_USER} -d $${POSTGRES_DB} -c 'SELECT 1'
       # test: pg_isready -d $${{POSTGRES_DB}} -U $${{POSTGRES_USER}}
     #   test: ["CMD-SHELL", "/usr/pgsql-12/bin/pg_isready", "-d", "gwells"]
+
 
 #############################################################################################
 ###                                       Tileserv                                        ###
