@@ -125,6 +125,8 @@ services:
     ports:
       - "7800:7800"
     entrypoint: sh -c "sleep 10; /app/pg_tileserv"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7800"]
 
 #############################################################################################
 ###                                       Frontend                                        ###
@@ -152,6 +154,8 @@ services:
       - /frontend/node_modules/
     depends_on:
       backend:
+        condition: service_started
+      tileserv:
         condition: service_started
 
   caddy:
