@@ -20,6 +20,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 <script>
 import mapboxgl from 'mapbox-gl'
 import GestureHandling from '@geolonia/mbgl-gesture-handling'
+import { mapGetters } from 'vuex'
 
 import {
   DATABC_ROADS_SOURCE,
@@ -27,9 +28,17 @@ import {
   DATABC_ROADS_SOURCE_ID,
   DATABC_CADASTREL_SOURCE_ID,
   DATABC_ROADS_LAYER,
-  DATABC_CADASTREL_LAYER
+  DATABC_CADASTREL_LAYER,
+  WELLS_BASE_AND_ARTESIAN_LAYER_ID,
+  WELLS_SOURCE_ID,
+  WELLS_SOURCE,
+  wellsBaseLayer,
+  highlightedWellsLayer,
+  wellLayerFilter,
+  wellFilterOutId
 } from '../../common/mapbox/layers'
-import { buildLeafletStyleMarker } from '../../common/mapbox/images'
+import { setupFeatureTooltips } from '../../common/mapbox/popup'
+import { createWellPopupElement } from '../popup'
 
 export default {
   name: 'SingleWellMap',
@@ -39,6 +48,9 @@ export default {
     },
     longitude: {
       type: Number
+    },
+    id: {
+      type: String
     }
   },
   data () {
@@ -55,6 +67,9 @@ export default {
   destroyed () {
     this.map.remove()
     this.map = null
+  },
+  computed: {
+    ...mapGetters(['userRoles']),
   },
   methods: {
     initMapBox () {
@@ -74,11 +89,14 @@ export default {
           version: 8,
           sources: {
             [DATABC_ROADS_SOURCE_ID]: DATABC_ROADS_SOURCE,
-            [DATABC_CADASTREL_SOURCE_ID]: DATABC_CADASTREL_SOURCE
+            [DATABC_CADASTREL_SOURCE_ID]: DATABC_CADASTREL_SOURCE,
+            [WELLS_SOURCE_ID]: WELLS_SOURCE,
           },
           layers: [
             DATABC_ROADS_LAYER,
-            DATABC_CADASTREL_LAYER
+            DATABC_CADASTREL_LAYER,
+            wellsBaseLayer({ filter: ['all', wellFilterOutId(this.id),  wellLayerFilter(Boolean(this.userRoles.wells.edit))] }),
+            highlightedWellsLayer({ filter: ['!', wellFilterOutId(this.id)] })
           ]
         }
       }
@@ -103,10 +121,21 @@ export default {
 
       this.map.on('load', () => {
         if (this.longitude && this.latitude) {
-          buildLeafletStyleMarker(this.longitude, this.latitude).addTo(this.map)
-
           this.map.setZoom(12)
         }
+
+        const tooltipLayers = {
+          [WELLS_BASE_AND_ARTESIAN_LAYER_ID]: {
+            snapToCenter: true,
+            createTooltipContent: (features) => createWellPopupElement(
+              features,
+              this.map,
+              this.$router,
+              { canInteract: true, openInNewTab: true }
+            )
+          }
+        }
+        setupFeatureTooltips(this.map, tooltipLayers)
 
         this.$emit('mapLoaded')
       })

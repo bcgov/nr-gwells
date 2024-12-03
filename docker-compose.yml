@@ -31,21 +31,21 @@ services:
 #############################################################################################
 ###                                       Minio-Priv                                      ###
 #############################################################################################
-  minio-private:
-    build:
-      context: ./minio/
-    hostname: minio
-    ports:
-      - "9001:9001"
-    volumes:
-      - type: tmpfs
-        target: /tmp/data:/tmp/data
-    environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio1234
-      MINIO_DATA_DIR: /tmp/data
-    entrypoint: /minio-entrypoint.sh
-    command: server --address :9001 /tmp/data
+  # minio-private:
+  #   build:
+  #     context: ./minio/
+  #   hostname: minio
+  #   ports:
+  #     - "9001:9001"
+  #   volumes:
+  #     - type: tmpfs
+  #       target: /tmp/data:/tmp/data
+  #   environment:
+  #     MINIO_ACCESS_KEY: minio
+  #     MINIO_SECRET_KEY: minio1234
+  #     MINIO_DATA_DIR: /tmp/data
+  #   entrypoint: /minio-entrypoint.sh
+  #   command: server --address :9001 /tmp/data
 
 #############################################################################################
 ###                                       CrunchyDB                                       ###
@@ -84,6 +84,30 @@ services:
       retries: 5
       start_period: 120s
 
+  # db:
+  #   container_name: db
+  #   image: postgis/postgis:12-master
+  #   environment:
+  #     POSTGRES_USER: gwells
+  #     POSTGRES_PASSWORD: test1
+  #     POSTGRES_DATABASE: gwells
+  #     TILESERVER_USER: ftw_reader
+  #     TILESERVER_PASSWORD: test1
+  #   volumes:
+  #     # - /pgdata
+  #     - ./database/scripts/local_dev/setup.sql:/docker-entrypoint-initdb.d/init.sql
+  #   ports: ["5432:5432"]
+  #   healthcheck:
+  #     test: pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DATABASE}
+  #     interval: 1s
+  #     timeout: 3s
+  #     retries: 10
+  #     start_period: 5s
+      # test: psql -q -U $${POSTGRES_USER} -d $${POSTGRES_DB} -c 'SELECT 1'
+      # test: pg_isready -d $${{POSTGRES_DB}} -U $${{POSTGRES_USER}}
+    #   test: ["CMD-SHELL", "/usr/pgsql-12/bin/pg_isready", "-d", "gwells"]
+
+
 #############################################################################################
 ###                                       Tileserv                                        ###
 #############################################################################################
@@ -101,6 +125,8 @@ services:
     ports:
       - "7800:7800"
     entrypoint: sh -c "sleep 10; /app/pg_tileserv"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7800"]
 
 #############################################################################################
 ###                                       Frontend                                        ###
@@ -128,6 +154,8 @@ services:
       - /frontend/node_modules/
     depends_on:
       backend:
+        condition: service_started
+      tileserv:
         condition: service_started
 
   caddy:

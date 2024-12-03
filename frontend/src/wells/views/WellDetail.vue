@@ -208,7 +208,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
               </b-row>
             </b-col>
             <b-col cols="12" md="6" xl="6" offset-xl="1">
-              <single-well-map :latitude="well.latitude" :longitude="well.longitude"/>
+              <single-well-map :latitude="well.latitude" :longitude="well.longitude" :id="well.well_tag_number"/>
               <div class="font-weight-bold mt-5">
                 Geographic Coordinates - North American Datum of 1983 (NAD 83)
               </div>
