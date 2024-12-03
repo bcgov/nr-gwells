@@ -2683,3 +2683,568 @@ class WellDrawdown(models.Model):
     def calculate_available_drawdown(self):
         # Perform drawdown calculations
         pass
+
+
+"""
+API data models.
+These are external facing data models/schemas that users see.
+"""
+import json
+import logging
+from typing import Optional, List, Any
+from pydantic import BaseModel, Schema
+from geojson import Polygon
+from uuid import uuid4
+from geojson import Feature, FeatureCollection, Point
+
+logger = logging.getLogger('wells')
+
+
+def export_formatter():
+    """ 
+    returns a helper function that turns JSON results into GeoJSON,
+    using the provided id_field to give each feature an ID. 
+    """
+
+    def helper_function(self, result):
+
+        return FeatureCollection([
+            Feature(
+                id=result.get(self.id_field, str(uuid4())),
+                geometry=Point(
+                    (result.get('longitude'), result.get('latitude'))),
+                properties=result
+            )
+        ])
+
+    return helper_function
+
+
+class Screen(BaseModel):
+    """
+    Information about a screen installed into a well. Normally part of a set of
+    screen information broken down by depth intervals.
+    """
+    start: Optional[float]
+    end: Optional[float]
+    diameter: Optional[float]
+    assembly_type: Optional[str]
+
+
+class WellAquifer(BaseModel):
+    """
+    Well aquifer data
+    """
+    aquifer_id: int
+    subtype: Optional[str]
+    subtype_desc: Optional[str]
+    material: Optional[str]
+    material_desc: Optional[str]
+
+
+class WellDrawdown(BaseModel):
+    """
+    Well data focused on drawdown impact assessments
+    """
+    well_tag_number: int
+    latitude: float
+    longitude: float
+    well_yield: Optional[float]
+    diameter: Optional[str]
+    well_yield_unit: Optional[str]
+    finished_well_depth: Optional[float]
+    street_address: Optional[str]
+    intended_water_use: Optional[str]
+    aquifer_subtype: Optional[str]
+    aquifer_hydraulically_connected: Optional[bool]
+    aquifer_id: Optional[int]
+    # aquifer_material: Optional[str]
+    aquifer_lithology: Optional[str]
+    aquifer: Optional[WellAquifer]
+    screen_set: Optional[List[Screen]]
+    top_of_screen: Optional[float] = Schema(
+        None, title="Top of screen", description="The depth of the start of the uppermost "
+                                                 "reported screen segment.")
+    top_of_screen_type: Optional[str] = Schema(
+        None, title="Screen type at top of screen", description="The reported screen material "
+                                                                "type at the top of screen")
+    distance: Optional[float] = Schema(
+        None, title="Distance from search point", description="The distance from the search point "
+                                                              "in meters")
+    static_water_level: Optional[float]
+    swl_to_screen: Optional[float] = Schema(None, title="Static water level to top of screen (ft)",
+                                            description="The calculated distance between the "
+                                                        "reported static water level and the "
+                                                        "start of the uppermost screen segment. "
+                                                        "The type of screen is not taken into "
+                                                        "account. This information is based on "
+                                                        "reported values and should be confirmed.")
+    swl_to_bottom_of_well: Optional[float] = Schema(
+        None,
+        title="Static water level to bottom of well (ft)",
+        description="The calculated distance between the reported static water level and the "
+                    "finished well depth. This information is based on reported values and should "
+                    "be confirmed.")
+
+
+class WellsExport(BaseModel):
+    point: str
+    radius: float
+    export_wells: List[int]
+
+
+class WellSection(BaseModel):
+    """
+    Well data for use in sections
+    """
+    well_tag_number: int
+    finished_well_depth: Optional[float]
+    water_depth: Optional[float]
+    ground_elevation_from_dem: Optional[float]
+    distance_from_origin: Optional[float]
+    distance_from_line: Optional[float]
+    compass_direction: Optional[str]
+    aquifer: Optional[WellAquifer]
+    aquifer_lithology: Optional[str]
+    feature: Optional[dict]
+    screen_set: List
+
+    class Config:
+        orm_mode = True
+
+
+class Elevation(BaseModel):
+    """ elevation data at a point """
+    distance_from_origin: float
+    elevation: float
+
+
+class CrossSection(BaseModel):
+    search_area: Any
+    wells: List[WellSection]
+    elevation_profile: List[Elevation]
+    surface: List
+    waterbodies: List
+
+
+class CrossSectionExport(BaseModel):
+    wells: List[int]
+    coordinates: list
+    buffer: int
+
+
+class ExportApiParams(BaseModel):
+    """ request params for GWELLS API request """
+    geojson: str = "true"
+
+
+class ExportApiRequest(BaseModel):
+    """ a WMS feature request """
+    url: str
+    layer: str
+    # optional formatter function that accepts a list and returns geojson
+    formatter = export_formatter()
+    q: Optional[Any]
+    # an id field to populate geojson feature IDs (if not specified, a uuid will be created)
+    id_field: Optional[str]
+    # paginate: if set to False, do not follow pagination links (get one set of results only)
+    paginate = False
+
+class FreshwaterAtlasStreamNetwork(models.Model):
+    OGC_FID = models.IntegerField(primary_key=True)
+    LENGTH_METRE = models.FloatField()
+    FEATURE_SOURCE = models.CharField(max_length=255)
+    GNIS_NAME = models.CharField(max_length=255)
+    LEFT_RIGHT_TRIBUTARY = models.CharField(max_length=10)
+    GEOMETRY = gis_models.GeometryField()  # assuming this is a geometry field (Point, LineString, etc.)
+    WATERSHED_GROUP_CODE = models.CharField(max_length=100)
+    FWA_WATERSHED_CODE = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'freshwater_atlas_stream_networks'
+
+def get_nearest_streams(db, search_point, limit=10):
+    # Perform a geospatial query to find the nearest streams to a given point
+    streams_qs = FreshwaterAtlasStreamNetwork.objects.annotate(
+        distance=gis_models.Distance('GEOMETRY', search_point)
+    ).filter(
+        GEOMETRY__distance_lte=(search_point, D(m=1000))  # Example filter: within 1km
+    ).order_by('distance')[:limit]  # Limit results
+
+    # Serializing the result to a dictionary-like format
+    streams = [
+        {
+            "ogc_fid": stream.OGC_FID,
+            "length_metre": stream.LENGTH_METRE,
+            "gnis_name": stream.GNIS_NAME,
+            "geometry": stream.GEOMETRY,
+            "distance": stream.distance
+        }
+        for stream in streams_qs
+    ]
+    return streams
+
+"""
+Analysis functions for data in the Wally system
+"""
+
+import datetime
+import geojson
+import json
+import os
+from logging import getLogger
+from fastapi import APIRouter, Depends, Query
+from starlette.responses import Response
+from sqlalchemy.orm import Session
+from shapely.geometry import shape, MultiLineString, mapping, MultiPolygon, Point
+from shapely.ops import cascaded_union
+
+
+from api.db.utils import get_db
+
+from api.v1.streams import controller as streams_controller
+from api.v1.streams import schema as streams_schema
+
+from external.docgen.controller import docgen_export_to_xlsx
+logger = getLogger("streams")
+
+router = APIRouter()
+
+
+@router.get("/nearby", response_model=streams_schema.Streams)
+def get_nearby_streams(
+        db: Session = Depends(get_db),
+        point: str = Query(...,
+                           title="Point of interest",
+                           description="Point of interest to centre search at"),
+        limit: int = Query(10,
+                           title="Limit",
+                           description="Number of nearby streams to be returned"),
+        get_all: bool = Query(False,
+                              title="Get all",
+                              description="Get all nearby streams, even if its apportionment is "
+                                          "less than 10%"),
+        with_apportionment: bool = Query(True,
+                                         title="Include Apportionment",
+                                         description="Get stream apportionment data"),
+        weighting_factor: int = Query(2,
+                                      title="Weighting factor",
+                                      description="Weighting factor for calculating apportionment")
+):
+    point_parsed = json.loads(point)
+    point_shape = Point(point_parsed)
+
+    streams_nearby = streams_controller.get_streams_with_apportionment(
+        db, point_shape, limit, get_all, with_apportionment, weighting_factor)
+
+    return {
+        'weighting_factor': weighting_factor,
+        'streams': streams_nearby
+    }
+
+
+@router.post("/apportionment/export")
+def export_stream_apportionment(
+    req: streams_schema.ApportionmentExportRequest
+):
+    """ export a table of stream apportionment data, after the user
+        has chosen a set of streams and parameters using the Wally UI.
+    """
+
+    req.generated = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    cur_date = datetime.datetime.now().strftime("%Y%m%d")
+
+    filename = f"{cur_date}_HydraulicConnectivityAnalysis"
+
+    dirname = os.path.dirname(__file__)
+    xlsx_template = dirname + "/templates/StreamApportionment.xlsx"
+
+    excel_file = docgen_export_to_xlsx(
+        req, xlsx_template, filename)
+
+    return Response(
+        content=excel_file,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f"attachment; filename={filename}.xlsx"}
+    )
+
+
+@router.get("/apportionment", response_model=streams_schema.Streams)
+def get_streams_apportionment(
+        db: Session = Depends(get_db),
+        point: str = Query(...,
+                           title="Point of interest",
+                           description="Point of interest to centre search at"),
+        ogc_fid: list = Query(..., title="A list of ogc_fid of streams",
+                              description="A list of ogc_fid of streams"),
+        weighting_factor: int = Query(
+            2, title="Weighting factor", description="Weighting factor")
+):
+    point_parsed = json.loads(point)
+    point_shape = Point(point_parsed)
+    streams_by_ocg_fid = streams_controller.get_nearest_streams_by_ogc_fid(
+        db, point_shape, ogc_fid)
+    streams_with_apportionment = streams_controller.get_apportionment(
+        streams_by_ocg_fid, weighting_factor)
+    return {
+        'weighting_factor': weighting_factor,
+        'streams': streams_with_apportionment
+    }
+
+
+"""
+Analysis functions for data in the Wally system
+"""
+
+
+@router.get('/features')
+def get_streams_by_watershed_code(
+    full_upstream_area: bool = Query(
+        None,
+        title="Search full upstream area",
+        description="Indicates that the search should use the full upstream area, instead of only searching within a stream buffer. This is faster."),
+    buffer: float = Query(
+        100,
+        title="Buffer radius (m)",
+        description="Distance (in metres) from the stream to search within",
+        lte=500,
+        gte=0),
+    layer: str = Query(
+        None,
+        title="Layer to search",
+        description="The name of the layer to search. Points that are within `buffer` metres of the specified stream will be returned."),
+    point: str = Query(...,
+                       title="Point of interest",
+                       description="Point of interest close to stream."),
+    db: Session = Depends(get_db)
+):
+    """ generates a stream network based on a FWA_WATERSHED_CODE and
+    LINEAR_FEATURE_ID, and finds features from a given `layer`. """
+
+    point_parsed = json.loads(point)
+    point_shape = Point(point_parsed)
+
+    closest_segment = streams_controller.get_closest_stream_segment(db, point_shape)
+
+    logger.warning(closest_segment)
+
+    up_geom = streams_controller.get_upstream_area(
+        db, closest_segment["linear_feature_id"], buffer, full_upstream_area)
+    down_geom = streams_controller.get_downstream_area(
+        db, closest_segment["linear_feature_id"], buffer)
+
+    if not up_geom or not down_geom:
+        return None
+
+    up_geom_geojson = geojson.loads(up_geom[0]) if up_geom[0] else None
+    down_geom_geojson = geojson.loads(down_geom[0]) if down_geom[0] else None
+
+    if not up_geom_geojson and not down_geom_geojson:
+        return None
+
+    # calculate the junction between up and down streams
+    # and return the buffered line segments
+    junction_lines = streams_controller \
+        .get_split_line_stream_buffers(db, closest_segment["linear_feature_id"], buffer, point_shape)
+
+    # if either a up or down stream segment is not found,
+    # it means we are at the last segment ie a final tributary
+    # this means we can skip the union and just return the junction
+    if not up_geom_geojson or not down_geom_geojson or \
+            shape(up_geom_geojson).equals(shape(down_geom_geojson)):
+        up_poly = junction_lines[-1]
+        down_poly = junction_lines[0]
+    else:
+        up_shape = shape(up_geom_geojson)
+        down_shape = shape(down_geom_geojson)
+        # take only the largest polygon from any multi-polygons
+        # this eliminates any error shapes that occasionally
+        # popup in the freshwater atlas data
+        up_poly = max(up_shape, key=lambda a: a.area) if \
+            isinstance(up_shape, MultiPolygon) else up_shape
+        down_poly = max(down_shape, key=lambda a: a.area) if \
+            isinstance(down_shape, MultiPolygon) else down_shape
+        # join the junction calculations with the existing up and down polys
+        up_poly = cascaded_union([up_poly, junction_lines[-1]])
+        # if we're at the bottom of a stream junction then set
+        # the down_poly to be the down junction line, to avoid
+        # an overlapping downstream result
+        if closest_segment["downstream_route_measure"] == 0:
+            down_poly = junction_lines[0]
+        else:
+            down_poly = cascaded_union([down_poly, junction_lines[0]])
+
+    # remove overlapping geometry at the up/down stream junction point
+    # the selected point will always be upstream from this junction
+    # so we remove the intersecting geometry from the upstream poly
+    # down_poly = down_poly.difference(junction_lines[-1])
+    up_poly = up_poly.difference(down_poly)
+
+    # if a layer was not specified, skip the feature collection
+    if not layer:
+        features_upstream = None
+        features_downstream = None
+    else:
+        features_upstream = streams_controller. \
+            get_features_within_buffer(db, up_poly, buffer, layer)
+        features_downstream = streams_controller \
+            .get_features_within_buffer(db, down_poly, buffer, layer)
+
+    return {
+        "gnis_name": closest_segment["gnis_name"],
+        "upstream_features": features_upstream,
+        "upstream_poly": mapping(up_poly),
+        "downstream_features": features_downstream,
+        "downstream_poly": mapping(down_poly)
+    }
+
+
+def get_features_within_buffer_zone(
+        req: streams_schema.BufferRequest,
+        db: Session = Depends(get_db)
+):
+    geometry_parsed = json.loads(req.geometry)
+
+    lines = []
+    for line in geometry_parsed:
+        if line:
+            lines.append(shape(line))
+
+    multi_line_string = MultiLineString(lines)
+
+    features = streams_controller.get_features_within_buffer(db, multi_line_string,
+                                                             req.buffer, req.layer)
+    return features
+
+
+@router.get("/connections")
+def get_stream_connections(
+        db: Session = Depends(get_db),
+        outflowCode: str = Query(
+            ...,
+            title="The base outflow stream code",
+            description="The code that identifies the base outflow river to ocean"),
+):
+    streams = streams_controller.get_connected_streams(db, outflowCode)
+    return streams
+
+"""
+API data models for FreshWater Stream Atlas analysis.
+These are external facing data models/schemas that users see.
+"""
+from pydantic import BaseModel
+from typing import List, Any, Optional
+from geojson import Feature
+from shapely.geometry import Point
+
+
+class Stream(BaseModel):
+    # search_point
+
+    id: int
+    ogc_fid: int
+    geojson: Feature
+    linear_feature_id: Optional[int]
+    length_metre: Any
+    feature_source: Any
+    gnis_name: Any
+    left_right_tributary: Any
+    geometry_length: Any
+    # geometry: str
+    watershed_group_code: str
+    fwa_watershed_code: str
+    distance_degrees: float
+    distance: float
+
+    closest_stream_point: Any
+    inverse_distance: Optional[float]
+    apportionment: Optional[float]
+
+
+class Streams(BaseModel):
+    weighting_factor: int
+
+    streams: List[Stream]
+
+
+class StreamDetailsExport(BaseModel):
+    """ details about an apportioned link
+    to a single stream for the purpose of exporting data."""
+
+    gnis_name: Optional[str]
+    linear_feature_id: Optional[int]
+    distance: float
+    length_metre: float
+    apportionment: float
+
+
+class ApportionmentExportRequest(BaseModel):
+    """ the data required to export stream apportionment data,
+    after the user has applied their own adjustments """
+
+    streams: List[StreamDetailsExport]
+    point: List[float]
+    generated: Optional[str]
+    weighting_factor: float
+
+
+class ApportionmentTemplateFile(BaseModel):
+    """ the metadata and encoded file for
+        a stream apportionment excel template.
+        This is the format required by the Common Services
+        Document Generator.
+    """
+
+    encodingType: str
+    content: str  # base64 encoded
+    fileType: str
+
+
+class ApportionmentDocGenOptions(BaseModel):
+    """ options for docgen requests """
+    reportName: str
+    overwrite: str = "true"
+
+
+class ApportionmentDocGenRequest(BaseModel):
+    """ the request body for making document generator requests """
+
+    data: dict
+    template: dict
+    options: dict = {}
+
+
+class StreamPoint(BaseModel):
+    """a point on a stream along with the stream_feature_id associated with it.
+    """
+    stream_point: Point
+    stream_feature_id: int
+
+    class Config:
+        arbitrary_types_allowed = True
+
+
+class _FreshWaterAtlasStreamNetworks(BaseModel):
+    distance: float
+    LICENCE_NUMBER: Optional[str]
+    LICENCE_STATUS: Optional[str]
+    POD_NUMBER: Optional[str]
+    POD_SUBTYPE: Optional[str]
+    PURPOSE_USE: Optional[str]
+    SOURCE_NAME: Optional[str]
+    QUANTITY: Optional[float]
+    QUANTITY_UNITS: Optional[str]
+    QTY_DIVERSION_MAX_RATE: Optional[float]
+    QTY_UNITS_DIVERSION_MAX_RATE: Optional[str]
+    QUANTITY_FLAG: Optional[str]
+    QUANTITY_FLAG_DESCRIPTION: Optional[str]
+
+    class Config:
+        orm_mode = True
+
+
+class BufferRequest(BaseModel):
+    geometry: str
+    buffer: float
+    layer: str

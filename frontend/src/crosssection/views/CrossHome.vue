@@ -69,5 +69,44 @@ export default {
 }
 </script>
 
+<!--
+components: {
+  InfoPanel,
+  Map,
+  WelcomeMessage
+},
+data: () => ({
+  sidebarColumnDefaults: {
+    cols: 12,
+    md: 6,
+    lg: 4,
+    xl: 3
+  }
+}),
+computed: {
+  sidebarColumns () {
+    const sidebarColumns = this.$route.meta.sidebarColumns || {}
+    return Object.assign(this.sidebarColumnDefaults, sidebarColumns)
+  },
+  mapColumns () {
+    if (this.$route.meta.hide) {
+      return {
+        cols: 12,
+        md: 12,
+        lg: 12,
+        xl: 12
+      }
+    }
+    return {
+      cols: 12 - this.sidebarColumns.cols,
+      md: 12 - this.sidebarColumns.md,
+      lg: 12 - this.sidebarColumns.lg,
+      xl: 12 - this.sidebarColumns.xl
+    }
+  },
+  ...mapGetters('map', ['map'])
+}
+} -->
+
 <style>
 </style>

@@ -632,3 +632,10 @@ class RecordComplianceSerializer(ActivitySubmissionMixin, serializers.ModelSeria
           'natural_resource_region',
           'internal_comments'
         ]
+
+class FreshwaterAtlasStreamNetworkSerializer(serializers.ModelSerializer):
+    distance = serializers.FloatField()  # Custom field for distance calculation
+
+    class Meta:
+        model = FreshwaterAtlasStreamNetwork
+        fields = ['ogc_fid', 'length_metre', 'gnis_name', 'geometry', 'distance']

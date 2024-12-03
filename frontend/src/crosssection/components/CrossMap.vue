@@ -12,7 +12,11 @@
     limitations under the License.
 */
 <template>
-  <div id="cross-map" class="map"/>
+  <div class="float-left">
+    <v-fade-transition>
+      <div id="cross-map" class="map"/>
+    </v-fade-transition>
+  </div>
 </template>
 
 <script>
