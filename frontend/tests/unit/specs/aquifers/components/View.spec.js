@@ -107,7 +107,7 @@ const aquiferFixture = {
 }
 
 describe('View Component', () => {
-  let fetch
+  let fetch = null
 
   const component = (options, storeState = {}) => {
     const store = new Vuex.Store({
