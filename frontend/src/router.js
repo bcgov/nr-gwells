@@ -147,7 +147,7 @@ const router = new Router({
       meta: {
         // list of required permissions (e.g. "edit: true" means user needs edit permission)
         edit: true,
-        app: 'registry'
+        app: 'wells'
       }
     },
 

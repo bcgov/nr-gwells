@@ -15,13 +15,57 @@ Licensed under the Apache License, Version 2.0 (the "License");
   <b-card class="container p-1">
       <h1 class="card-title" id="CrossSectionTitle">Cross Section Home</h1>
       <div>
+        <div>
+          <MapLoadingSpinner :loading="loadingMap"/>
+          <CrossMap
+            :focusedWells="focusedWells"
+          />
+        </div>
       </div>
     </b-card>
 </template>
 
 <script>
+import MapLoadingSpinner from '../../common/components/MapLoadingSpinner.vue'
+import CrossMap from '../components/CrossMap.vue'
+
 export default {
   name: 'CrossHome',
+  components: {
+    CrossMap,
+    MapLoadingSpinner
+  },
+  data () {
+    return {
+      scrolled: false,
+      loadingMap: false,
+      focusedWells: [],
+      mapServerErrorMessage: null,
+      showMapErrorMessage: false,
+    }
+  },
+  methods: {
+    handleScroll () {
+      this.scrolled = window.scrollY > 100
+    },
+    handleMapError (err) {
+      if (err.noFeatures) {
+        this.noWellsInView = true
+      } else if (err.serverError) {
+        this.mapServerErrorMessage = err.serverError
+      }
+    }
+  },
+  watch: {
+    beforeMount () {
+      this.loadingMap = true
+      this.scrolled = window.scrollY > 100
+      window.addEventListener('scroll', this.handleScroll)
+    },
+    beforeDestroy () {
+      window.removeEventListener('scroll', this.handleScroll)
+    }
+  }
 }
 </script>
 
