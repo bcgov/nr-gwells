@@ -68,7 +68,8 @@ export const DATABC_ROADS_SOURCE = {
   ],
   minzoom: 0,
   maxzoom: 17,
-  tileSize: 256
+  tileSize: 256,
+  crossOrigin: 'anonymous',
 }
 
 export const DATABC_CADASTREL_SOURCE = {
