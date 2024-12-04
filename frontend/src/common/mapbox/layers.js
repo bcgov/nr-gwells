@@ -62,11 +62,12 @@ export const DATABC_ROADS_SOURCE = {
   type: 'raster',
   tiles: [
     // NOTE: added ?env= param because of WATER-1183
-    `https://maps.gov.bc.ca/arcserver/rest/services/Province/roads_wm/MapServer/tile/{z}/{y}/{x}?env=${window.location.hostname}`
+    `http://localhost:3000/arcserver/rest/services/Province/roads_wm/MapServer/tile/{z}/{y}/{x}?env=${window.location.hostname}`
   ],
   minzoom: 0,
   maxzoom: 17,
-  tileSize: 256
+  tileSize: 256,
+  crossOrigin: 'anonymous',
 }
 
 export const DATABC_CADASTREL_SOURCE = {
