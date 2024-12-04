@@ -162,6 +162,7 @@ services:
       PORT: 3000
       BACKEND_URL: http://backend:8000
       LOG_LEVEL: info
+      MAPS_URL: https://maps.gov.bc.ca
       # VUE_APP_AXIOS_BASE_URL: "http://backend:8000/gwells/api/v2/"
       # VUE_APP_VECTOR_TILE_BASE_URL: "/tiles/"
       # VECTOR_TILE_SERVER: "http://tileserv:7800/"

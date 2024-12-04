@@ -218,7 +218,8 @@ export default {
         maxPitch: 0,
         dragRotate: false,
         center: [-126.5, 54.5],
-        style: this.buildMapStyle()
+        style: this.buildMapStyle(),
+        mode: "no-cors"
       }
 
       this.map = new mapboxgl.Map(mapConfig)
