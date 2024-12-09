@@ -103,7 +103,7 @@ export function popupItem (item, $router, options = {}) {
     if (item.url || item.route) {
       // { name: 'aquifers-view', params: { id: aquiferId } }
       if (canInteract) {
-        const anchor = popupLink(item.url || item.route, $router, item.text)
+        const anchor = popupLink(item.url || item.route, $router, item.text, options.openInNewTab)
         li.appendChild(anchor)
       } else {
         li.appendChild(document.createTextNode(item.text))
@@ -128,21 +128,25 @@ export function popupItem (item, $router, options = {}) {
 }
 
 // Creates an HTML anchor to a Vue route or URL
-export function popupLink (route, $router, text) {
+export function popupLink (route, $router, text, openInNewTab) {
   const anchor = document.createElement('a')
   let url = route
 
   if (typeof route === 'string') {
-    if (url && url.startsWith('http')) {
+    if ((url && url.startsWith('http')) || openInNewTab) {
       anchor.setAttribute('target', '_blank')
     }
   } else {
     url = $router.resolve(route).href
-    anchor.onclick = (e) => {
-      if (!e.ctrlKey) {
-        e.preventDefault()
-        // The catch statement prevents duplicate route errors
-        $router.push(route).catch(()=>{})
+    if (openInNewTab) {
+      anchor.setAttribute('target', '_blank')
+    } else {
+      anchor.onclick = (e) => {
+        if (!e.ctrlKey) {
+          e.preventDefault()
+          // The catch statement prevents duplicate route errors
+          $router.push(route).catch(()=>{})
+        }
       }
     }
   }

@@ -229,13 +229,7 @@ exports[`WellDetail.vue should match snapshot 1`] = `
               Aquifer Number: 
             </span>
              
-            <router-link-stub
-              to="[object Object]"
-            >
-              
-              
-            
-            </router-link-stub>
+            <!---->
           </b-col-stub>
            
           <b-col-stub
@@ -454,6 +448,8 @@ exports[`WellDetail.vue should match snapshot 1`] = `
                 Comments
               </a>
             </div>
+             
+            <!---->
              
             <!---->
              
@@ -1860,7 +1856,7 @@ exports[`WellDetail.vue should match snapshot 1`] = `
             currentpage="1"
             emptyfilteredtext="There are no records matching your request"
             emptytext="There are no records to show"
-            fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"
+            fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"
             filterdebounce="0"
             filterfunction="function bvConfigurablePropDefault() {
       var value = getComponentConfig(componentKey, key, prop.default);
@@ -1903,6 +1899,8 @@ exports[`WellDetail.vue should match snapshot 1`] = `
         
         </p>
       </fieldset>
+       
+      <!---->
        
       <fieldset
         class="detail-section my-3"

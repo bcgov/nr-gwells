@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.contrib.gis.geos import Point
 from wells.models import Well
-from wells.signals import update_utm
+from wells.signals import update_utm, _get_utm_zone, _generate_utm_point
+from osgeo import ogr
 
 class TestSignals(TestCase):
     def test_get_utm_zone(self):

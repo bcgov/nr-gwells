@@ -91,7 +91,7 @@ export default {
         admin: adminMeta ? adminMeta.content === 'true' : false,
         aquifers: this.hasConfig && this.config.enable_aquifers_search === true,
         surveys: this.hasConfig && this.userRoles.surveys.edit === true,
-        qaqc: this.hasConfig && this.userRoles.submissions.edit === true,
+        qaqc: this.hasConfig && this.userRoles.idir === true && this.userRoles.submissions.edit === true,
         bulk
       }
     }
