@@ -22,6 +22,7 @@ jobs:
       - uses: bcgov-nr/action-builder-ghcr@v2.2.0
         with:
           build_context: ./../
+          build_file: ./Dockerfile
           keep_versions: 50
           package: ${{ matrix.package }}
           tag: ${{ github.event.number }}
