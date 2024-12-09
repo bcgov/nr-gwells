@@ -100,13 +100,13 @@ if DEBUG:
 
 # Application definition
 INSTALLED_APPS = (
-    # 'whitenoise.runserver_nostatic',
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    # 'django.contrib.staticfiles',
+    'django.contrib.staticfiles',
     'debug_toolbar',
     'django.contrib.postgres',
     'rest_framework',
@@ -129,7 +129,7 @@ INSTALLED_APPS = (
 MIDDLEWARE = (
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -198,17 +198,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-# if APP_CONTEXT_ROOT:
-#     STATIC_URL = '/' + APP_CONTEXT_ROOT + '/'
-# else:
-#     STATIC_URL = '/'
+if APP_CONTEXT_ROOT:
+    STATIC_URL = '/' + APP_CONTEXT_ROOT + '/'
+else:
+    STATIC_URL = '/'
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# STATICFILES_DIR = (
-#     os.path.join(BASE_DIR, 'staticfiles')
-# )
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIR = (
+    os.path.join(BASE_DIR, 'staticfiles')
+)
 
 LOGGING = {
     'version': 1,
@@ -344,5 +344,5 @@ class DisableMigrations(object):
 if get_env_variable('DISABLE_MIGRATIONS', None, strict=False, warn=False) == 'DISABLE_MIGRATIONS':
     MIGRATION_MODULES = DisableMigrations()
 
-# WHITENOISE_INDEX_FILE = True
+WHITENOISE_INDEX_FILE = True
 APPEND_SLASH = True
