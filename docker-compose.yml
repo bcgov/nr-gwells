@@ -51,7 +51,7 @@ services:
 ###                                       CrunchyDB                                       ###
 #############################################################################################
   db:
-    platform: linux/x86_64
+    # platform: linux/x86_64
     image: crunchydata/crunchy-postgres-gis:centos7-12.2-4.2.2
     hostname: db
     environment:
@@ -103,10 +103,9 @@ services:
   #     timeout: 3s
   #     retries: 10
   #     start_period: 5s
-      # test: psql -q -U $${POSTGRES_USER} -d $${POSTGRES_DB} -c 'SELECT 1'
-      # test: pg_isready -d $${{POSTGRES_DB}} -U $${{POSTGRES_USER}}
-    #   test: ["CMD-SHELL", "/usr/pgsql-12/bin/pg_isready", "-d", "gwells"]
-
+  #     # test: psql -q -U $${POSTGRES_USER} -d $${POSTGRES_DB} -c 'SELECT 1'
+  #     # test: pg_isready -d $${{POSTGRES_DB}} -U $${{POSTGRES_USER}}
+  #   #   test: ["CMD-SHELL", "/usr/pgsql-12/bin/pg_isready", "-d", "gwells"]
 
 #############################################################################################
 ###                                       Tileserv                                        ###
@@ -146,52 +145,54 @@ services:
       API_TARGET: "http://backend:8000/"
       BACKEND_URL: "http://backend:8000"
       LOG_LEVEL: "info"
+      MAPS_URL: python $manage_file collectstatic --noinput
     command: /bin/bash -c "cd /frontend && npm install && npm run serve"
     ports:
-      - "3000:8080"
+      - "8080:8080"
     volumes:
       - ./frontend:/frontend
       - /frontend/node_modules/
     depends_on:
       backend:
         condition: service_started
-      tileserv:
-        condition: service_started
 
-  caddy:
-    container_name: caddy
-    profiles: ["caddy"]
-    build: ./frontend
-    environment:
-      NODE_ENV: development
-      PORT: 3000
-      BACKEND_URL: http://backend:8000
-      LOG_LEVEL: info
-      # VUE_APP_AXIOS_BASE_URL: "http://backend:8000/gwells/api/v2/"
-      # VUE_APP_VECTOR_TILE_BASE_URL: "/tiles/"
-      # VECTOR_TILE_SERVER: "http://tileserv:7800/"
-      # API_TARGET: "http://backend:8000/"
-      # LOG_LEVEL: "info"
-    ports: ["3005:3000"]
-    volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3005"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-      start_period: 20s
-    depends_on:
-      backend:
-        condition: service_healthy
+  # caddy:
+  #   container_name: caddy
+  #   profiles: ["caddy"]
+  #   build: ./frontend
+  #   environment:
+  #     NODE_ENV: development
+  #     PORT: 3000
+  #     BACKEND_URL: http://backend:8000
+  #     LOG_LEVEL: info
+  #     MAPS_URL: 'https://maps.gov.bc.ca'
+  #     # VUE_APP_AXIOS_BASE_URL: "http://backend:8000/gwells/api/v2/"
+  #     # VUE_APP_VECTOR_TILE_BASE_URL: "/tiles/"
+  #     # VECTOR_TILE_SERVER: "http://tileserv:7800/"
+  #     # API_TARGET: "http://backend:8000/"
+  #     # LOG_LEVEL: "info"
+  #   ports: ["3005:3000"]
+  #   volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:3005"]
+  #     interval: 5s
+  #     timeout: 3s
+  #     retries: 10
+  #     start_period: 20s
+  #   depends_on:
+  #     backend:
+  #       condition: service_healthy
+  #     tileserv:
+  #       condition: service_healthy
 
 #############################################################################################
 ###                                       Backend                                         ###
 #############################################################################################
   backend:
     platform: linux/x86_64
-    working_dir: /backend
+    working_dir: /app/backend
     build:
-      context: ./backend
+      context: ./
       dockerfile: Dockerfile
     hostname: backend
     # env_file:
@@ -255,11 +256,14 @@ services:
       start_period: 20s
     ports:
       - "8000:8000"
+      - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
       minio-public:
         condition: service_started
+      tileserv:
+        condition: service_healthy
 
 #############################################################################################
 ###                                       PGAdmin                                         ###
