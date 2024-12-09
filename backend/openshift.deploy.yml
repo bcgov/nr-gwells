@@ -485,8 +485,8 @@ objects:
     ports:
     - name: web
       protocol: TCP
-      port: 8000
-      targetPort: 8000
+      port: 8080
+      targetPort: 8080
     selector:
       name: nr-gwells-${NAME_SUFFIX}-backend
     type: ClusterIP
@@ -502,7 +502,7 @@ objects:
       appver: gwells-${NAME_SUFFIX}-backend
   spec:
     host: nr-gwells-${NAME_SUFFIX}-backend.apps.silver.devops.gov.bc.ca
-    # path: "/gwells"
+    path: "/gwells"
     to:
       kind: Service
       name: nr-gwells-${NAME_SUFFIX}-backend
