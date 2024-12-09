@@ -80,9 +80,8 @@ RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install ptvsd
 RUN python3 -m pip install 'setuptools<58.0'
 
-COPY ./backend/ .
-COPY ./backend/requirements.txt .
-
+COPY ./backend /app/backend/
+COPY ./backend/requirements.txt ./app/backend/
 # # RUN chmod +x load_fixtures.sh works when i pull the dockerfile into backend but not when dockerfile is with other docker files
 RUN chmod +x /app
 
