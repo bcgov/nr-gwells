@@ -17,12 +17,23 @@ jobs:
       matrix:
         # package: [database, backend, frontend, minio]
         package: [database, backend, minio]
+        include: 
+          - package: database
+            build_context: ./
+            build_file: database/Dockerfile
+            triggers: ('database/')
+          - package: backend
+            build_context: ./
+            build_file: ./Dockerfile
+            triggers: ('backend/', 'frontend/')
+          - package: minio
+            build_context: ./
+            build_file: minio/Dockerfile
+            triggers: ('minio/')
     timeout-minutes: 20
     steps:
       - uses: bcgov-nr/action-builder-ghcr@v2.2.0
         with:
-          build_context: ./../
-          build_file: ./Dockerfile
           keep_versions: 50
           package: ${{ matrix.package }}
           tag: ${{ github.event.number }}
