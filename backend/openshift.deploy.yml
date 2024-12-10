@@ -162,7 +162,7 @@ objects:
     replicas: 1
     test: false
     selector:
-      name: gwells-${NAME_SUFFIX}-backend
+      name: nr-gwells-${NAME_SUFFIX}-backend
       matchLabels:
         deployment: gwells-${NAME_SUFFIX}-backend
     template:
@@ -173,6 +173,7 @@ objects:
           name: gwells-${NAME_SUFFIX}-backend
           appver: gwells-${NAME_SUFFIX}-backend
           deployment: gwells-${NAME_SUFFIX}-backend
+          service: nr-gwells-${NAME_SUFFIX}-backend
       spec:
         volumes:
           - name: staticfiles
@@ -478,39 +479,39 @@ objects:
     creationTimestamp: 
     labels:
       app: nr-gwells-${NAME_SUFFIX}
-      appver: gwells-${NAME_SUFFIX}-backend
-    annotations:
-      description: Exposes and load balances the application pods
+      # appver: gwells-${NAME_SUFFIX}-backend
+    # annotations:
+    #   description: Exposes and load balances the application pods
   spec:
     ports:
-    - name: web
-      protocol: TCP
-      port: 8000
-      targetPort: 8000
+      - name: web
+        protocol: TCP
+        port: 8080
+        targetPort: 8080
     selector:
-      name: nr-gwells-${NAME_SUFFIX}-backend
+      service: nr-gwells-${NAME_SUFFIX}-backend
+      app: nr-gwells-${NAME_SUFFIX}-backend
     type: ClusterIP
     sessionAffinity: None
-# - kind: Route
-#   apiVersion: v1
-#   metadata:
-#     name: nr-gwells-${NAME_SUFFIX}-backend
-#     creationTimestamp: 
-#     labels:
-#       frontend: 'true'
-#       app: nr-gwells-${NAME_SUFFIX}
-#       appver: gwells-${NAME_SUFFIX}-backend
-#     annotations: {}
-#   spec:
-#     host: nr-gwells-${NAME_SUFFIX}-backend.apps.silver.devops.gov.bc.ca
-#     path: "/gwells"
-#     to:
-#       kind: Service
-#       name: nr-gwells-${NAME_SUFFIX}-backend
-#       weight: 100
-#     port:
-#       targetPort: web
-#     tls:
-#       insecureEdgeTerminationPolicy: Redirect
-#       termination: edge
-#     wildcardPolicy: None
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: nr-gwells-${NAME_SUFFIX}-backend
+    creationTimestamp: 
+    labels:
+      frontend: 'true'
+      app: nr-gwells-${NAME_SUFFIX}
+      # appver: gwells-${NAME_SUFFIX}-backend
+  spec:
+    host: nr-gwells-${NAME_SUFFIX}-backend.apps.silver.devops.gov.bc.ca
+    path: "/gwells"
+    to:
+      kind: Service
+      name: nr-gwells-${NAME_SUFFIX}-backend
+      weight: 100
+    port:
+      targetPort: web
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    wildcardPolicy: None
