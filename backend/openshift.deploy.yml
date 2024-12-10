@@ -162,7 +162,7 @@ objects:
     replicas: 1
     test: false
     selector:
-      name: gwells-${NAME_SUFFIX}-backend
+      name: nr-gwells-${NAME_SUFFIX}-backend
       matchLabels:
         deployment: gwells-${NAME_SUFFIX}-backend
     template:
