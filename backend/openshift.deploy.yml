@@ -478,15 +478,15 @@ objects:
     creationTimestamp: 
     labels:
       app: nr-gwells-${NAME_SUFFIX}
-      appver: gwells-${NAME_SUFFIX}-backend
-    annotations:
-      description: Exposes and load balances the application pods
+      # appver: gwells-${NAME_SUFFIX}-backend
+    # annotations:
+    #   description: Exposes and load balances the application pods
   spec:
     ports:
     - name: web
       protocol: TCP
       port: 8080
-      targetPort: 8080
+      targetPort: 8000
     selector:
       name: nr-gwells-${NAME_SUFFIX}-backend
     type: ClusterIP
@@ -499,7 +499,7 @@ objects:
     labels:
       frontend: 'true'
       app: nr-gwells-${NAME_SUFFIX}
-      appver: gwells-${NAME_SUFFIX}-backend
+      # appver: gwells-${NAME_SUFFIX}-backend
   spec:
     host: nr-gwells-${NAME_SUFFIX}-backend.apps.silver.devops.gov.bc.ca
     path: "/gwells"
