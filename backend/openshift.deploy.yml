@@ -488,7 +488,7 @@ objects:
       port: 8080
       targetPort: 8000
     selector:
-      name: nr-gwells-${NAME_SUFFIX}-backend
+      service: nr-gwells-${NAME_SUFFIX}-backend
     type: ClusterIP
     sessionAffinity: None
 - kind: Route
