@@ -180,7 +180,7 @@ objects:
             emptyDir:
               sizeLimit: 250Mi
         containers:
-        - name: nr-gwells-app-${NAME_SUFFIX}-backend
+        - name: gwells-app-${NAME_SUFFIX}-backend
           image: 'ghcr.io/bcgov/nr-gwells/backend:${IMAGE_TAG}'
           volumeMounts:
             - name: staticfiles
@@ -484,12 +484,13 @@ objects:
     #   description: Exposes and load balances the application pods
   spec:
     ports:
-    - name: web
-      protocol: TCP
-      port: 8080
-      targetPort: 8080
+      - name: web
+        protocol: TCP
+        port: 8080
+        targetPort: 8080
     selector:
       service: nr-gwells-${NAME_SUFFIX}-backend
+      app: nr-gwells-${NAME_SUFFIX}-backend
     type: ClusterIP
     sessionAffinity: None
 - kind: Route
