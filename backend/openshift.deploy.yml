@@ -180,7 +180,7 @@ objects:
             emptyDir:
               sizeLimit: 250Mi
         containers:
-        - name: gwells-app-${NAME_SUFFIX}-backend
+        - name: nr-gwells-app-${NAME_SUFFIX}-backend
           image: 'ghcr.io/bcgov/nr-gwells/backend:${IMAGE_TAG}'
           volumeMounts:
             - name: staticfiles
