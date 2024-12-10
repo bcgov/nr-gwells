@@ -173,6 +173,7 @@ objects:
           name: gwells-${NAME_SUFFIX}-backend
           appver: gwells-${NAME_SUFFIX}-backend
           deployment: gwells-${NAME_SUFFIX}-backend
+          service: nr-gwells-${NAME_SUFFIX}-backend
       spec:
         volumes:
           - name: staticfiles
