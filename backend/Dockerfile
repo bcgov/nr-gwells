@@ -1,3 +1,23 @@
+FROM node:14.21.3 AS frontend
+
+ENV LOG_LEVEL="info"
+
+RUN apt update && \
+    apt install -y git build-essential python3 python3-pip make g++ && \
+    apt autoremove -y && \
+    apt clean
+
+WORKDIR /app
+
+COPY ./frontend/package*.json ./
+
+RUN npm install
+
+COPY ./frontend/ /app
+
+RUN npm run build
+
+
 FROM python:3.7-slim
 
 # Envars
@@ -60,9 +80,9 @@ RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install ptvsd
 RUN python3 -m pip install 'setuptools<58.0'
 
-COPY . /app
+COPY ./backend /app
 # COPY ./backend-command-script.sh /backend-command-script.sh
-COPY ./requirements.txt /requirements.txt
+COPY ./backend/requirements.txt /requirements.txt
 
 # RUN chmod +x load_fixtures.sh works when i pull the dockerfile into backend but not when dockerfile is with other docker files
 RUN chmod +x /app

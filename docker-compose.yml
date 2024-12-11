@@ -191,8 +191,8 @@ services:
     platform: linux/x86_64
     working_dir: /backend
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./backend/Dockerfile
     hostname: backend
     # env_file:
     # - path: ./.env.test
