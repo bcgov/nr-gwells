@@ -16,9 +16,9 @@ jobs:
     strategy:
       matrix:
         package: [database, backend, frontend, minio]
-      include:
-        - package: backend
-          build_conext: ./
+        include:
+          - package: backend
+            build_conext: ./
     timeout-minutes: 20
     steps:
       - uses: bcgov-nr/action-builder-ghcr@v2.2.0
