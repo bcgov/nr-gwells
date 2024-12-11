@@ -17,7 +17,6 @@ COPY ./frontend/ /app
 
 RUN npm run build
 
-
 FROM python:3.7-slim
 
 # Envars
@@ -82,7 +81,10 @@ RUN python3 -m pip install 'setuptools<58.0'
 
 COPY ./backend /app
 # COPY ./backend-command-script.sh /backend-command-script.sh
-COPY ./backend/requirements.txt /requirements.txt
+COPY ./backend/requirements.txt /app/requirements.txt
+
+COPY --from=frontend ./app/dist ./gwells/static
+COPY --from=frontend ./app/dist/index.html ./gwells/templates/
 
 # RUN chmod +x load_fixtures.sh works when i pull the dockerfile into backend but not when dockerfile is with other docker files
 RUN chmod +x /app
@@ -91,48 +93,11 @@ RUN chmod +x /app
 
 RUN python3 -m pip install -r requirements.txt
 
-
 # TODO: move to entrypoint in deployment template?
 # chmod -R 777 /app && \
 CMD sh -c "python3 manage.py migrate --noinput && \
     ./load_fixtures.sh all && \
     python3 manage.py createinitialrevisions && \
-    # python3 manage.py collectstatic --noinput && \
+    python3 manage.py collectstatic --noinput && \
     # python3 manage.py export --cleanup=1 --upload=1 && \
     python3 manage.py runserver 0.0.0.0:8000"
-
-# RUN mkdir -p /app/staticfiles/admin/css && \
-#     ln -s /app/staticfiles /tmp/staticfiles && \
-#     chmod -R 777 /app/staticfiles
-
-# make script executable
-# RUN chmod +x /backend/backend-command-script.sh
-
-# production image step
-# FROM python:3.7-slim
-
-# # TODO: need to confirm version of libgdal-dev used with FROM python version
-# RUN apt-get -y update && \
-#     apt-get -y install libgdal32 \
-#     gdal-bin
-
-# ENV PATH="/usr/bin/python3:${PATH}"
-
-# WORKDIR /app
-
-# RUN python3 -m pip install 'setuptools<58.0'
-# RUN python3 -m pip install --upgrade pip
-# RUN python3 -m pip install ptvsd
-
-# COPY --from=build /app /app
-# COPY --from=build /backend-command-script.sh /backend-command-script.sh
-# COPY --from=build /requirements.txt /requirements.txt
-
-# RUN chmod +x /app
-
-# RUN python3 -m pip install -r requirements.txt
-
-# make script executable
-# RUN chmod +x /backend/backend-command-script.sh
-
-# CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
