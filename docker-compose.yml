@@ -15,7 +15,7 @@ services:
   minio-public:
     build:
       context: ./minio/
-    hostname: minio
+    container_name: minio
     ports:
       - "9000:9000"
     volumes:
@@ -34,7 +34,7 @@ services:
   # minio-private:
   #   build:
   #     context: ./minio/
-  #   hostname: minio
+  #   container_name: minio
   #   ports:
   #     - "9001:9001"
   #   volumes:
@@ -53,7 +53,7 @@ services:
   db:
     platform: linux/x86_64
     image: crunchydata/crunchy-postgres-gis:centos7-12.2-4.2.2
-    hostname: db
+    container_name: db
     environment:
       PG_USER: gwells
       PG_PASSWORD: test1
@@ -112,7 +112,7 @@ services:
 ###                                       Tileserv                                        ###
 #############################################################################################
   tileserv:
-    hostname: tileserv
+    container_name: tileserv
     depends_on:
       - db
     platform: linux/x86_64
@@ -133,7 +133,7 @@ services:
 #############################################################################################
   frontend:
     image: node:14.21.3
-    hostname: frontend
+    container_name: frontend
     # working_dir: /app/frontend
     # build:
     #   context: ./frontend
@@ -194,7 +194,7 @@ services:
       context: ./
       dockerfile: ./backend/Dockerfile
     image: nr-gwells/backend:latest
-    hostname: backend
+    container_name: backend
     # env_file:
     # - path: ./.env.test
     #   required: false
