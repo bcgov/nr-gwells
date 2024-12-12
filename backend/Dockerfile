@@ -17,7 +17,7 @@ COPY ./frontend/ /app
 
 RUN npm run build
 
-FROM python:3.7-slim
+FROM python:3.7
 
 # Envars
 ENV ENVIRONMENT="local"
