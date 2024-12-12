@@ -189,10 +189,11 @@ services:
 #############################################################################################
   backend:
     platform: linux/x86_64
-    working_dir: /backend
+    # working_dir: /backend
     build:
       context: ./
       dockerfile: ./backend/Dockerfile
+    image: nr-gwells/backend:latest
     hostname: backend
     # env_file:
     # - path: ./.env.test
@@ -245,8 +246,8 @@ services:
       GEOCODER_ADDRESS_API_BASE: https://geocoder.api.gov.bc.ca/addresses.json?
       LOCAL: "true"
       LOAD_FIXTURES: "true"
-    volumes:
-      - ./backend:/backend
+    # volumes:
+    #   - ./backend:/backend
     healthcheck:
       test: timeout 3s bash -c 'true > /dev/tcp/127.0.0.1/8000'
       interval: 5s
@@ -255,8 +256,6 @@ services:
       start_period: 20s
     ports:
       - "8000:8000"
-      - "3000:3000"
-      - "8080:8080"
     depends_on:
       db:
         condition: service_healthy
