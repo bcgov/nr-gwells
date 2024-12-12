@@ -201,8 +201,8 @@ services:
     environment:
       ENVIRONMENT: "${ENVIRONMENT:-local}"
       APP_CONTEXT_ROOT: gwells
-      CSRF_COOKIE_SECURE: "False"
-      CUSTOM_GDAL_GEOS: "False"
+      CSRF_COOKIE_SECURE: "false"
+      CUSTOM_GDAL_GEOS: "false"
       DATABASE_NAME: gwells
       DATABASE_USER: "${DATABASE_USER:-gwells}"
       DATABASE_PASSWORD: "${DATABASE_PASSWORD:-test1}"
@@ -217,7 +217,7 @@ services:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio1234
       PYTHONUNBUFFERED: "1"
-      SESSION_COOKIE_SECURE: "False"
+      SESSION_COOKIE_SECURE: "false"
       SSO_AUDIENCE: gwells-4121
       SSO_CLIENT: gwells-4121
       SSO_TEST_AUDIENCE: gwells-api-tests-4820
