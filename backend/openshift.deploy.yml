@@ -344,9 +344,9 @@ objects:
           - name: APP_CONTEXT_ROOT
             value: gwells
           - name: SESSION_COOKIE_SECURE
-            value: 'True'
+            value: 'true'
           - name: CSRF_COOKIE_SECURE
-            value: 'True'
+            value: 'true'
           - name: DB_REPLICATE
             valueFrom:
               configMapKeyRef:
@@ -407,7 +407,7 @@ objects:
           - name: GUNICORN_WORKERS
             value: '4'
           - name: ENFORCE_ENV_VARIABLES
-            value: 'False'
+            value: 'false'
           - name: EMAIL_NOTIFICATION_RECIPIENT
             valueFrom:
               configMapKeyRef:
