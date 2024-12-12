@@ -45,25 +45,21 @@ export default {
     }
   },
   methods: {
-    handleScroll () {
-      this.scrolled = window.scrollY > 100
-    },
     handleMapError (err) {
       if (err.noFeatures) {
         this.noWellsInView = true
       } else if (err.serverError) {
         this.mapServerErrorMessage = err.serverError
       }
-    }
-  },
-  watch: {
-    beforeMount () {
-      this.loadingMap = true
-      this.scrolled = window.scrollY > 100
-      window.addEventListener('scroll', this.handleScroll)
     },
-    beforeDestroy () {
-      window.removeEventListener('scroll', this.handleScroll)
+    createWellPopupElement (features, { canInteract }) {
+      return createWellPopupElement(features, this.map, this.$router, {
+        canInteract,
+        openInNewTab: true,
+        wellLayerIds: [
+          WELLS_BASE_AND_ARTESIAN_LAYER_ID
+        ]
+      })
     }
   }
 }

@@ -40,6 +40,7 @@ import {
 import { LegendControl } from '../../common/mapbox/controls'
 import { createWellPopupElement } from '../../common/mapbox/popup'
 import { PulsingWellImage, PulsingArtesianWellImage, PulsingClosedWellImage } from '../../common/mapbox/images'
+import { mapGetters } from 'vuex'
 import {CENTRE_LNG_LAT_BC, buildWellsGeoJSON } from '../../common/mapbox/geometry'
 
 import wellsAllLegendSrc from '../../common/assets/images/wells-all.svg'
@@ -96,6 +97,12 @@ export default {
     this.map.remove()
     this.map = null
   },
+  computed: {
+    ...mapGetters(['userRoles']),
+    showUnpublished () {
+      return Boolean(this.userRoles.wells.edit)
+    }
+  },
   methods: {
     initMapBox () {
       if (!mapboxgl.supported()) {
@@ -122,7 +129,8 @@ export default {
             DATABC_ROADS_LAYER,
             DATABC_CADASTREL_LAYER,
             //should we filter based on user role? this page is already behind keycloak
-            wellsBaseAndArtesianLayer({ filter: wellLayerFilter(true) }),
+            // wellsBaseAndArtesianLayer({ filter: wellLayerFilter(this.showUnpublished) }),
+            wellsBaseAndArtesianLayer({ filter: wellLayerFilter(this.showUnpublished) }),
             focusedWellsLayer()
           ]
         }
@@ -164,10 +172,14 @@ export default {
         const tooltipLayers = {
           [WELLS_BASE_AND_ARTESIAN_LAYER_ID]: {
             snapToCenter: true,
-            createTooltipContent: this.createWellPopupElement
+            createTooltipContent: (features) => createWellPopupElement(
+              features,
+              this.map,
+              this.$router,
+              { canInteract: true, openInNewTab: true }
+            )
           }
         }
-
         setupFeatureTooltips(this.map, tooltipLayers)
 
         this.setFocusedWells(this.focusedWells)
@@ -185,6 +197,11 @@ export default {
           WELLS_BASE_AND_ARTESIAN_LAYER_ID
         ]
       })
+    }
+  },
+  watch: {
+    userRoles () {
+      this.map.setStyle(this.buildMapStyle())
     }
   }
 }
