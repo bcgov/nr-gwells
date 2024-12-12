@@ -140,15 +140,15 @@ services:
     #   dockerfile: Dockerfile
     environment:
       DEBUG: "true"
-      VUE_APP_AXIOS_BASE_URL: "http://backend:8000/gwells/api/v2/"
+      VUE_APP_AXIOS_BASE_URL: "/api/"
       VUE_APP_VECTOR_TILE_BASE_URL: "/tiles/"
       VECTOR_TILE_SERVER: "http://tileserv:7800/"
-      API_TARGET: "http://backend:8000/"
-      BACKEND_URL: "http://backend:8000"
-      LOG_LEVEL: "info"
+      API_TARGET: "${API_TARGET:-http://backend:8000/}"
+      # BACKEND_URL: "http://backend:8000"
+      # LOG_LEVEL: "info"
     command: /bin/bash -c "cd /frontend && npm install && npm run serve"
     ports:
-      - "3000:8080"
+      - "8080:8080"
     volumes:
       - ./frontend:/frontend
       - /frontend/node_modules/
