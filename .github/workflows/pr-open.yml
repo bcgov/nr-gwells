@@ -19,12 +19,14 @@ jobs:
         include:
           - package: backend
             build_context: ./
+            build_file: ./backend/Dockerfile
     timeout-minutes: 20
     steps:
       - uses: bcgov-nr/action-builder-ghcr@v2.2.0
         with:
           keep_versions: 50
           build_context: ${{ matrix.build_context }}
+          build_file: ${{ matrix.build_file }}
           package: ${{ matrix.package }}
           tag: ${{ github.event.number }}
           tag_fallback: latest
