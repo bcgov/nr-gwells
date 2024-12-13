@@ -406,6 +406,10 @@ objects:
             value: '4'
           - name: ENFORCE_ENV_VARIABLES
             value: 'false'
+          - name: GWELLS_SERVICE_HOST
+            value: 'gwells'
+          - name: GWELLS_SERVICE_PORT
+            value: 5432
           - name: EMAIL_NOTIFICATION_RECIPIENT
             valueFrom:
               configMapKeyRef:
