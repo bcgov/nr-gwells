@@ -185,21 +185,21 @@ objects:
             protocol: TCP
           env:
           - name: DATABASE_SERVICE_NAME
-            value: ${REPO}-${ZONE}-database
+            value: ${REPO}-database-${ZONE}
           - name: DATABASE_NAME
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-${ZONE}-database
+                name: ${REPO}-database-${ZONE}
                 key: database-name
           - name: DATABASE_USER
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-${ZONE}-database
+                name: ${REPO}-database-${ZONE}
                 key: database-user
           - name: DATABASE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-${ZONE}-database
+                name: ${REPO}-database-${ZONE}
                 key: database-password
           - name: DATABASE_SCHEMA
             value: public
