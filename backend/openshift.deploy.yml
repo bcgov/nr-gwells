@@ -337,6 +337,8 @@ objects:
               configMapKeyRef:
                 key: ENABLE_AQUIFERS_SEARCH
                 name: ${REPO}-${ZONE}-global-config
+          - name: APP_CONTEXT_ROOT
+            value: ${REPO}
           - name: SESSION_COOKIE_SECURE
             value: 'true'
           - name: CSRF_COOKIE_SECURE
