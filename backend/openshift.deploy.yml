@@ -1,94 +1,92 @@
 kind: Template
 apiVersion: template.openshift.io/v1
 parameters:
-- name: NAME_SUFFIX
-  displayName: Name Suffix
-  description: A suffix appended to all objects
-  required: true
-- name: IMAGE_TAG
-  required: true
-- name: HOST
-  required: false
-  value: ''
-- name: CPU_REQUEST
-  required: false
-  value: 25m
-- name: CPU_LIMIT
-  required: false
-  value: 100m
-- name: MEMORY_REQUEST
-  required: false
-  value: 150Mi
-- name: MEMORY_LIMIT
-  required: false
-  value: 450Mi
-- name: PSQL_IMAGE
-  description: A psql client image (a PostgreSQL image will suffice)
-  required: true
-  value: image-registry.openshift-image-registry.svc:5000/26e83e-tools/crunchy-postgres-gis:centos7-12.4-3.0-4.5.0
-- name: E_LICENSING_URL
-  required: true
-- name: DB_REPLICATE
-  required: true
-- name: DJANGO_DEBUG
-  required: true
-- name: ENABLE_ADDITIONAL_DOCUMENTS
-  required: true
-- name: S3_PRIVATE_BUCKET
-  required: true
-- name: S3_PRIVATE_HOST
-  required: true
-- name: S3_WELL_EXPORT_BUCKET
-  required: true
-- name: SSO_AUDIENCE
-  required: true
-- name: SSO_AUTH_HOST
-  required: true
-- name: SSO_CLIENT
-  required: true
-- name: SSO_IDP_HINT
-  required: true
-- name: SSO_PORT
-  required: true
-- name: SSO_PUBKEY
-  required: true
-- name: SSO_REALM
-  required: true
-- name: SSO_TEST_AUDIENCE
-  required: true
-- name: SSO_TEST_CLIENT
-  required: true
-# - name: GDAL_LIBRARY_PATH
-#   required: true
-# - name: GEOS_LIBRARY_PATH
-#   required: true
-# - name: S3_AQUIFER_BUCKET
-#   required: true
-# - name: S3_REGISTRANT_BUCKET
-#   required: true
-# - name: S3_PRIVATE_ROOT_BUCKET
-#   required: true
-# - name: S3_PRIVATE_AQUIFER_BUCKET
-#   required: true
-# - name: S3_PRIVATE_REGISTRANT_BUCKET
-#   required: true
-# - name: S3_PRIVATE_WELL_BUCKET
-#   required: true
-# - name: ENABLE_AQUIFERS_SEARCH
-#   required: true
-# - name: EMAIL_NOTIFICATION_RECIPIENT
-#   required: true
-# - name: GEOCODER_ADDRESS_API_BASE
-#   required: true
+  - name: REPO
+    description: Repository name
+    value: nr-gwells
+  - name: COMPONENT
+    description: Component name
+    value: backend
+  - name: ZONE
+    description: Deployment zone, e.g. pr-### or prod
+    required: true
+  - name: TAG
+    required: true
+  - name: CPU_REQUEST
+    required: false
+    value: 25m
+  - name: CPU_LIMIT
+    required: false
+    value: 100m
+  - name: MEMORY_REQUEST
+    required: false
+    value: 150Mi
+  - name: MEMORY_LIMIT
+    required: false
+    value: 450Mi
+  - name: E_LICENSING_URL
+    required: true
+  - name: DB_REPLICATE
+    required: true
+  - name: DJANGO_DEBUG
+    required: true
+  - name: ENABLE_ADDITIONAL_DOCUMENTS
+    required: true
+  - name: S3_PRIVATE_BUCKET
+    required: true
+  - name: S3_PRIVATE_HOST
+    required: true
+  - name: S3_WELL_EXPORT_BUCKET
+    required: true
+  - name: SSO_AUDIENCE
+    required: true
+  - name: SSO_AUTH_HOST
+    required: true
+  - name: SSO_CLIENT
+    required: true
+  - name: SSO_IDP_HINT
+    required: true
+  - name: SSO_PORT
+    required: true
+  - name: SSO_PUBKEY
+    required: true
+  - name: SSO_REALM
+    required: true
+  - name: SSO_TEST_AUDIENCE
+    required: true
+  - name: SSO_TEST_CLIENT
+    required: true
+  - name: GDAL_LIBRARY_PATH
+    required: true
+  - name: GEOS_LIBRARY_PATH
+    required: true
+  - name: S3_AQUIFER_BUCKET
+    required: true
+  - name: S3_REGISTRANT_BUCKET
+    required: true
+  - name: S3_PRIVATE_ROOT_BUCKET
+    required: true
+  - name: S3_PRIVATE_AQUIFER_BUCKET
+    required: true
+  - name: S3_PRIVATE_REGISTRANT_BUCKET
+    required: true
+  - name: S3_PRIVATE_WELL_BUCKET
+    required: true
+  - name: ENABLE_AQUIFERS_SEARCH
+    required: true
+  - name: EMAIL_NOTIFICATION_RECIPIENT
+    required: true
+  - name: GEOCODER_ADDRESS_API_BASE
+    required: true
 objects:
 - kind: ConfigMap
   apiVersion: v1
   metadata:
     creationTimestamp: 
-    name: gwells-global-config-${NAME_SUFFIX}
+    name: ${REPO}-${ZONE}-global-config
     labels:
-      appver: gwells-${NAME_SUFFIX}
-      app: nr-gwells-${NAME_SUFFIX}
+      appver: ${REPO}-${ZONE}
+      app: ${REPO}-${ZONE}
   data:
     DB_REPLICATE: ${DB_REPLICATE}
     DJANGO_DEBUG: ${DJANGO_DEBUG}
@@ -120,10 +118,10 @@ objects:
 - kind: Deployment
   apiVersion: apps/v1
   metadata:
-    name: gwells-${NAME_SUFFIX}-backend
+    name: ${REPO}-${ZONE}-${COMPONENT}
     creationTimestamp: 
     labels:
-      app: nr-gwells-${NAME_SUFFIX}-backend
+      app: ${REPO}-${ZONE}-${COMPONENT}
     annotations:
       description: Defines how to deploy the application server
   spec:
@@ -137,48 +135,48 @@ objects:
         #     command:
         #     - "/usr/bin/container-entrypoint"
         #     - "/opt/app-root/src/scripts/pre-deploy.sh"
-        #     containerName: gwells-app-${NAME_SUFFIX}-backend
+        #     containerName: ${REPO}-${ZONE}-${COMPONENT}-app
         #     env:
         #     - name: PGDATABASE
         #       valueFrom:
         #         secretKeyRef:
-        #           name: gwells-pg12-${NAME_SUFFIX}-backend
+        #           name: ${REPO}-${ZONE}-${COMPONENT}-pg12
         #           key: database-name
         #     - name: PGUSER
         #       valueFrom:
         #         secretKeyRef:
-        #           name: gwells-pg12-${NAME_SUFFIX}-backend
+        #           name: ${REPO}-${ZONE}-${COMPONENT}-pg12
         #           key: database-user
         #     - name: PGPASSWORD
         #       valueFrom:
         #         secretKeyRef:
-        #           name: gwells-pg12-${NAME_SUFFIX}-backend
+        #           name: ${REPO}-${ZONE}-${COMPONENT}-pg12
         #           key: database-password
         #     - name: PGHOST
-        #       value: gwells-pg12-${NAME_SUFFIX}-backend
+        #       value: ${REPO}-${ZONE}-${COMPONENT}-pg12
       resources: {}
       activeDeadlineSeconds: 21600
     replicas: 1
     test: false
     selector:
-      name: nr-gwells-${NAME_SUFFIX}-backend
+      name: ${REPO}-${ZONE}-${COMPONENT}
       matchLabels:
-        deployment: nr-gwells-${NAME_SUFFIX}-backend
+        deployment: ${REPO}-${ZONE}-${COMPONENT}
     template:
       metadata:
-        name: nr-gwells-${NAME_SUFFIX}-backend
+        name: ${REPO}-${ZONE}-${COMPONENT}
         creationTimestamp: 
         labels:
-          name: nr-gwells-${NAME_SUFFIX}-backend
-          deployment: nr-gwells-${NAME_SUFFIX}-backend
+          name: ${REPO}-${ZONE}-${COMPONENT}
+          deployment: ${REPO}-${ZONE}-${COMPONENT}
       spec:
         volumes:
           - name: staticfiles
             emptyDir:
               sizeLimit: 250Mi
         containers:
-        - name: gwells-app-${NAME_SUFFIX}-backend
-          image: 'ghcr.io/bcgov/nr-gwells/backend:${IMAGE_TAG}'
+        - name: ${REPO}-${ZONE}-${COMPONENT}-app
+          image: 'ghcr.io/bcgov/${REPO}/${COMPONENT}:${TAG}'
           volumeMounts:
             - name: staticfiles
               mountPath: /app/staticfiles
@@ -187,162 +185,162 @@ objects:
             protocol: TCP
           env:
           - name: DATABASE_SERVICE_NAME
-            value: gwells-${NAME_SUFFIX}-database
+            value: ${REPO}-${ZONE}-database
           - name: DATABASE_NAME
             valueFrom:
               secretKeyRef:
-                name: gwells-${NAME_SUFFIX}-database
+                name: ${REPO}-${ZONE}-database
                 key: database-name
           - name: DATABASE_USER
             valueFrom:
               secretKeyRef:
-                name: gwells-${NAME_SUFFIX}-database
+                name: ${REPO}-${ZONE}-database
                 key: database-user
           - name: DATABASE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: gwells-${NAME_SUFFIX}-database
+                name: ${REPO}-${ZONE}-database
                 key: database-password
           - name: DATABASE_SCHEMA
             value: public
           - name: APP_MODULE
             value: wsgi:application
           - name: APP_HOME
-            value: backend
+            value: ${COMPONENT}
           - name: APP_CONFIG
-            value: "/opt/app-root/src/backend/gunicorn.ocp4.cfg"
+            value: "/opt/app-root/src/${COMPONENT}/gunicorn.ocp4.cfg"
           - name: DJANGO_SECRET_KEY
             valueFrom:
               secretKeyRef:
-                name: gwells-django-${NAME_SUFFIX}
+                name: ${REPO}-django-${ZONE}
                 key: secret_key
           - name: DJANGO_ADMIN_URL
             valueFrom:
               secretKeyRef:
-                name: gwells-django-${NAME_SUFFIX}
+                name: ${REPO}-django-${ZONE}
                 key: admin_url
           - name: DJANGO_ADMIN_USER
             valueFrom:
               secretKeyRef:
-                name: gwells-django-${NAME_SUFFIX}
+                name: ${REPO}-django-${ZONE}
                 key: admin_user
           - name: DJANGO_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: gwells-django-${NAME_SUFFIX}
+                name: ${REPO}-django-${ZONE}
                 key: admin_password
           - name: E_LICENSING_AUTH_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: gwells-e-licensing-${NAME_SUFFIX}
+                name: ${REPO}-e-licensing-${ZONE}
                 key: E_LICENSING_AUTH_PASSWORD
           - name: E_LICENSING_AUTH_USERNAME
             valueFrom:
               secretKeyRef:
-                name: gwells-e-licensing-${NAME_SUFFIX}
+                name: ${REPO}-e-licensing-${ZONE}
                 key: E_LICENSING_AUTH_USERNAME
           - name: E_LICENSING_URL
             valueFrom:
               configMapKeyRef:
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
                 key: E_LICENSING_URL
           - name: DJANGO_DEBUG
             valueFrom:
               configMapKeyRef:
                 key: DJANGO_DEBUG
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: GDAL_LIBRARY_PATH
             valueFrom:
               configMapKeyRef:
                 key: GDAL_LIBRARY_PATH
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: GEOS_LIBRARY_PATH
             valueFrom:
               configMapKeyRef:
                 key: GEOS_LIBRARY_PATH
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: S3_AQUIFER_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_AQUIFER_BUCKET
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: S3_REGISTRANT_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_REGISTRANT_BUCKET
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: S3_PRIVATE_ROOT_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_ROOT_BUCKET
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: S3_PRIVATE_AQUIFER_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_AQUIFER_BUCKET
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: S3_PRIVATE_REGISTRANT_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_REGISTRANT_BUCKET
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: S3_PRIVATE_WELL_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_WELL_BUCKET
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: SSO_CLIENT
             valueFrom:
               configMapKeyRef:
                 key: SSO_CLIENT
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: SSO_PUBKEY
             valueFrom:
               configMapKeyRef:
                 key: SSO_PUBKEY
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: SSO_AUTH_HOST
             valueFrom:
               configMapKeyRef:
                 key: SSO_AUTH_HOST
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: SSO_AUDIENCE
             valueFrom:
               configMapKeyRef:
                 key: SSO_AUDIENCE
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: SSO_REALM
             valueFrom:
               configMapKeyRef:
                 key: SSO_REALM
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: SSO_PORT
             valueFrom:
               configMapKeyRef:
                 key: SSO_PORT
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: SSO_TEST_CLIENT
             valueFrom:
               configMapKeyRef:
                 key: SSO_TEST_CLIENT
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: SSO_TEST_AUDIENCE
             valueFrom:
               configMapKeyRef:
                 key: SSO_TEST_AUDIENCE
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: ENABLE_ADDITIONAL_DOCUMENTS
             valueFrom:
               configMapKeyRef:
                 key: ENABLE_ADDITIONAL_DOCUMENTS
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: ENABLE_AQUIFERS_SEARCH
             valueFrom:
               configMapKeyRef:
                 key: ENABLE_AQUIFERS_SEARCH
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: APP_CONTEXT_ROOT
-            value: gwells
+            value: ${REPO}
           - name: SESSION_COOKIE_SECURE
             value: 'true'
           - name: CSRF_COOKIE_SECURE
@@ -351,57 +349,57 @@ objects:
             valueFrom:
               configMapKeyRef:
                 key: DB_REPLICATE
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           # - name: MINIO_ACCESS_KEY
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters-${NAME_SUFFIX}
+          #       name: minio-access-parameters-${ZONE}
           #       key: MINIO_ACCESS_KEY
           # - name: MINIO_SECRET_KEY
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters-${NAME_SUFFIX}
+          #       name: minio-access-parameters-${ZONE}
           #       key: MINIO_SECRET_KEY
           # - name: S3_PUBLIC_ACCESS_KEY
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters-${NAME_SUFFIX}
+          #       name: minio-access-parameters-${ZONE}
           #       key: S3_PUBLIC_ACCESS_KEY
           # - name: S3_PUBLIC_SECRET_KEY
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters-${NAME_SUFFIX}
+          #       name: minio-access-parameters-${ZONE}
           #       key: S3_PUBLIC_SECRET_KEY
           # - name: S3_HOST
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters-${NAME_SUFFIX}
+          #       name: minio-access-parameters-${ZONE}
           #       key: S3_HOST
           # - name: S3_ROOT_BUCKET
           #   valueFrom:
           #     secretKeyRef:
-          #       name: minio-access-parameters-${NAME_SUFFIX}
+          #       name: minio-access-parameters-${ZONE}
           #       key: S3_ROOT_BUCKET
           - name: S3_PRIVATE_HOST
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_HOST
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: S3_WELL_EXPORT_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_WELL_EXPORT_BUCKET
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: S3_PRIVATE_BUCKET
             valueFrom:
               configMapKeyRef:
                 key: S3_PRIVATE_BUCKET
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: SSO_IDP_HINT
             valueFrom:
               configMapKeyRef:
                 key: SSO_IDP_HINT
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: WEB_CONCURRENCY
             value: '4'
           - name: GUNICORN_WORKERS
@@ -412,12 +410,12 @@ objects:
             valueFrom:
               configMapKeyRef:
                 key: EMAIL_NOTIFICATION_RECIPIENT
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           - name: GEOCODER_ADDRESS_API_BASE
             valueFrom:
               configMapKeyRef:
                 key: GEOCODER_ADDRESS_API_BASE
-                name: gwells-global-config-${NAME_SUFFIX}
+                name: ${REPO}-${ZONE}-global-config
           resources:
             limits:
               cpu: "${CPU_LIMIT}"
@@ -458,24 +456,24 @@ objects:
   metadata:
     creationTimestamp: 
     labels:
-      app: nr-gwells-${NAME_SUFFIX}
-      appver: gwells-${NAME_SUFFIX}-backend
-    name: gwells-${NAME_SUFFIX}-backend
+      app: ${REPO}-${ZONE}
+      appver: ${REPO}-${ZONE}-${COMPONENT}
+    name: ${REPO}-${ZONE}-${COMPONENT}
   spec:
     maxReplicas: 5
     minReplicas: 1
     scaleTargetRef:
       apiVersion: v1
       kind: Deployment
-      name: gwells-${NAME_SUFFIX}-backend
+      name: ${REPO}-${ZONE}-${COMPONENT}
     targetCPUUtilizationPercentage: 90
 - kind: Service
   apiVersion: v1
   metadata:
-    name: nr-gwells-${NAME_SUFFIX}-backend
+    name: ${REPO}-${ZONE}-${COMPONENT}
     creationTimestamp: 
     labels:
-      app: nr-gwells-${NAME_SUFFIX}-backend
+      app: ${REPO}-${ZONE}-${COMPONENT}
   spec:
     ports:
     - name: web
@@ -483,23 +481,22 @@ objects:
       port: 8080
       targetPort: 8080
     selector:
-      name: nr-gwells-${NAME_SUFFIX}-backend
+      name: ${REPO}-${ZONE}-${COMPONENT}
     type: ClusterIP
     sessionAffinity: None
 - kind: Route
   apiVersion: v1
   metadata:
-    name: nr-gwells-${NAME_SUFFIX}-backend
-    creationTimestamp: 
+    name: ${REPO}-${ZONE}-${COMPONENT}
     labels:
       frontend: 'true'
-      app: nr-gwells-${NAME_SUFFIX}-backend
+      app: ${REPO}-${ZONE}-${COMPONENT}
   spec:
-    host: nr-gwells-${NAME_SUFFIX}-backend.apps.silver.devops.gov.bc.ca
+    host: ${REPO}-${ZONE}-${COMPONENT}.apps.silver.devops.gov.bc.ca
     path: "/gwells"
     to:
       kind: Service
-      name: nr-gwells-${NAME_SUFFIX}-backend
+      name: ${REPO}-${ZONE}-${COMPONENT}
       weight: 100
     port:
       targetPort: web
