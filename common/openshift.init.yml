@@ -3,7 +3,7 @@ kind: Template
 parameters:
   - name: REPO
     description: Repository name
-    value: ${REPO}
+    value: nr-gwells
   - name: ZONE
     description: Deployment zone, e.g. pr-### or prod
     required: true
