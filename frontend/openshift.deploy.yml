@@ -1,19 +1,24 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 parameters:
-  - name: NAME_SUFFIX
-    displayName: Name Suffix
-    description: A suffix appended to all objects
+  - name: REPO
+    description: Repository name
+    value: nr-gwells
+  - name: COMPONENT
+    description: Component name
+    value: frontend
+  - name: ZONE
+    description: Deployment zone, e.g. pr-### or prod
     required: true
-  - name: IMAGE_TAG
+  - name: TAG
     required: true
 objects:
   - kind: Service
     apiVersion: v1
     metadata:
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
-      name: nr-gwells-${NAME_SUFFIX}-frontend
+        app: ${REPO}-${ZONE}
+      name: ${REPO}-${ZONE}-${COMPONENT}
     spec:
       type: ClusterIP
       ports:
@@ -22,30 +27,30 @@ objects:
           protocol: TCP
           name: 3000-tcp
       selector:
-        service: nr-gwells-${NAME_SUFFIX}-frontend
+        service: ${REPO}-${ZONE}-${COMPONENT}
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
-        deployment: gwells-${NAME_SUFFIX}-frontend
-      name: gwells-${NAME_SUFFIX}-frontend
+        app: ${REPO}-${ZONE}
+        deployment: ${REPO}-${ZONE}-${COMPONENT}
+      name: ${REPO}-${ZONE}-${COMPONENT}
     spec:
       strategy:
         type: Recreate
       selector:
         matchLabels:
-          deployment: gwells-${NAME_SUFFIX}-frontend
+          deployment: ${REPO}-${ZONE}-${COMPONENT}
       template:
         metadata:
           labels:
-            app: nr-gwells-${NAME_SUFFIX}
-            deployment: gwells-${NAME_SUFFIX}-frontend
-            service: nr-gwells-${NAME_SUFFIX}-frontend
+            app: ${REPO}-${ZONE}
+            deployment: ${REPO}-${ZONE}-${COMPONENT}
+            service: ${REPO}-${ZONE}-${COMPONENT}
         spec:
           containers:
-            - name: gwells-${NAME_SUFFIX}-frontend
-              image: ghcr.io/bcgov/nr-gwells/frontend:${IMAGE_TAG}
+            - name: ${REPO}-${ZONE}-${COMPONENT}
+              image: ghcr.io/bcgov/${REPO}/${COMPONENT}:${TAG}
               securityContext:
                 capabilities:
                   add: ["NET_BIND_SERVICE"]
@@ -54,9 +59,9 @@ objects:
                 - name: LOG_LEVEL
                   value: info
                 - name: VUE_APP_AXIOS_BASE_URL
-                  value: http://gwells-${NAME_SUFFIX}-frontend/gwells/api/v2/
+                  value: http://${REPO}-${ZONE}-${COMPONENT}/gwells/api/v2/
                 - name: BACKEND_URL
-                  value: http://gwells-${NAME_SUFFIX}-frontend
+                  value: http://${REPO}-${ZONE}-${COMPONENT}
               ports:
                 - name: container-port
                   containerPort: 3000
@@ -93,15 +98,15 @@ objects:
     apiVersion: route.openshift.io/v1
     metadata:
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
-      name: nr-gwells-${NAME_SUFFIX}-frontend
+        app: ${REPO}-${ZONE}
+      name: ${REPO}-${ZONE}-${COMPONENT}
     spec:
-      host: nr-gwells-${NAME_SUFFIX}-frontend.apps.silver.devops.gov.bc.ca
+      host: ${REPO}-${ZONE}-${COMPONENT}.apps.silver.devops.gov.bc.ca
       port:
         targetPort: 3000-tcp
       to:
         kind: Service
-        name: nr-gwells-${NAME_SUFFIX}-frontend
+        name: ${REPO}-${ZONE}-${COMPONENT}
         weight: 100
       tls:
         termination: edge

@@ -1,48 +1,39 @@
-apiVersion: template.openshift.io/v1
 kind: Template
-metadata:
-  annotations:
-    description: "Minio deployment"
-  labels:
-    app: "gwells-${NAME_SUFFIX}"
-    template: "gwells-minio-template-${NAME_SUFFIX}"
-  name: "gwells-minio-${NAME_SUFFIX}"
+apiVersion: template.openshift.io/v1
 parameters:
-  - name: "NAME_SUFFIX"
+  - name: REPO
+    description: Repository name
+    value: nr-gwells
+  - name: COMPONENT
+    description: Component name
+    value: minio
+  - name: ZONE
+    description: Deployment zone, e.g. pr-### or prod
     required: true
-  - name: "SRC_NAMESPACE"
-    displayName: "Namespace containing the deployment source"
-    value: "26e83e-tools"
-  - name: "SRC_IMAGE"
-    displayName: "Name of source image"
-    value: "gwells-minio"
-  - name: "SRC_TAG"
-    displayName: "Tag of source image"
-    value: "latest"
-  - name: "DEST_PVC_SIZE"
+  - name: TAG
+    required: true
+  - name: DEST_PVC_SIZE
     displayName: "PVC size"
     value: "1Gi"
-  - name: "DEST_PVC_CLASS"
+  - name: DEST_PVC_CLASS
     displayName: "PVC class"
     value: "netapp-file-standard"
-  - name: "DEST_PVC_ACCESS"
+  - name: DEST_PVC_ACCESS
     displayName: "PVC access mode"
     value: "ReadWriteMany"
-  - name: "IMAGE_TAG"
-    required: true
 objects:
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
       finalizers:
-      - kubernetes.io/pvc-protection
-      name: "gwells-minio-${NAME_SUFFIX}"
+        - kubernetes.io/pvc-protection
+      name: ${REPO}-${ZONE}-${COMPONENT}
       labels:
-        app: "nr-gwells-${NAME_SUFFIX}"
-        name: gwells-minio-${NAME_SUFFIX}
+        app: ${REPO}-${ZONE}
+        name: ${REPO}-${ZONE}-${COMPONENT}
     spec:
       accessModes:
-      - ${DEST_PVC_ACCESS}
+        - ${DEST_PVC_ACCESS}
       resources:
         requests:
           storage: ${DEST_PVC_SIZE}
@@ -51,14 +42,14 @@ objects:
     kind: Deployment
     metadata:
       labels:
-        app: "nr-gwells-${NAME_SUFFIX}"
-        name: "gwells-minio-${NAME_SUFFIX}"
-      name: "gwells-minio-${NAME_SUFFIX}"
+        app: ${REPO}-${ZONE}
+        name: ${REPO}-${ZONE}-${COMPONENT}
+      name: ${REPO}-${ZONE}-${COMPONENT}
     spec:
       replicas: 1
       selector:
         matchLabels:
-          app: "nr-gwells-${NAME_SUFFIX}"
+          app: ${REPO}-${ZONE}
       strategy:
         activeDeadlineSeconds: 3000
         recreateParams:
@@ -67,25 +58,25 @@ objects:
       template:
         metadata:
           labels:
-            app: "nr-gwells-${NAME_SUFFIX}"
-            name: gwells-minio-${NAME_SUFFIX}
-            service: gwells-minio-${NAME_SUFFIX}
+            app: ${REPO}-${ZONE}
+            name: ${REPO}-${ZONE}-${COMPONENT}
+            service: ${REPO}-${ZONE}-${COMPONENT}
         spec:
           containers:
           - env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: gwells-minio-${NAME_SUFFIX}
+                  name: ${REPO}-${ZONE}-${COMPONENT}
                   key: MINIO_ACCESS_KEY
             - name: MINIO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: gwells-minio-${NAME_SUFFIX}
+                  name: ${REPO}-${ZONE}-${COMPONENT}
                   key: MINIO_SECRET_KEY
             - name: MINIO_DATA_DIR
               value: /opt/minio/s3/data
-            image: ghcr.io/bcgov/nr-gwells/minio:${IMAGE_TAG}
+            image: ghcr.io/bcgov/${REPO}/${COMPONENT}:${TAG}
             securityContext:
               capabilities:
                 add: ["NET_BIND_SERVICE"]
@@ -100,7 +91,7 @@ objects:
             #   successThreshold: 1
             #   failureThreshold: 30
             # imagePullPolicy: Always
-            name: "gwells-minio-${NAME_SUFFIX}"
+            name: ${REPO}-${ZONE}-${COMPONENT}
             command:
               - '/bin/sh'
               - '-c'
@@ -124,19 +115,19 @@ objects:
           volumes:
           - name: minio-vol
             persistentVolumeClaim:
-              claimName: "gwells-minio-${NAME_SUFFIX}"
+              claimName: ${REPO}-${ZONE}-${COMPONENT}
   - apiVersion: v1
     kind: Service
     metadata:
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
-        name: gwells-minio-${NAME_SUFFIX}
-      name: gwells-minio-${NAME_SUFFIX}
+        app: ${REPO}-${ZONE}
+        name: ${REPO}-${ZONE}-${COMPONENT}
+      name: ${REPO}-${ZONE}-${COMPONENT}
     spec:
       selector:
-        app: nr-gwells-${NAME_SUFFIX}
-        name: gwells-minio-${NAME_SUFFIX}
-        service: gwells-minio-${NAME_SUFFIX}
+        app: ${REPO}-${ZONE}
+        name: ${REPO}-${ZONE}-${COMPONENT}
+        service: ${REPO}-${ZONE}-${COMPONENT}
       ports:
       - name: 9000-tcp
         port: 9000
