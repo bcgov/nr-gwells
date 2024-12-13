@@ -91,8 +91,8 @@ jobs:
           file: database/openshift.deploy.yml
           overwrite: true
           parameters:
-            -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
-            -p IMAGE_STREAM_NAME=crunchy-postgres-gis
+            # -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
+            # -p IMAGE_STREAM_NAME=crunchy-postgres-gis
             -p TAG=${{ inputs.tag }}
             -p ZONE=${{ inputs.target }}
             -p STORAGE_CLASS=netapp-file-standard
