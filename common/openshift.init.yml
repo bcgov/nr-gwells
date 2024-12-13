@@ -62,7 +62,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: ${REPO}-${ZONE}-database
+      name: ${REPO}-database-${ZONE}
       labels:
         app: ${REPO}-${ZONE}
     stringData:
