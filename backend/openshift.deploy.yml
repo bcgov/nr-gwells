@@ -56,28 +56,28 @@ parameters:
     required: true
   - name: SSO_TEST_CLIENT
     required: true
-  - name: GDAL_LIBRARY_PATH
-    required: true
-  - name: GEOS_LIBRARY_PATH
-    required: true
-  - name: S3_AQUIFER_BUCKET
-    required: true
-  - name: S3_REGISTRANT_BUCKET
-    required: true
-  - name: S3_PRIVATE_ROOT_BUCKET
-    required: true
-  - name: S3_PRIVATE_AQUIFER_BUCKET
-    required: true
-  - name: S3_PRIVATE_REGISTRANT_BUCKET
-    required: true
-  - name: S3_PRIVATE_WELL_BUCKET
-    required: true
-  - name: ENABLE_AQUIFERS_SEARCH
-    required: true
-  - name: EMAIL_NOTIFICATION_RECIPIENT
-    required: true
-  - name: GEOCODER_ADDRESS_API_BASE
-    required: true
+  # - name: GDAL_LIBRARY_PATH
+  #   required: true
+  # - name: GEOS_LIBRARY_PATH
+  #   required: true
+  # - name: S3_AQUIFER_BUCKET
+  #   required: true
+  # - name: S3_REGISTRANT_BUCKET
+  #   required: true
+  # - name: S3_PRIVATE_ROOT_BUCKET
+  #   required: true
+  # - name: S3_PRIVATE_AQUIFER_BUCKET
+  #   required: true
+  # - name: S3_PRIVATE_REGISTRANT_BUCKET
+  #   required: true
+  # - name: S3_PRIVATE_WELL_BUCKET
+  #   required: true
+  # - name: ENABLE_AQUIFERS_SEARCH
+  #   required: true
+  # - name: EMAIL_NOTIFICATION_RECIPIENT
+  #   required: true
+  # - name: GEOCODER_ADDRESS_API_BASE
+  #   required: true
 objects:
 - kind: ConfigMap
   apiVersion: v1
