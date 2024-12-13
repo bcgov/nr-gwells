@@ -398,6 +398,8 @@ objects:
               configMapKeyRef:
                 key: SSO_IDP_HINT
                 name: ${REPO}-${ZONE}-global-config
+          - name: CUSTOM_GDAL_GEOS
+            value: 'false'
           - name: WEB_CONCURRENCY
             value: '4'
           - name: GUNICORN_WORKERS
