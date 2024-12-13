@@ -3,10 +3,10 @@ apiVersion: template.openshift.io/v1
 parameters:
   - name: REPO
     description: Repository name
-    value: ${REPO}
+    value: nr-gwells
   - name: COMPONENT
     description: Component name
-    value: ${COMPONENT}
+    value: backend
   - name: ZONE
     description: Deployment zone, e.g. pr-### or prod
     required: true

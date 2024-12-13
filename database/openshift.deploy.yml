@@ -1,23 +1,17 @@
-apiVersion: v1
 kind: Template
-labels:
-  template: postgresql-persistent-template
-metadata:
-  creationTimestamp: null
-  name: gwells-postgresql-dc
+apiVersion: template.openshift.io/v1
 parameters:
-  - description: The OpenShift ImageStream name.
-    displayName: IMAGE_STREAM_NAME
-    name: IMAGE_STREAM_NAME
-    value: crunchy-postgres-gis
-  - description: The OpenShift Namespace where the ImageStream resides.
-    displayName: Namespace
-    name: IMAGE_STREAM_NAMESPACE
-    value: 26e83e-tools
-  - description: The image registry for the container image or ImageStream.
-    displayName: Image Registry
-    name: IMAGE_REGISTRY
-    value: image-registry.openshift-image-registry.svc:5000
+  - name: REPO
+    description: Repository name
+    value: nr-gwells
+  - name: COMPONENT
+    description: Component name
+    value: database
+  - name: ZONE
+    description: Deployment zone, e.g. pr-### or prod
+    required: true
+  - name: TAG
+    required: true
   - description: Volume space available for data, e.g. 512Mi, 2Gi.
     displayName: Volume Capacity
     name: VOLUME_CAPACITY
@@ -47,10 +41,6 @@ parameters:
     name: IMAGE_STREAM_VERSION
     required: true
     value: centos7-12.4-3.0-4.5.0
-  - name: NAME_SUFFIX
-    required: true
-  - name: IMAGE_TAG
-    required: true 
   - description: Storage class for PVCs.
     displayName: Storage class for PVCs.
     name: STORAGE_CLASS
@@ -117,18 +107,18 @@ objects:
     kind: ConfigMap
     metadata:
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
-        name: gwells-${NAME_SUFFIX}-database-setupcfg
-        appver: gwells-${NAME_SUFFIX}-database
-      name: gwells-${NAME_SUFFIX}-database-setupcfg
+        app: ${REPO}-${ZONE}
+        name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
+        appver: ${REPO}-${ZONE}-${COMPONENT}
+      name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
   - apiVersion: v1
     kind: Service
     metadata:
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
+        app: ${REPO}-${ZONE}
       annotations:
         template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
-      name: gwells-${NAME_SUFFIX}-database
+      name: ${REPO}-${ZONE}-${COMPONENT}
     spec:
       ports:
         - name: postgresql
@@ -137,7 +127,7 @@ objects:
           protocol: TCP
           targetPort: 5432
       selector:
-        deployment: gwells-${NAME_SUFFIX}-database
+        deployment: ${REPO}-${ZONE}-${COMPONENT}
       sessionAffinity: None
       type: ClusterIP
     status:
@@ -145,9 +135,9 @@ objects:
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: gwells-${NAME_SUFFIX}-database
+      name: ${REPO}-${ZONE}-${COMPONENT}
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
+        app: ${REPO}-${ZONE}
       annotations:
         template.openshift.io.bcgov/create: "true"
     spec:
@@ -162,22 +152,22 @@ objects:
     metadata:
       annotations:
         template.alpha.openshift.io/wait-for-ready: "true"
-      name: gwells-${NAME_SUFFIX}-database
+      name: ${REPO}-${ZONE}-${COMPONENT}
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
+        app: ${REPO}-${ZONE}
     spec:
       replicas: 1
       selector:
         matchLabels:
-          deployment: gwells-${NAME_SUFFIX}-database
+          deployment: ${REPO}-${ZONE}-${COMPONENT}
       strategy:
         type: Recreate
       template:
         metadata:
           labels:
-            name: gwells-${NAME_SUFFIX}-database
-            appver: gwells-${NAME_SUFFIX}
-            deployment: gwells-${NAME_SUFFIX}-database
+            name: ${REPO}-${ZONE}-${COMPONENT}
+            appver: ${REPO}-${ZONE}
+            deployment: ${REPO}-${ZONE}-${COMPONENT}
         spec:
           containers:
             - capabilities: {}
@@ -187,7 +177,7 @@ objects:
                 - name: CONTAINER_NAME
                   value: postgresql
                 - name: PG_PRIMARY_HOST
-                  value: gwells-${NAME_SUFFIX}-database
+                  value: ${REPO}-${ZONE}-${COMPONENT}
                 - name: PGDATA_PATH_OVERRIDE
                   value: userdata
                 - name: PGHOST
@@ -196,38 +186,38 @@ objects:
                   valueFrom:
                     secretKeyRef:
                         key: database-name
-                        name: gwells-${NAME_SUFFIX}-database
+                        name: ${REPO}-${ZONE}-${COMPONENT}
                 - name: PG_PASSWORD
                   valueFrom:
                     secretKeyRef:
                         key: database-password
-                        name: gwells-${NAME_SUFFIX}-database
+                        name: ${REPO}-${ZONE}-${COMPONENT}
                 - name: PG_USER
                   valueFrom:
                     secretKeyRef:
                         key: database-user
-                        name: gwells-${NAME_SUFFIX}-database
+                        name: ${REPO}-${ZONE}-${COMPONENT}
                 - name: PG_MODE
                   valueFrom:
                     secretKeyRef:
                         key: PG_MODE
-                        name: crunchy-db-credentials-${NAME_SUFFIX}
+                        name: crunchy-db-credentials-${ZONE}
                 - name: PG_PRIMARY_PASSWORD
                   valueFrom:
                     secretKeyRef:
                         key: PG_PRIMARY_PASSWORD
-                        name: crunchy-db-credentials-${NAME_SUFFIX}
+                        name: crunchy-db-credentials-${ZONE}
                 - name: PG_PRIMARY_USER
                   valueFrom:
                     secretKeyRef:
                         key: PG_PRIMARY_USER
-                        name: crunchy-db-credentials-${NAME_SUFFIX}
+                        name: crunchy-db-credentials-${ZONE}
                 - name: PG_ROOT_PASSWORD
                   valueFrom:
                     secretKeyRef:
                         key: PG_ROOT_PASSWORD
-                        name: crunchy-db-credentials-${NAME_SUFFIX}
-              image: "ghcr.io/bcgov/nr-gwells/database:${IMAGE_TAG}"
+                        name: crunchy-db-credentials-${ZONE}
+              image: "ghcr.io/bcgov/${REPO}/${COMPONENT}:${TAG}"
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
@@ -268,20 +258,19 @@ objects:
               terminationMessagePath: /dev/termination-log
               volumeMounts:
                 - mountPath: /pgdata
-                  name: gwells-${NAME_SUFFIX}-database-data
+                  name: ${REPO}-${ZONE}-${COMPONENT}-data
                 - mountPath: /var/run/postgresql
-                  name: gwells-${NAME_SUFFIX}-database-run
+                  name: ${REPO}-${ZONE}-${COMPONENT}-run
                 - mountPath: /pgconf
-                  name: gwells-${NAME_SUFFIX}-database-setupcfg
+                  name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           volumes:
-            - name: gwells-${NAME_SUFFIX}-database-data
+            - name: ${REPO}-${ZONE}-${COMPONENT}-data
               persistentVolumeClaim:
-                claimName: gwells-${NAME_SUFFIX}-database
-            - name: gwells-${NAME_SUFFIX}-database-run
+                claimName: ${REPO}-${ZONE}-${COMPONENT}
+            - name: ${REPO}-${ZONE}-${COMPONENT}-run
               emptyDir: {}
             - configMap:
-                name: gwells-${NAME_SUFFIX}-database-setupcfg
-              name: gwells-${NAME_SUFFIX}-database-setupcfg
-    status: {}
+                name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
+              name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
