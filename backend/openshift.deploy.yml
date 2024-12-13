@@ -205,8 +205,6 @@ objects:
             value: public
           - name: APP_MODULE
             value: wsgi:application
-          - name: APP_HOME
-            value: ${COMPONENT}
           - name: APP_CONFIG
             value: "/opt/app-root/src/${COMPONENT}/gunicorn.ocp4.cfg"
           - name: DJANGO_SECRET_KEY
@@ -339,8 +337,6 @@ objects:
               configMapKeyRef:
                 key: ENABLE_AQUIFERS_SEARCH
                 name: ${REPO}-${ZONE}-global-config
-          - name: APP_CONTEXT_ROOT
-            value: ${REPO}
           - name: SESSION_COOKIE_SECURE
             value: 'true'
           - name: CSRF_COOKIE_SECURE
