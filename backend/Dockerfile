@@ -20,9 +20,9 @@ RUN npm run build
 FROM python:3.7
 
 # # Envars
-ENV ENVIRONMENT="local"
+# ENV ENVIRONMENT="local"
 # ENV CSRF_COOKIE_SECURE="False"
-ENV CUSTOM_GDAL_GEOS="False"
+# ENV CUSTOM_GDAL_GEOS="False"
 # ENV DATABASE_NAME=gwells
 # ENV DATABASE_USER="gwells"
 # ENV DATABASE_PASSWORD="test1"
