@@ -185,21 +185,21 @@ objects:
             protocol: TCP
           env:
           - name: DATABASE_SERVICE_NAME
-            value: ${REPO}-database-${ZONE}
+            value: ${REPO}-${ZONE}-database
           - name: DATABASE_NAME
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-database-${ZONE}
+                name: ${REPO}-${ZONE}-database
                 key: database-name
           - name: DATABASE_USER
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-database-${ZONE}
+                name: ${REPO}-${ZONE}-database
                 key: database-user
           - name: DATABASE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-database-${ZONE}
+                name: ${REPO}-${ZONE}-database
                 key: database-password
           - name: DATABASE_SCHEMA
             value: public
@@ -212,32 +212,32 @@ objects:
           - name: DJANGO_SECRET_KEY
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-django-${ZONE}
+                name: ${REPO}-${ZONE}-django
                 key: secret_key
           - name: DJANGO_ADMIN_URL
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-django-${ZONE}
+                name: ${REPO}-${ZONE}-django
                 key: admin_url
           - name: DJANGO_ADMIN_USER
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-django-${ZONE}
+                name: ${REPO}-${ZONE}-django
                 key: admin_user
           - name: DJANGO_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-django-${ZONE}
+                name: ${REPO}-${ZONE}-django
                 key: admin_password
           - name: E_LICENSING_AUTH_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-e-licensing-${ZONE}
+                name: ${REPO}-${ZONE}-e-licensing
                 key: E_LICENSING_AUTH_PASSWORD
           - name: E_LICENSING_AUTH_USERNAME
             valueFrom:
               secretKeyRef:
-                name: ${REPO}-e-licensing-${ZONE}
+                name: ${REPO}-${ZONE}-e-licensing
                 key: E_LICENSING_AUTH_USERNAME
           - name: E_LICENSING_URL
             valueFrom:
