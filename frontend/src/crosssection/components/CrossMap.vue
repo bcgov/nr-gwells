@@ -89,7 +89,7 @@ export default {
     }
   },
   mounted () {
-    this.$emit('mapLoading')
+    // this.$emit('mapLoading')
 
     this.initMapBox()
   },
@@ -117,23 +117,7 @@ export default {
         maxPitch: 0,
         dragRotate: false,
         center: CENTRE_LNG_LAT_BC,
-        style: {
-          version: 8,
-          sources: {
-            [DATABC_ROADS_SOURCE_ID]: DATABC_ROADS_SOURCE,
-            [DATABC_CADASTREL_SOURCE_ID]: DATABC_CADASTREL_SOURCE,
-            [WELLS_SOURCE_ID]: WELLS_SOURCE,
-            [FOCUSED_WELLS_SOURCE_ID]: { type: 'geojson', data: buildWellsGeoJSON([]) }
-          },
-          layers: [
-            DATABC_ROADS_LAYER,
-            DATABC_CADASTREL_LAYER,
-            //should we filter based on user role? this page is already behind keycloak
-            // wellsBaseAndArtesianLayer({ filter: wellLayerFilter(this.showUnpublished) }),
-            wellsBaseAndArtesianLayer({ filter: wellLayerFilter(this.showUnpublished) }),
-            focusedWellsLayer()
-          ]
-        }
+        style: this.buildMapStyle()
       }
 
       this.map = new mapboxgl.Map(mapConfig)
@@ -146,6 +130,9 @@ export default {
         positionOptions: {
           enableHighAccuracy: true
         }
+      }), 'top-left')
+      this.map.addControl(new BoxZoomControl({
+        onZoom: this.zoomToBBox
       }), 'top-left')
       this.map.addControl(new mapboxgl.ScaleControl({
         maxWidth: 80,
@@ -164,6 +151,8 @@ export default {
       })
       this.map.addControl(this.legendControl, 'bottom-right')
 
+      this.listenForMapMovement()
+
       this.map.on('load', () => {
         this.map.addImage(FOCUSED_WELL_ARTESIAN_IMAGE_ID, new PulsingArtesianWellImage(this.map), { pixelRatio: 2 })
         this.map.addImage(FOCUSED_WELL_IMAGE_ID, new PulsingWellImage(this.map), { pixelRatio: 2 })
@@ -172,12 +161,7 @@ export default {
         const tooltipLayers = {
           [WELLS_BASE_AND_ARTESIAN_LAYER_ID]: {
             snapToCenter: true,
-            createTooltipContent: (features) => createWellPopupElement(
-              features,
-              this.map,
-              this.$router,
-              { canInteract: true, openInNewTab: true }
-            )
+            createTooltipContent: this.createWellPopupElement
           }
         }
         setupFeatureTooltips(this.map, tooltipLayers)
@@ -187,12 +171,35 @@ export default {
         this.$emit('mapLoaded')
       })
     },
+    buildMapStyle () {
+      return {
+        version: 8,
+        sources: {
+          [DATABC_ROADS_SOURCE_ID]: DATABC_ROADS_SOURCE,
+          [DATABC_CADASTREL_SOURCE_ID]: DATABC_CADASTREL_SOURCE,
+          [WELLS_SOURCE_ID]: WELLS_SOURCE,
+          [FOCUSED_WELLS_SOURCE_ID]: { type: 'geojson', data: buildWellsGeoJSON([]) }
+        },
+        layers: [
+          DATABC_ROADS_LAYER,
+          DATABC_CADASTREL_LAYER,
+          wellsBaseAndArtesianLayer({ filter: wellLayerFilter(this.showUnpublished) }),
+          focusedWellsLayer()
+        ]
+      }
+    },
     setFocusedWells (wells) {
       this.map.getSource(FOCUSED_WELLS_SOURCE_ID).setData(buildWellsGeoJSON(wells, FOCUSED_WELL_PROPERTIES))
+    },
+    zoomToBBox (bbox) {
+      if (bbox) {
+        this.map.fitBounds(bbox)
+      }
     },
     createWellPopupElement (features, { canInteract }) {
       return createWellPopupElement(features, this.map, this.$router, {
         canInteract,
+        openInNewTab: true,
         wellLayerIds: [
           WELLS_BASE_AND_ARTESIAN_LAYER_ID
         ]
