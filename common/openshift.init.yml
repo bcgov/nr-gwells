@@ -1,9 +1,11 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 parameters:
-  - description: A suffix appended to all objects
-    displayName: Name Suffix
-    name: NAME_SUFFIX
+  - name: REPO
+    description: Repository name
+    value: ${REPO}
+  - name: ZONE
+    description: Deployment zone, e.g. pr-### or prod
     required: true
   - description: The name of the OpenShift Service exposed for the database.
     displayName: Database Service Name
@@ -60,9 +62,9 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: gwells-${NAME_SUFFIX}-database
+      name: ${REPO}-${ZONE}-database
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
+        app: ${REPO}-${ZONE}
     stringData:
       database-name: ${POSTGRESQL_DATABASE}
       database-password: ${POSTGRESQL_PASSWORD}
@@ -74,10 +76,9 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: gwells-minio-${NAME_SUFFIX}
+      name: ${REPO}-${ZONE}-minio
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
-      creationTimestamp: 
+        app: ${REPO}-${ZONE}
     stringData:
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
@@ -88,10 +89,9 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      creationTimestamp: 
-      name: gwells-django-${NAME_SUFFIX}
+      name: ${REPO}-${ZONE}-django
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
+        app: ${REPO}-${ZONE}
     stringData:
       admin_password: ${DJANGO_ADMIN_PASSWORD}
       admin_url: ${DJANGO_ADMIN_URL}
@@ -100,10 +100,9 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      creationTimestamp: 
-      name: gwells-e-licensing-${NAME_SUFFIX}
+      name: ${REPO}-${ZONE}-e-licensing
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
+        app: ${REPO}-${ZONE}
     stringData:
       E_LICENSING_AUTH_PASSWORD: ${E_LICENSING_AUTH_PASSWORD}
       E_LICENSING_AUTH_USERNAME: ${E_LICENSING_AUTH_USERNAME}
@@ -111,9 +110,9 @@ objects:
     kind: Secret
     metadata:
       creationTimestamp:
-      name: crunchy-db-credentials-${NAME_SUFFIX}
+      name: ${REPO}-${ZONE}-crunchy-db-credentials
       labels:
-        app: nr-gwells-${NAME_SUFFIX}
+        app: ${REPO}-${ZONE}
     stringData:
       PG_MODE: ${PG_MODE}
       PG_PRIMARY_PASSWORD: ${PG_PRIMARY_PASSWORD}
@@ -138,7 +137,7 @@ objects:
     metadata:
       name: allow-same-namespace
       labels:
-        template: nr-gwells-backend-network-security-policy
+        template: ${REPO}-backend-network-security-policy
     spec:
       policyTypes:
         - Ingress
