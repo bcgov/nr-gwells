@@ -127,7 +127,7 @@ objects:
           protocol: TCP
           targetPort: 5432
       selector:
-        deployment: ${REPO}-${ZONE}-${COMPONENT}
+        name: ${REPO}-${ZONE}-${COMPONENT}
       sessionAffinity: None
       type: ClusterIP
     status:
