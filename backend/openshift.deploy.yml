@@ -205,6 +205,8 @@ objects:
             value: public
           - name: APP_MODULE
             value: wsgi:application
+          - name: APP_HOME
+            value: backend
           - name: APP_CONFIG
             value: "/opt/app-root/src/${COMPONENT}/gunicorn.ocp4.cfg"
           - name: DJANGO_SECRET_KEY
@@ -340,9 +342,9 @@ objects:
           - name: APP_CONTEXT_ROOT
             value: ${REPO}
           - name: SESSION_COOKIE_SECURE
-            value: 'true'
+            value: 'True'
           - name: CSRF_COOKIE_SECURE
-            value: 'true'
+            value: 'True'
           - name: DB_REPLICATE
             valueFrom:
               configMapKeyRef:
@@ -399,13 +401,13 @@ objects:
                 key: SSO_IDP_HINT
                 name: ${REPO}-${ZONE}-global-config
           - name: CUSTOM_GDAL_GEOS
-            value: 'false'
+            value: 'False'
           - name: WEB_CONCURRENCY
             value: '4'
           - name: GUNICORN_WORKERS
             value: '4'
           - name: ENFORCE_ENV_VARIABLES
-            value: 'false'
+            value: 'False'
           - name: EMAIL_NOTIFICATION_RECIPIENT
             valueFrom:
               configMapKeyRef:

@@ -7,11 +7,11 @@ parameters:
   - name: ZONE
     description: Deployment zone, e.g. pr-### or prod
     required: true
-  - description: The name of the OpenShift Service exposed for the database.
-    displayName: Database Service Name
-    name: DATABASE_SERVICE_NAME
-    required: true
-    value: postgresql
+  # - description: The name of the OpenShift Service exposed for the database.
+  #   displayName: Database Service Name
+  #   name: DATABASE_SERVICE_NAME
+  #   required: true
+  #   value: postgresql
   - description: Username for PostgreSQL user that will be used for accessing the database.
     name: POSTGRESQL_USER
     required: true
