@@ -177,15 +177,21 @@ objects:
         containers:
         - name: ${REPO}-${ZONE}-${COMPONENT}-app
           image: 'ghcr.io/bcgov/${REPO}/${COMPONENT}:${TAG}'
-          volumeMounts:
-            - name: staticfiles
-              mountPath: /app/staticfiles
+          # volumeMounts:
+          #   - name: staticfiles
+          #     mountPath: /app/staticfiles
           ports:
           - containerPort: 8080
             protocol: TCP
           env:
           - name: DATABASE_SERVICE_NAME
             value: ${REPO}-${ZONE}-database
+          - name: PG_PRIMARY_HOST
+            value: ${REPO}-${ZONE}-database
+          - name: PG_PRIMARY_PORT
+            value: "5432"
+          - name: PGHOST
+            value: /tmp
           - name: DATABASE_NAME
             valueFrom:
               secretKeyRef:
@@ -401,13 +407,13 @@ objects:
                 key: SSO_IDP_HINT
                 name: ${REPO}-${ZONE}-global-config
           - name: CUSTOM_GDAL_GEOS
-            value: 'False'
+            value: 'false'
           - name: WEB_CONCURRENCY
             value: '4'
           - name: GUNICORN_WORKERS
             value: '4'
           - name: ENFORCE_ENV_VARIABLES
-            value: 'False'
+            value: 'false'
           - name: EMAIL_NOTIFICATION_RECIPIENT
             valueFrom:
               configMapKeyRef:
