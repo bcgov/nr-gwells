@@ -129,31 +129,31 @@ objects:
       type: RollingUpdate
       rollingParams:
         timeoutSeconds: 900
-        # pre:
-        #   failurePolicy: Abort
-        #   execNewPod:
-        #     command:
-        #     - "/usr/bin/container-entrypoint"
-        #     - "/opt/app-root/src/scripts/pre-deploy.sh"
-        #     containerName: ${REPO}-${ZONE}-${COMPONENT}-app
-        #     env:
-        #     - name: PGDATABASE
-        #       valueFrom:
-        #         secretKeyRef:
-        #           name: ${REPO}-${ZONE}-${COMPONENT}-pg12
-        #           key: database-name
-        #     - name: PGUSER
-        #       valueFrom:
-        #         secretKeyRef:
-        #           name: ${REPO}-${ZONE}-${COMPONENT}-pg12
-        #           key: database-user
-        #     - name: PGPASSWORD
-        #       valueFrom:
-        #         secretKeyRef:
-        #           name: ${REPO}-${ZONE}-${COMPONENT}-pg12
-        #           key: database-password
-        #     - name: PGHOST
-        #       value: ${REPO}-${ZONE}-${COMPONENT}-pg12
+        pre:
+          failurePolicy: Abort
+          execNewPod:
+            command:
+            - "/usr/bin/container-entrypoint"
+            - "/opt/app-root/src/scripts/pre-deploy.sh"
+            containerName: ${REPO}-${ZONE}-${COMPONENT}
+            env:
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: ${REPO}-${ZONE}-database
+                  key: database-name
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ${REPO}-${ZONE}-database
+                  key: database-user
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${REPO}-${ZONE}-database
+                  key: database-password
+            - name: DATABASE_SERVICE_NAME
+              value: ${REPO}-${ZONE}-database
       resources: {}
       activeDeadlineSeconds: 21600
     replicas: 1
