@@ -170,10 +170,10 @@ objects:
           name: ${REPO}-${ZONE}-${COMPONENT}
           deployment: ${REPO}-${ZONE}-${COMPONENT}
       spec:
-        volumes:
-          - name: staticfiles
-            emptyDir:
-              sizeLimit: 250Mi
+        # volumes:
+        #   - name: staticfiles
+        #     emptyDir:
+        #       sizeLimit: 250Mi
         containers:
         - name: ${REPO}-${ZONE}-${COMPONENT}-app
           image: 'ghcr.io/bcgov/${REPO}/${COMPONENT}:${TAG}'
