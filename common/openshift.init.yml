@@ -69,7 +69,7 @@ objects:
       database-name: ${POSTGRESQL_DATABASE}
       database-password: ${POSTGRESQL_PASSWORD}
       database-user: ${POSTGRESQL_USER}
-      database-host: postgresql
+      database-host: nr-gwells-232-database.cd43d9-dev.svc.cluster.local
       fdw-database-user: proxy_wells_gwells
       fdw-database-password: ${FDW_DATABASE_PASSWORD}
       fdw-database-server: "//nrk1-scan.bcgov/envprod1.nrs.bcgov"

@@ -14,16 +14,16 @@ parameters:
     required: true
   - name: CPU_REQUEST
     required: false
-    value: 25m
+    value: 100m
   - name: CPU_LIMIT
     required: false
-    value: 100m
+    value: 500m
   - name: MEMORY_REQUEST
     required: false
-    value: 150Mi
+    value: 750Mi
   - name: MEMORY_LIMIT
     required: false
-    value: 450Mi
+    value: 1Gi
   - name: E_LICENSING_URL
     required: true
   - name: DB_REPLICATE
@@ -129,31 +129,31 @@ objects:
       type: RollingUpdate
       rollingParams:
         timeoutSeconds: 900
-        pre:
-          failurePolicy: Abort
-          execNewPod:
-            command:
-            - "/usr/bin/container-entrypoint"
-            - "/opt/app-root/src/scripts/pre-deploy.sh"
-            containerName: ${REPO}-${ZONE}-${COMPONENT}
-            env:
-            - name: DATABASE_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: ${REPO}-${ZONE}-database
-                  key: database-name
-            - name: DATABASE_USER
-              valueFrom:
-                secretKeyRef:
-                  name: ${REPO}-${ZONE}-database
-                  key: database-user
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ${REPO}-${ZONE}-database
-                  key: database-password
-            - name: DATABASE_SERVICE_NAME
-              value: ${REPO}-${ZONE}-database
+        # pre:
+        #   failurePolicy: Abort
+        #   execNewPod:
+        #     command:
+        #     - "/usr/bin/container-entrypoint"
+        #     - "/opt/app-root/src/scripts/pre-deploy.sh"
+        #     containerName: ${REPO}-${ZONE}-${COMPONENT}
+        #     env:
+        #     - name: DATABASE_NAME
+        #       valueFrom:
+        #         secretKeyRef:
+        #           name: ${REPO}-${ZONE}-database
+        #           key: database-name
+        #     - name: DATABASE_USER
+        #       valueFrom:
+        #         secretKeyRef:
+        #           name: ${REPO}-${ZONE}-database
+        #           key: database-user
+        #     - name: DATABASE_PASSWORD
+        #       valueFrom:
+        #         secretKeyRef:
+        #           name: ${REPO}-${ZONE}-database
+        #           key: database-password
+        #     - name: DATABASE_SERVICE_NAME
+        #       value: ${REPO}-${ZONE}-database
       resources: {}
       activeDeadlineSeconds: 21600
     replicas: 1
@@ -170,6 +170,38 @@ objects:
           name: ${REPO}-${ZONE}-${COMPONENT}
           deployment: ${REPO}-${ZONE}-${COMPONENT}
       spec:
+        # initContainers:
+        #   - name: check-database
+        #     image: 'ghcr.io/bcgov/${REPO}/database:${TAG}'
+        #     labels: 
+        #       name: ${REPO}-${ZONE}-${COMPONENT}
+        #     command: ["/bin/bash", "-c", "set -x; psql -qtAX -c 'select 1'"]
+        #     env:
+        #       - name: PGDATABASE
+        #         valueFrom:
+        #           secretKeyRef: 
+        #             name: ${REPO}-${ZONE}-database
+        #             key: database-name
+        #       - name: PGUSER
+        #         valueFrom:
+        #           secretKeyRef: 
+        #             name: ${REPO}-${ZONE}-database
+        #             key: database-user
+        #       - name: PGPASSWORD
+        #         valueFrom:
+        #           secretKeyRef: 
+        #             name: ${REPO}-${ZONE}-database
+        #             key: database-password
+        #       - name: PGHOST
+        #         value: ${REPO}-${ZONE}-database
+        #     resources:
+        #       limits:
+        #         cpu: 50m
+        #         memory: 256Mi
+        #       requests:
+        #         cpu: 10m
+        #         memory: 128Mi
+            
         # volumes:
         #   - name: staticfiles
         #     emptyDir:
@@ -186,12 +218,6 @@ objects:
           env:
           - name: DATABASE_SERVICE_NAME
             value: ${REPO}-${ZONE}-database
-          - name: PG_PRIMARY_HOST
-            value: ${REPO}-${ZONE}-database
-          - name: PG_PRIMARY_PORT
-            value: "5432"
-          - name: PGHOST
-            value: /tmp
           - name: DATABASE_NAME
             valueFrom:
               secretKeyRef:
