@@ -138,7 +138,7 @@ objects:
     metadata:
       name: allow-same-namespace
       labels:
-        template: ${REPO}-backend-network-security-policy
+        template: nr-gwells-backend-network-security-policy
     spec:
       policyTypes:
         - Ingress
