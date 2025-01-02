@@ -363,4 +363,4 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/node,java,python,go
 
 # Django static files
-static/
+staticfiles/
