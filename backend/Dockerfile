@@ -20,7 +20,7 @@ RUN npm run build
 FROM python:3.7
 
 # Install dependencies
-RUN apt -y update && apt -y install git build-essential gdal-bin libgdal-dev
+RUN apt -y update && apt -y install git build-essential gdal-bin libgdal-dev postgresql-client
 
 ENV PATH="/usr/bin/python3:${PATH}"
 
@@ -36,6 +36,7 @@ COPY ./backend/requirements.txt /app/requirements.txt
 
 COPY --from=frontend ./app/dist ./gwells/static
 COPY --from=frontend ./app/dist/index.html ./gwells/templates/
+# COPY /backend/startup.sh /docker-entrypoint-initdb.d/
 
 # RUN chmod +x load_fixtures.sh works when i pull the dockerfile into backend but not when dockerfile is with other docker files
 RUN chmod +x /app
@@ -46,6 +47,8 @@ RUN python3 -m pip install -r requirements.txt
 
 # TODO: move to entrypoint in deployment template?
 # chmod -R 777 /app && \
+# CMD [""]
+
 CMD sh -c "python3 manage.py migrate --noinput && \
     ./load_fixtures.sh all && \
     python3 manage.py createinitialrevisions && \
