@@ -140,5 +140,12 @@ objects:
       labels:
         template: nr-gwells-backend-network-security-policy
     spec:
+      podSelector: {}
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  environment: dev
+                  name: cd43d9
       policyTypes:
         - Ingress

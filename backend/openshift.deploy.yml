@@ -14,16 +14,16 @@ parameters:
     required: true
   - name: CPU_REQUEST
     required: false
-    value: 200m
+    value: 100m
   - name: CPU_LIMIT
     required: false
-    value: 1000m
+    value: 500m
   - name: MEMORY_REQUEST
     required: false
-    value: 1500Mi
+    value: 750Mi
   - name: MEMORY_LIMIT
     required: false
-    value: 2Gi
+    value: 1Gi
   - name: E_LICENSING_URL
     required: true
   - name: DB_REPLICATE
@@ -459,19 +459,19 @@ objects:
             requests:
               cpu: "${CPU_REQUEST}"
               memory: "${MEMORY_REQUEST}"
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 8000
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 8000
             # initialDelaySeconds: 20
             # timeoutSeconds: 3
             # periodSeconds: 5
             # successThreshold: 1
             # failureThreshold: 5
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8000
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 8000
             # initialDelaySeconds: 20
             # timeoutSeconds: 3
             # periodSeconds: 30
@@ -483,7 +483,9 @@ objects:
         restartPolicy: Always
         terminationGracePeriodSeconds: 30
         dnsPolicy: ClusterFirst
-        securityContext: {}
+        securityContext:
+          capabilities:
+            add: ["NET_BIND_SERVICE"]
         schedulerName: default-scheduler
 - apiVersion: autoscaling/v1
   kind: HorizontalPodAutoscaler
