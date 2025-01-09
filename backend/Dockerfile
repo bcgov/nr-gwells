@@ -39,8 +39,8 @@ COPY --from=frontend ./app/dist/index.html ./gwells/templates/
 # COPY /backend/startup.sh /docker-entrypoint-initdb.d/
 
 # RUN chmod +x load_fixtures.sh works when i pull the dockerfile into backend but not when dockerfile is with other docker files
-RUN chmod +x /app
-RUN chmod -R 777 /app 
+RUN chmod -R +x /app
+# RUN chmod -R 777 /app 
 # RUN python3 -m pip install -r requirements.txt
 
 RUN python3 -m pip install -r requirements.txt
