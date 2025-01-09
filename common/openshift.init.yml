@@ -3,7 +3,7 @@ kind: Template
 parameters:
   - name: REPO
     description: Repository name
-    value: ${REPO}
+    value: nr-gwells
   - name: ZONE
     description: Deployment zone, e.g. pr-### or prod
     required: true
@@ -69,6 +69,7 @@ objects:
       database-name: ${POSTGRESQL_DATABASE}
       database-password: ${POSTGRESQL_PASSWORD}
       database-user: ${POSTGRESQL_USER}
+      database-host: nr-gwells-232-database.cd43d9-dev.svc.cluster.local
       fdw-database-user: proxy_wells_gwells
       fdw-database-password: ${FDW_DATABASE_PASSWORD}
       fdw-database-server: "//nrk1-scan.bcgov/envprod1.nrs.bcgov"
@@ -137,7 +138,14 @@ objects:
     metadata:
       name: allow-same-namespace
       labels:
-        template: ${REPO}-backend-network-security-policy
+        template: nr-gwells-backend-network-security-policy
     spec:
+      podSelector: {}
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  environment: dev
+                  name: cd43d9
       policyTypes:
         - Ingress

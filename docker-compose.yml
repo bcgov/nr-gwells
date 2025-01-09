@@ -15,7 +15,7 @@ services:
   minio-public:
     build:
       context: ./minio/
-    hostname: minio
+    container_name: minio
     ports:
       - "9000:9000"
     volumes:
@@ -34,7 +34,7 @@ services:
   # minio-private:
   #   build:
   #     context: ./minio/
-  #   hostname: minio
+  #   container_name: minio
   #   ports:
   #     - "9001:9001"
   #   volumes:
@@ -53,7 +53,7 @@ services:
   db:
     platform: linux/x86_64
     image: crunchydata/crunchy-postgres-gis:centos7-12.2-4.2.2
-    hostname: db
+    container_name: db
     environment:
       PG_USER: gwells
       PG_PASSWORD: test1
@@ -112,7 +112,7 @@ services:
 ###                                       Tileserv                                        ###
 #############################################################################################
   tileserv:
-    hostname: tileserv
+    container_name: tileserv
     depends_on:
       - db
     platform: linux/x86_64
@@ -133,22 +133,22 @@ services:
 #############################################################################################
   frontend:
     image: node:14.21.3
-    hostname: frontend
+    container_name: frontend
     # working_dir: /app/frontend
     # build:
     #   context: ./frontend
     #   dockerfile: Dockerfile
     environment:
       DEBUG: "true"
-      VUE_APP_AXIOS_BASE_URL: "http://backend:8000/gwells/api/v2/"
+      VUE_APP_AXIOS_BASE_URL: "/api/"
       VUE_APP_VECTOR_TILE_BASE_URL: "/tiles/"
       VECTOR_TILE_SERVER: "http://tileserv:7800/"
-      API_TARGET: "http://backend:8000/"
-      BACKEND_URL: "http://backend:8000"
-      LOG_LEVEL: "info"
+      API_TARGET: "${API_TARGET:-http://backend:8000/}"
+      # BACKEND_URL: "http://backend:8000"
+      # LOG_LEVEL: "info"
     command: /bin/bash -c "cd /frontend && npm install && npm run serve"
     ports:
-      - "3000:8080"
+      - "8080:8080"
     volumes:
       - ./frontend:/frontend
       - /frontend/node_modules/
@@ -189,34 +189,37 @@ services:
 #############################################################################################
   backend:
     platform: linux/x86_64
-    working_dir: /backend
+    # working_dir: /backend
     build:
-      context: ./backend
-      dockerfile: Dockerfile
-    hostname: backend
+      context: ./
+      dockerfile: ./backend/Dockerfile
+    image: nr-gwells/backend:latest
+    container_name: backend
     # env_file:
     # - path: ./.env.test
     #   required: false
     environment:
       ENVIRONMENT: "${ENVIRONMENT:-local}"
       APP_CONTEXT_ROOT: gwells
-      CSRF_COOKIE_SECURE: "False"
-      CUSTOM_GDAL_GEOS: "False"
+      CSRF_COOKIE_SECURE: "false"
+      CUSTOM_GDAL_GEOS: "false"
       DATABASE_NAME: gwells
       DATABASE_USER: "${DATABASE_USER:-gwells}"
       DATABASE_PASSWORD: "${DATABASE_PASSWORD:-test1}"
-      DATABASE_SERVICE_NAME: gwells
+      # DATABASE_SERVICE_NAME: gwells
       DJANGO_ADMIN_URL: admin
       DJANGO_DEBUG: "true"
       DJANGO_SECRET_KEY: secret
       ENABLE_ADDITIONAL_DOCUMENTS: "true"
       ENABLE_AQUIFERS_SEARCH: "true"
-      GWELLS_SERVICE_HOST: "${GWELLS_SERVICE_HOST:-db}"
-      GWELLS_SERVICE_PORT: "${GWELLS_SERVICE_PORT:-5432}"
+      # GWELLS_SERVICE_HOST: "${GWELLS_SERVICE_HOST:-db}"
+      # GWELLS_SERVICE_PORT: "${GWELLS_SERVICE_PORT:-5432}"
+      DATABASE_SERVICE_NAME: db
+      DATABASE_PORT: 5432
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio1234
       PYTHONUNBUFFERED: "1"
-      SESSION_COOKIE_SECURE: "False"
+      SESSION_COOKIE_SECURE: "false"
       SSO_AUDIENCE: gwells-4121
       SSO_CLIENT: gwells-4121
       SSO_TEST_AUDIENCE: gwells-api-tests-4820

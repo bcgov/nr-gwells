@@ -127,7 +127,7 @@ objects:
           protocol: TCP
           targetPort: 5432
       selector:
-        deployment: ${REPO}-${ZONE}-${COMPONENT}
+        name: ${REPO}-${ZONE}-${COMPONENT}
       sessionAffinity: None
       type: ClusterIP
     status:
@@ -175,7 +175,7 @@ objects:
                 - name: PG_PRIMARY_PORT
                   value: "5432"
                 - name: CONTAINER_NAME
-                  value: postgresql
+                  value: ${REPO}-${ZONE}-${COMPONENT}
                 - name: PG_PRIMARY_HOST
                   value: ${REPO}-${ZONE}-${COMPONENT}
                 - name: PGDATA_PATH_OVERRIDE
@@ -227,7 +227,7 @@ objects:
                 tcpSocket:
                   port: 5432
                 timeoutSeconds: 1
-              name: postgresql
+              name: ${REPO}-${ZONE}-${COMPONENT}
               ports:
                 - containerPort: 5432
                   protocol: TCP

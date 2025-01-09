@@ -5,8 +5,8 @@ if (process.env.API_TARGET) {
 module.exports = {
   lintOnSave: false,
   runtimeCompiler: true,
-  // publicPath: process.env.NODE_ENV === 'production' ? '/gwells/' : '/',
-  publicPath: '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/gwells/' : '/',
+  // publicPath: '/',
   configureWebpack: {
     resolve: {
       alias: {
