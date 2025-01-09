@@ -248,8 +248,8 @@ services:
       GEOCODER_ADDRESS_API_BASE: https://geocoder.api.gov.bc.ca/addresses.json?
       LOCAL: "true"
       LOAD_FIXTURES: "true"
-    # volumes:
-    #   - ./backend:/backend
+    volumes:
+      - ./backend:/backend
     healthcheck:
       test: timeout 3s bash -c 'true > /dev/tcp/127.0.0.1/8000'
       interval: 5s

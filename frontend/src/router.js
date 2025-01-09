@@ -50,9 +50,8 @@ Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
-  // base: '/',
-  // component: WellSearch,
-  base: '/gwells/',
+  base: '/',
+  component: WellSearch,
   routes: [
     // aquifers routes
     {

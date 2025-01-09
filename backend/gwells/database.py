@@ -36,6 +36,7 @@ def config():
     #     'HOST': get_env_variable('{}_SERVICE_HOST'.format(service_name)),
     #     'PORT': get_env_variable('{}_SERVICE_PORT'.format(service_name)),
     # }
+    
     return {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': os.getenv('DATABASE_NAME'),
