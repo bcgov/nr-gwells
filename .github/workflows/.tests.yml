@@ -22,14 +22,14 @@ env:
 jobs:
   tests:
     name: Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: TODO Tests
         run: echo "The automated test suite is not set up yet."
         
   # integration-tests:
   #   name: Integration
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-24.04
   #   timeout-minutes: 1
   #   steps:
   #     - uses: actions/checkout@v4
@@ -56,7 +56,7 @@ jobs:
   #   defaults:
   #     run:
   #       working-directory: frontend
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-24.04
   #   timeout-minutes: 5
   #   strategy:
   #     matrix:
@@ -92,7 +92,7 @@ jobs:
 
   # load-tests:
   #   name: Load
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-24.04
   #   strategy:
   #     matrix:
   #       name: [backend, frontend]
