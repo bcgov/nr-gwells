@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # https://github.com/bcgov-nr/action-builder-ghcr
+  # https://github.com/bcgov/action-builder-ghcr
   builds:
     name: Builds
     runs-on: ubuntu-latest
@@ -22,7 +22,7 @@ jobs:
             build_file: ./backend/Dockerfile
     timeout-minutes: 20
     steps:
-      - uses: bcgov-nr/action-builder-ghcr@v2.2.0
+      - uses: bcgov/action-builder-ghcr@v2.2.0
         with:
           keep_versions: 50
           build_context: ${{ matrix.build_context }}
