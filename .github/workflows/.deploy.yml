@@ -22,7 +22,7 @@ jobs:
   init:
     name: Initialize
     environment: ${{ inputs.environment }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Initialize
         uses: bcgov-nr/action-deployer-openshift@v3.0.1
@@ -59,7 +59,7 @@ jobs:
     name: Minio
     needs: [ init ]
     environment: ${{ inputs.environment }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Deploy Minio
         uses: bcgov-nr/action-deployer-openshift@v3.0.1
@@ -79,7 +79,7 @@ jobs:
     name: Database
     needs: init
     environment: ${{ inputs.environment }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Database
         uses: bcgov-nr/action-deployer-openshift@v3.0.1
@@ -104,7 +104,7 @@ jobs:
     name: Backend
     needs: [ init, database ]
     environment: ${{ inputs.environment }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Deploy Backend
         uses: bcgov-nr/action-deployer-openshift@v3.0.1
@@ -149,7 +149,7 @@ jobs:
   #   name: Frontend
   #   needs: [ init, database, backend ]
   #   environment: ${{ inputs.environment }}
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-24.04
   #   steps:
   #     - name: Deploy Frontend
   #       uses: bcgov-nr/action-deployer-openshift@v3.0.1
