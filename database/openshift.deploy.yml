@@ -294,3 +294,24 @@ objects:
               port: 5432
       policyTypes:
         - Ingress
+  - apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    metadata:
+      name: ${REPO}-${ZONE}-${COMPONENT}
+      labels:
+        app: ${REPO}-${ZONE}
+        appver: ${REPO}-${ZONE}-${COMPONENT}
+    spec:
+      scaleTargetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: ${REPO}-${ZONE}-${COMPONENT}
+      minReplicas: 1
+      maxReplicas: 5
+      metrics:
+        - type: Resource
+          resource:
+            name: cpu
+            target:
+              type: Utilization
+              averageUtilization: 90
