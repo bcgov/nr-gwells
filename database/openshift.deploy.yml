@@ -274,3 +274,23 @@ objects:
             - configMap:
                 name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
               name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
+  - apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: ${REPO}-${ZONE}-${COMPONENT}-network-policy
+      labels:
+        app: ${REPO}-${ZONE}
+    spec:
+      podSelector:
+        matchLabels:
+          name: ${REPO}-${ZONE}-${COMPONENT}
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  name: ${REPO}-${ZONE}-backend
+          ports:
+            - protocol: TCP
+              port: 5432
+      policyTypes:
+        - Ingress
