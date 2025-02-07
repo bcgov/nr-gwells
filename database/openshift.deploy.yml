@@ -47,7 +47,19 @@ parameters:
     value: gluster-file-db
 objects:
   - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: ${REPO}-${ZONE}-${COMPONENT}-config
+      labels:
+        app: ${REPO}-${ZONE}
     data:
+      pg_hba.conf: |
+        # TYPE  DATABASE        USER            ADDRESS                 METHOD
+        local   all            all                                     trust
+        host    all            all             127.0.0.1/32           trust
+        host    all            all             ::1/128                 trust
+        host    all            all             0.0.0.0/0              md5
+
       setup.sql: |-
         SET application_name="container_setup";
 
@@ -259,6 +271,9 @@ objects:
                   name: ${REPO}-${ZONE}-${COMPONENT}-run
                 - mountPath: /pgconf
                   name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
+                - mountPath: /etc/postgresql/pg_hba.conf
+                  name: ${REPO}-${ZONE}-${COMPONENT}-config
+                  subPath: pg_hba.conf
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           volumes:
@@ -267,6 +282,9 @@ objects:
                 claimName: ${REPO}-${ZONE}-${COMPONENT}
             - name: ${REPO}-${ZONE}-${COMPONENT}-run
               emptyDir: {}
+            - name: ${REPO}-${ZONE}-${COMPONENT}-config
+              configMap:
+                name: ${REPO}-${ZONE}-${COMPONENT}-config
             - configMap:
                 name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
               name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
