@@ -238,13 +238,12 @@ objects:
                     - bash
                     - '-c'
                     - >-
-                      psql -q -d
-                      $PG_DATABASE -c 'SELECT 1'
+                      PGDATA=/pgdata/userdata PGHOST=/tmp pg_isready -p 5432
                 failureThreshold: 5
-                initialDelaySeconds: 30
+                initialDelaySeconds: 60
                 periodSeconds: 15
                 successThreshold: 1
-                timeoutSeconds: 1
+                timeoutSeconds: 5
               resources:
                 requests:
                   cpu: ${REQUEST_CPU}
@@ -253,8 +252,10 @@ objects:
                   cpu: ${LIMIT_CPU}
                   memory: ${LIMIT_MEMORY}
               securityContext:
-                capabilities: {}
-                privileged: false
+                runAsUser: 26
+                runAsGroup: 26
+                fsGroup: 26
+                allowPrivilegeEscalation: false
               terminationMessagePath: /dev/termination-log
               volumeMounts:
                 - mountPath: /pgdata
