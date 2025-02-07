@@ -58,7 +58,9 @@ objects:
         local   all            all                                     trust
         host    all            all             127.0.0.1/32           trust
         host    all            all             ::1/128                 trust
+        host    all            all             localhost               trust
         host    all            all             0.0.0.0/0              md5
+        host    all            all             ::/0                    md5
 
       setup.sql: |-
         SET application_name="container_setup";
@@ -246,8 +248,7 @@ objects:
                     - bash
                     - '-c'
                     - >-
-                      psql -q -d
-                      $PG_DATABASE -c 'SELECT 1'
+                      PGPASSWORD=$PG_PASSWORD PGHOST=localhost psql -U $PG_USER -d $PG_DATABASE -c 'SELECT 1'
                 initialDelaySeconds: 60
                 periodSeconds: 15
                 successThreshold: 1
@@ -271,7 +272,7 @@ objects:
                   name: ${REPO}-${ZONE}-${COMPONENT}-run
                 - mountPath: /pgconf
                   name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
-                - mountPath: /etc/postgresql/pg_hba.conf
+                - mountPath: /pgdata/userdata/pg_hba.conf
                   name: ${REPO}-${ZONE}-${COMPONENT}-config
                   subPath: pg_hba.conf
           dnsPolicy: ClusterFirst
