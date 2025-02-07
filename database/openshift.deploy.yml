@@ -114,24 +114,18 @@ objects:
   - apiVersion: v1
     kind: Service
     metadata:
-      labels:
-        app: ${REPO}-${ZONE}
-      annotations:
-        template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
       name: ${REPO}-${ZONE}-${COMPONENT}
+      labels:
+        app: ${REPO}-${ZONE}-${COMPONENT}
     spec:
       ports:
         - name: postgresql
-          nodePort: 0
           port: 5432
           protocol: TCP
           targetPort: 5432
       selector:
         name: ${REPO}-${ZONE}-${COMPONENT}
-      sessionAffinity: None
       type: ClusterIP
-    status:
-      loadBalancer: {}
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
@@ -181,7 +175,9 @@ objects:
                 - name: PGDATA_PATH_OVERRIDE
                   value: userdata
                 - name: PGHOST
-                  value: /tmp
+                  value: '*'
+                - name: LISTEN_ADDRESSES
+                  value: '*'
                 - name: PG_DATABASE
                   valueFrom:
                     secretKeyRef:

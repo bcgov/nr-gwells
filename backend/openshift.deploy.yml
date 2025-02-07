@@ -216,10 +216,14 @@ objects:
           - containerPort: 8000
             protocol: TCP
           env:
-          - name: DATABASE_SERVICE_NAME
-            value: ${REPO}-${ZONE}-database
-          - name: DATABASE_PORT
-            value: "5432"
+            - name: DATABASE_SERVICE_NAME
+              value: ${REPO}-${ZONE}-database
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_HOST
+              value: ${REPO}-${ZONE}-database
+            - name: PGHOST
+              value: ${REPO}-${ZONE}-database
           - name: DATABASE_NAME
             valueFrom:
               secretKeyRef:
