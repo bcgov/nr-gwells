@@ -170,37 +170,37 @@ objects:
           name: ${REPO}-${ZONE}-${COMPONENT}
           deployment: ${REPO}-${ZONE}-${COMPONENT}
       spec:
-        # initContainers:
-        #   - name: check-database
-        #     image: 'ghcr.io/bcgov/${REPO}/database:${TAG}'
-        #     labels: 
-        #       name: ${REPO}-${ZONE}-${COMPONENT}
-        #     command: ["/bin/bash", "-c", "set -x; psql -qtAX -c 'select 1'"]
-        #     env:
-        #       - name: PGDATABASE
-        #         valueFrom:
-        #           secretKeyRef: 
-        #             name: ${REPO}-${ZONE}-database
-        #             key: database-name
-        #       - name: PGUSER
-        #         valueFrom:
-        #           secretKeyRef: 
-        #             name: ${REPO}-${ZONE}-database
-        #             key: database-user
-        #       - name: PGPASSWORD
-        #         valueFrom:
-        #           secretKeyRef: 
-        #             name: ${REPO}-${ZONE}-database
-        #             key: database-password
-        #       - name: PGHOST
-        #         value: ${REPO}-${ZONE}-database
-        #     resources:
-        #       limits:
-        #         cpu: 50m
-        #         memory: 256Mi
-        #       requests:
-        #         cpu: 10m
-        #         memory: 128Mi
+        initContainers:
+          - name: check-database
+            image: 'ghcr.io/bcgov/${REPO}/database:${TAG}'
+            labels: 
+              name: ${REPO}-${ZONE}-${COMPONENT}
+            command: ["/bin/bash", "-c", "set -x; psql -qtAX -c 'select 1'"]
+            env:
+              - name: PGDATABASE
+                valueFrom:
+                  secretKeyRef: 
+                    name: ${REPO}-${ZONE}-database
+                    key: database-name
+              - name: PGUSER
+                valueFrom:
+                  secretKeyRef: 
+                    name: ${REPO}-${ZONE}-database
+                    key: database-user
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef: 
+                    name: ${REPO}-${ZONE}-database
+                    key: database-password
+              - name: PGHOST
+                value: ${REPO}-${ZONE}-database
+            resources:
+              limits:
+                cpu: 50m
+                memory: 256Mi
+              requests:
+                cpu: 10m
+                memory: 128Mi
             
         volumes:
           - name: staticfiles
