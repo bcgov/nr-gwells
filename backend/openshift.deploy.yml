@@ -202,16 +202,16 @@ objects:
         #         cpu: 10m
         #         memory: 128Mi
             
-        # volumes:
-        #   - name: staticfiles
-        #     emptyDir:
-        #       sizeLimit: 250Mi
+        volumes:
+          - name: staticfiles
+            emptyDir:
+              sizeLimit: 250Mi
         containers:
         - name: ${REPO}-${ZONE}-${COMPONENT}-app
           image: 'ghcr.io/bcgov/${REPO}/${COMPONENT}:${TAG}'
-          # volumeMounts:
-          #   - name: staticfiles
-          #     mountPath: /app/staticfiles
+          volumeMounts:
+            - name: staticfiles
+              mountPath: /app/staticfiles
           ports:
           - containerPort: 8000
             protocol: TCP
@@ -520,23 +520,23 @@ objects:
       name: ${REPO}-${ZONE}-${COMPONENT}
     type: ClusterIP
     sessionAffinity: None
-# - kind: Route
-#   apiVersion: v1
-#   metadata:
-#     name: ${REPO}-${ZONE}-${COMPONENT}
-#     labels:
-#       frontend: 'true'
-#       app: ${REPO}-${ZONE}-${COMPONENT}
-#   spec:
-#     host: ${REPO}-${ZONE}-${COMPONENT}.apps.silver.devops.gov.bc.ca
-#     path: "/gwells"
-#     to:
-#       kind: Service
-#       name: ${REPO}-${ZONE}-${COMPONENT}
-#       weight: 100
-#     port:
-#       targetPort: web
-#     tls:
-#       insecureEdgeTerminationPolicy: Redirect
-#       termination: edge
-#     wildcardPolicy: None
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: ${REPO}-${ZONE}-${COMPONENT}
+    labels:
+      frontend: 'true'
+      app: ${REPO}-${ZONE}-${COMPONENT}
+  spec:
+    host: ${REPO}-${ZONE}-${COMPONENT}.apps.silver.devops.gov.bc.ca
+    path: "/gwells"
+    to:
+      kind: Service
+      name: ${REPO}-${ZONE}-${COMPONENT}
+      weight: 100
+    port:
+      targetPort: web
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    wildcardPolicy: None
