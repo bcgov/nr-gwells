@@ -123,6 +123,7 @@ objects:
         app: ${REPO}-${ZONE}
       annotations:
         template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
+      name: ${REPO}-${ZONE}-${COMPONENT}
     spec:
       ports:
         - name: postgresql
@@ -132,10 +133,10 @@ objects:
           targetPort: 5432
       selector:
         name: ${REPO}-${ZONE}-${COMPONENT}
-        sessionAffinity: None
+      sessionAffinity: None
       type: ClusterIP
-      status:
-        loadBalancer: {}
+    status:
+      loadBalancer: {}
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
