@@ -254,7 +254,7 @@ objects:
                 privileged: false
               terminationMessagePath: /dev/termination-log
               volumeMounts:
-                - mountPath: /var/lib/postgresql/data
+                - mountPath: /pgdata
                   name: ${REPO}-${ZONE}-${COMPONENT}-data
                 - mountPath: /var/run/postgresql
                   name: ${REPO}-${ZONE}-${COMPONENT}-run
