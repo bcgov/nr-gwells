@@ -7,57 +7,52 @@ parameters:
   - name: ZONE
     description: Deployment zone, e.g. pr-### or prod
     required: true
-  - description: The name of the OpenShift Service exposed for the database.
-    displayName: Database Service Name
-    name: DATABASE_SERVICE_NAME
-    required: true
-    value: postgresql
   - description: Username for PostgreSQL user that will be used for accessing the database.
-    name: POSTGRESQL_USER
+    name: POSTGRES_USER
     required: true
     value: gwells
   - description: Password for the PostgreSQL connection user
-    name: POSTGRESQL_PASSWORD
-    required: true
+    name: POSTGRES_PASSWORD
+    value:
   - description: Name of the PostgreSQL database accessed.
     displayName: PostgreSQL Database Name
-    name: POSTGRESQL_DATABASE
+    name: POSTGRES_DATABASE
     required: true
     value: gwells
-  - name: FDW_DATABASE_PASSWORD
-    required: true
-  - name: DJANGO_ADMIN_PASSWORD
-    required: true
-  - name: DJANGO_ADMIN_URL
-    required: true
-  - name: DJANGO_ADMIN_USER
-    required: true
-  - name: DJANGO_SECRET_KEY
-    required: true
-  - name: E_LICENSING_AUTH_USERNAME
-    required: true
-  - name: E_LICENSING_AUTH_PASSWORD
-    required: true
-  - name: PG_MODE
-    required: true
-  - name: PG_PRIMARY_PASSWORD
-    required: true
-  - name: PG_PRIMARY_USER
-    required: true
-  - name: PG_ROOT_PASSWORD
-    required: true
-  - name: MINIO_ACCESS_KEY
-    required: true
-  - name: MINIO_SECRET_KEY
-    required: true
-  - name: S3_PUBLIC_ACCESS_KEY
-    required: true
-  - name: S3_PUBLIC_SECRET_KEY
-    required: true
-  - name: S3_HOST
-    required: true
-  - name: S3_ROOT_BUCKET
-    required: true
+  # - name: FDW_DATABASE_PASSWORD
+  #   required: true
+  # - name: DJANGO_ADMIN_PASSWORD
+  #   required: true
+  # - name: DJANGO_ADMIN_URL
+  #   required: true
+  # - name: DJANGO_ADMIN_USER
+  #   required: true
+  # - name: DJANGO_SECRET_KEY
+  #   required: true
+  # - name: E_LICENSING_AUTH_USERNAME
+  #   required: true
+  # - name: E_LICENSING_AUTH_PASSWORD
+  #   required: true
+  # - name: PG_MODE
+  #   required: true
+  # - name: PG_PRIMARY_PASSWORD
+  #   required: true
+  # - name: PG_PRIMARY_USER
+  #   required: true
+  # - name: PG_ROOT_PASSWORD
+  #   required: true
+  # - name: MINIO_ACCESS_KEY
+  #   required: true
+  # - name: MINIO_SECRET_KEY
+  #   required: true
+  # - name: S3_PUBLIC_ACCESS_KEY
+  #   required: true
+  # - name: S3_PUBLIC_SECRET_KEY
+  #   required: true
+  # - name: S3_HOST
+  #   required: true
+  # - name: S3_ROOT_BUCKET
+  #   required: true
 objects:
   - apiVersion: v1
     kind: Secret
@@ -66,59 +61,59 @@ objects:
       labels:
         app: ${REPO}-${ZONE}
     stringData:
-      database-name: ${POSTGRESQL_DATABASE}
-      database-password: ${POSTGRESQL_PASSWORD}
-      database-user: ${POSTGRESQL_USER}
-      database-host: nr-gwells-232-database.cd43d9-dev.svc.cluster.local
-      fdw-database-user: proxy_wells_gwells
-      fdw-database-password: ${FDW_DATABASE_PASSWORD}
-      fdw-database-server: "//nrk1-scan.bcgov/envprod1.nrs.bcgov"
-      fdw-database-schema: WELLS
-  - apiVersion: v1
-    kind: Secret
-    metadata:
-      name: ${REPO}-${ZONE}-minio
-      labels:
-        app: ${REPO}-${ZONE}
-    stringData:
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-      S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
-      S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
-      S3_HOST: ${S3_HOST}
-      S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
-  - apiVersion: v1
-    kind: Secret
-    metadata:
-      name: ${REPO}-${ZONE}-django
-      labels:
-        app: ${REPO}-${ZONE}
-    stringData:
-      admin_password: ${DJANGO_ADMIN_PASSWORD}
-      admin_url: ${DJANGO_ADMIN_URL}
-      admin_user: ${DJANGO_ADMIN_USER}
-      secret_key: ${DJANGO_SECRET_KEY}
-  - apiVersion: v1
-    kind: Secret
-    metadata:
-      name: ${REPO}-${ZONE}-e-licensing
-      labels:
-        app: ${REPO}-${ZONE}
-    stringData:
-      E_LICENSING_AUTH_PASSWORD: ${E_LICENSING_AUTH_PASSWORD}
-      E_LICENSING_AUTH_USERNAME: ${E_LICENSING_AUTH_USERNAME}
-  - apiVersion: v1
-    kind: Secret
-    metadata:
-      creationTimestamp:
-      name: ${REPO}-${ZONE}-crunchy-db-credentials
-      labels:
-        app: ${REPO}-${ZONE}
-    stringData:
-      PG_MODE: ${PG_MODE}
-      PG_PRIMARY_PASSWORD: ${PG_PRIMARY_PASSWORD}
-      PG_PRIMARY_USER: ${PG_PRIMARY_USER}
-      PG_ROOT_PASSWORD: ${PG_ROOT_PASSWORD}
+      database-name: ${POSTGRES_DATABASE}
+      database-password: ${POSTGRES_PASSWORD}
+      database-user: ${POSTGRES_USER}
+      # database-host: nr-gwells-232-database.cd43d9-dev.svc.cluster.local
+      # fdw-database-user: proxy_wells_gwells
+      # fdw-database-password: ${FDW_DATABASE_PASSWORD}
+      # fdw-database-server: "//nrk1-scan.bcgov/envprod1.nrs.bcgov"
+      # fdw-database-schema: WELLS
+  # - apiVersion: v1
+  #   kind: Secret
+  #   metadata:
+  #     name: ${REPO}-${ZONE}-minio
+  #     labels:
+  #       app: ${REPO}-${ZONE}
+  #   stringData:
+  #     MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+  #     MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+  #     S3_PUBLIC_ACCESS_KEY: ${S3_PUBLIC_ACCESS_KEY}
+  #     S3_PUBLIC_SECRET_KEY: ${S3_PUBLIC_SECRET_KEY}
+  #     S3_HOST: ${S3_HOST}
+  #     S3_ROOT_BUCKET: ${S3_ROOT_BUCKET}
+  # - apiVersion: v1
+  #   kind: Secret
+  #   metadata:
+  #     name: ${REPO}-${ZONE}-django
+  #     labels:
+  #       app: ${REPO}-${ZONE}
+  #   stringData:
+  #     admin_password: ${DJANGO_ADMIN_PASSWORD}
+  #     admin_url: ${DJANGO_ADMIN_URL}
+  #     admin_user: ${DJANGO_ADMIN_USER}
+  #     secret_key: ${DJANGO_SECRET_KEY}
+  # - apiVersion: v1
+  #   kind: Secret
+  #   metadata:
+  #     name: ${REPO}-${ZONE}-e-licensing
+  #     labels:
+  #       app: ${REPO}-${ZONE}
+  #   stringData:
+  #     E_LICENSING_AUTH_PASSWORD: ${E_LICENSING_AUTH_PASSWORD}
+  #     E_LICENSING_AUTH_USERNAME: ${E_LICENSING_AUTH_USERNAME}
+  # - apiVersion: v1
+  #   kind: Secret
+  #   metadata:
+  #     creationTimestamp:
+  #     name: ${REPO}-${ZONE}-crunchy-db-credentials
+  #     labels:
+  #       app: ${REPO}-${ZONE}
+  #   stringData:
+  #     PG_MODE: ${PG_MODE}
+  #     PG_PRIMARY_PASSWORD: ${PG_PRIMARY_PASSWORD}
+  #     PG_PRIMARY_USER: ${PG_PRIMARY_USER}
+  #     PG_ROOT_PASSWORD: ${PG_ROOT_PASSWORD}
   - apiVersion: networking.k8s.io/v1
     kind: NetworkPolicy
     metadata:
