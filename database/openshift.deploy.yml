@@ -274,9 +274,9 @@ objects:
             - name: ${REPO}-${ZONE}-${COMPONENT}-config
               configMap:
                 name: ${REPO}-${ZONE}-${COMPONENT}-config
-            - configMap:
+            - name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
+              configMap:
                 name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
-              name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
   - apiVersion: networking.k8s.io/v1
     kind: NetworkPolicy
     metadata:
