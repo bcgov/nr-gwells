@@ -236,7 +236,8 @@ objects:
                     - bash
                     - '-c'
                     - >-
-                      PGPASSWORD=$PG_PASSWORD PGHOST=${REPO}-${ZONE}-${COMPONENT} psql -U $PG_USER -d $PG_DATABASE -c 'SELECT 1'
+                      psql -q -d
+                      $PG_DATABASE -c 'SELECT 1'
                 initialDelaySeconds: 180
                 periodSeconds: 30
                 successThreshold: 1
