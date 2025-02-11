@@ -260,9 +260,6 @@ objects:
                   name: ${REPO}-${ZONE}-${COMPONENT}-run
                 - mountPath: /pgconf
                   name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
-                - mountPath: /pgdata/userdata/pg_hba.conf
-                  name: ${REPO}-${ZONE}-${COMPONENT}-config
-                  subPath: pg_hba.conf
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           volumes:
@@ -271,9 +268,6 @@ objects:
                 claimName: ${REPO}-${ZONE}-${COMPONENT}
             - name: ${REPO}-${ZONE}-${COMPONENT}-run
               emptyDir: {}
-            - name: ${REPO}-${ZONE}-${COMPONENT}-config
-              configMap:
-                name: ${REPO}-${ZONE}-${COMPONENT}-config
             - name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
               configMap:
                 name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
