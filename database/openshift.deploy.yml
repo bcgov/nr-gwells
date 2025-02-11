@@ -243,11 +243,11 @@ objects:
                     - bash
                     - '-c'
                     - >-
-                      PGPASSWORD=$PG_PASSWORD PGHOST=localhost psql -U $PG_USER -d $PG_DATABASE -c 'SELECT 1'
-                initialDelaySeconds: 60
+                      PGPASSWORD=$PG_PASSWORD PGHOST=${REPO}-${ZONE}-${COMPONENT} psql -U $PG_USER -d $PG_DATABASE -c 'SELECT 1'
+                initialDelaySeconds: 120
                 periodSeconds: 15
                 successThreshold: 1
-                failureThreshold: 5
+                failureThreshold: 10
                 timeoutSeconds: 5
               resources:
                 requests:
@@ -261,7 +261,7 @@ objects:
                 privileged: false
               terminationMessagePath: /dev/termination-log
               volumeMounts:
-                - mountPath: /pgdata
+                - mountPath: /var/lib/postgresql/data
                   name: ${REPO}-${ZONE}-${COMPONENT}-data
                 - mountPath: /var/run/postgresql
                   name: ${REPO}-${ZONE}-${COMPONENT}-run

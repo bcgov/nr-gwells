@@ -175,7 +175,16 @@ objects:
             image: 'ghcr.io/bcgov/${REPO}/database:${TAG}'
             labels: 
               name: ${REPO}-${ZONE}-${COMPONENT}
-            command: ["/bin/bash", "-c", "set -x; psql -qtAX -c 'select 1'"]
+            command:
+              - /bin/bash
+              - "-c"
+              - |
+                echo "Waiting for PostgreSQL..."
+                until PGPASSWORD=$PGPASSWORD psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "SELECT 1"; do
+                  echo "PostgreSQL is unavailable - sleeping"
+                  sleep 5
+                done
+                echo "PostgreSQL is up!"
             env:
               - name: PGDATABASE
                 valueFrom:
@@ -221,7 +230,10 @@ objects:
             - name: DATABASE_PORT
               value: "5432"
             - name: DATABASE_HOST
-              value: ${REPO}-${ZONE}-database
+            valueFrom:
+              secretKeyRef:
+                name: ${REPO}-${ZONE}-database
+                key: database-host
             - name: PGHOST
               value: ${REPO}-${ZONE}-database
           - name: DATABASE_NAME
