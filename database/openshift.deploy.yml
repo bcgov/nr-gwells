@@ -109,13 +109,6 @@ objects:
         grant usage on schema postgis_ftw to ftw_reader;
         ALTER DEFAULT PRIVILEGES IN SCHEMA postgis_ftw GRANT SELECT ON TABLES TO ftw_reader;
 
-    kind: ConfigMap
-    metadata:
-      labels:
-        app: ${REPO}-${ZONE}
-        name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
-        appver: ${REPO}-${ZONE}-${COMPONENT}
-      name: ${REPO}-${ZONE}-${COMPONENT}-setupcfg
   - apiVersion: v1
     kind: Service
     metadata:
