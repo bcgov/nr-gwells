@@ -98,7 +98,7 @@ jobs:
             -p TAG=${{ inputs.tag }}
             -p ZONE=${{ inputs.target }}
             -p STORAGE_CLASS=netapp-file-standard
-            -p REQUEST_CPU=200m
+            -p REQUEST_CPU=85m
             -p LIMIT_CPU=500m
             -p LIMIT_MEMORY=1Gi
 
