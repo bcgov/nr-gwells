@@ -10,46 +10,46 @@ concurrency:
 
 jobs:
   # https://github.com/bcgov/action-builder-ghcr
-  builds:
-    name: Builds
-    runs-on: ubuntu-24.04
-    strategy:
-      matrix:
-        package: [database, backend, frontend, minio]
-        include:
-          - package: backend
-            build_context: ./
-            build_file: ./backend/Dockerfile
-    timeout-minutes: 20
-    steps:
-      - uses: bcgov/action-builder-ghcr@v2.2.0
-        with:
-          keep_versions: 50
-          build_context: ${{ matrix.build_context }}
-          build_file: ${{ matrix.build_file }}
-          package: ${{ matrix.package }}
-          tag: ${{ github.event.number }}
-          tag_fallback: latest
-          triggers: ('${{ matrix.package }}/')
+  # builds:
+  #   name: Builds
+  #   runs-on: ubuntu-24.04
+  #   strategy:
+  #     matrix:
+  #       package: [database, backend, frontend, minio]
+  #       include:
+  #         - package: backend
+  #           build_context: ./
+  #           build_file: ./backend/Dockerfile
+  #   timeout-minutes: 20
+  #   steps:
+  #     - uses: bcgov/action-builder-ghcr@v2.2.0
+  #       with:
+  #         keep_versions: 50
+  #         build_context: ${{ matrix.build_context }}
+  #         build_file: ${{ matrix.build_file }}
+  #         package: ${{ matrix.package }}
+  #         tag: ${{ github.event.number }}
+  #         tag_fallback: latest
+  #         triggers: ('${{ matrix.package }}/')
 
   deploys:
     name: Deploy
-    needs: [builds]
+    # needs: [builds]
     secrets: inherit
     uses: ./.github/workflows/.deploy.yml
 
-  tests:
-    name: Tests
-    if: needs.deploys.outputs.triggered == 'true'
-    needs: [deploys]
-    uses: ./.github/workflows/.tests.yml
-    with:
-      target: ${{ github.event.number }}
+  # tests:
+  #   name: Tests
+  #   if: needs.deploys.outputs.triggered == 'true'
+  #   needs: [deploys]
+  #   uses: ./.github/workflows/.tests.yml
+  #   with:
+  #     target: ${{ github.event.number }}
 
-  results:
-    name: PR Results
-    needs: [builds, deploys, tests]
-    if: always() && (!failure()) && (!cancelled())
-    runs-on: ubuntu-24.04
-    steps:
-      - run: echo "Success!"
+  # results:
+  #   name: PR Results
+  #   needs: [builds, deploys, tests]
+  #   if: always() && (!failure()) && (!cancelled())
+  #   runs-on: ubuntu-24.04
+  #   steps:
+  #     - run: echo "Success!"
