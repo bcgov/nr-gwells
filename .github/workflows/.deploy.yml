@@ -93,12 +93,12 @@ jobs:
           parameters:
             # -p IMAGE_STREAM_NAMESPACE=${{ vars.OC_NAMESPACE }}
             # -p IMAGE_STREAM_NAME=crunchy-postgres-gis
-            -p TAG=${{ inputs.tag }}
+            # -p TAG=${{ inputs.tag }}
             -p ZONE=${{ inputs.target }}
-            -p STORAGE_CLASS=netapp-file-standard
-            -p REQUEST_CPU=200m
-            -p LIMIT_CPU=500m
-            -p LIMIT_MEMORY=1Gi
+            # -p STORAGE_CLASS=netapp-file-standard
+            # -p REQUEST_CPU=200m
+            # -p LIMIT_CPU=500m
+            # -p LIMIT_MEMORY=1Gi
 
   backend:
     name: Backend
