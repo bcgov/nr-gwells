@@ -5,7 +5,7 @@
 --   
 -- Loading the temporary mapping of wells <-> aquifers is done via
 --   cd app/database/scripts/aquifers/
---   psql -d $POSTGRESQL_DATABASE -U $POSTGRESQL_USER << EOF
+--   psql -d $POSTGRES_DATABASE -U $POSTGRES_USER << EOF
 --   \copy xform_aquifers FROM 'xforms-aquifers.csv' HEADER DELIMITER ',' CSV
 --   EOF
 --
