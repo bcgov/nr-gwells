@@ -1,4 +1,4 @@
-FROM node:14.21.3 AS frontend
+FROM node:14.21.3-bullseye AS frontend
 
 ENV LOG_LEVEL="info"
 
@@ -45,6 +45,9 @@ RUN chmod -R +x /app
 
 RUN python3 -m pip install -r requirements.txt
 
+RUN mkdir -p /app/staticfiles \
+ && chown -R 1001:1001 /app
+
 # TODO: move to entrypoint in deployment template?
 # chmod -R 777 /app && \
 # CMD [""]
@@ -53,8 +56,14 @@ CMD sh -c "python3 manage.py migrate --noinput && \
     ./load_fixtures.sh all && \
     python3 manage.py createinitialrevisions && \
     python3 manage.py collectstatic --noinput && \
-    # python3 manage.py export --cleanup=1 --upload=1 && \
     python3 manage.py runserver 0.0.0.0:8000"
+
+# CMD sh -c "python3 manage.py migrate --noinput && \
+#     ./load_fixtures.sh all && \
+#     python3 manage.py createinitialrevisions && \
+#     python3 manage.py collectstatic --noinput && \
+#     python3 manage.py export --cleanup=1 --upload=1 && \
+#     python3 manage.py runserver 0.0.0.0:8000"
 
 USER 1001
 
