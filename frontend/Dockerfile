@@ -50,3 +50,4 @@ HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost:3001/health
 
 # Nonroot user
 USER 1001
+

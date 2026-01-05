@@ -58,7 +58,6 @@ CMD sh -c "python3 manage.py migrate --noinput && \
     python3 manage.py collectstatic --noinput && \
     python3 manage.py runserver 0.0.0.0:8000"
 
-
 # CMD sh -c "python3 manage.py migrate --noinput && \
 #     ./load_fixtures.sh all && \
 #     python3 manage.py createinitialrevisions && \
@@ -67,3 +66,4 @@ CMD sh -c "python3 manage.py migrate --noinput && \
 #     python3 manage.py runserver 0.0.0.0:8000"
 
 USER 1001
+
